@@ -1,7 +1,6 @@
-<!-- This is the global layout file; it "wraps" every page on the site. (Or more accurately: is the parent component to every page component on the site.) -->
 <script>
+	import './layout.css';
 	import { run } from 'svelte/legacy';
-
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { currentPage, isMenuOpen } from '../lib/assets/js/store.js';
@@ -10,8 +9,8 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { siteTitle, siteURL } from '$lib/config.js';
-	let { data, children } = $props();
 
+	let { data, children } = $props();
 	const transitionIn = { delay: 150, duration: 150 };
 	const transitionOut = { duration: 100 };
 
@@ -32,9 +31,12 @@
 	 **/
 	onMount(() => {
 		const navRoutes = navItems.map((item) => item.route);
+
 		preloadCode(...navRoutes);
 	});
 </script>
+
+<!-- This is the global layout file; it "wraps" every page on the site. (Or more accurately: is the parent component to every page component on the site.) -->
 
 <svelte:head>
 	<link rel="stylesheet" href="/css/vars.css" />
@@ -49,6 +51,7 @@
 	<link rel="stylesheet" href="/css/utilities.css" />
 	<link rel="stylesheet" href="/css/code.css" />
 	<link rel="stylesheet" href="/css/prism.css" />
+
 	<link
 		rel="alternate"
 		type="application/rss+xml"
@@ -61,12 +64,18 @@
 	The below markup is used on every page in the site. The <slot> is where the page's
 	actual contents will show up.
 -->
+
 <div class="layout" class:open={$isMenuOpen}>
 	<Header />
+
 	{#key data.path}
-		<main id="main" tabindex="-1" in:fade|global={transitionIn} out:fade|global={transitionOut}>
-			{@render children?.()}
-		</main>
+		<main
+			id="main"
+			tabindex="-1"
+			in:fade|global={transitionIn}
+			out:fade|global={transitionOut}
+		>{@render children?.()}</main>
 	{/key}
+
 	<Footer />
 </div>

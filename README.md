@@ -38,13 +38,8 @@ view the
 
 ## Quick Start
 
-Clone or download
-[this repo](https://github.com/josh-collinsworth/sveltekit-blog-starter), then
-install the dependencies and run the dev server:
 
 ```
-npx degit https://github.com/josh-collinsworth/sveltekit-blog-starter my-sveltekit-blog
-cd my-sveltekit-blog
 npm install
 npm run dev -- --open
 ```
@@ -59,11 +54,6 @@ Now all you need to do is:
 - Drop your Markdown posts into `src/lib/posts`
 - Optionally, customize the styles in `static/css`
 
-GLHF! Details below. 👇
-
-(_Feel free to
-[open an issue](https://github.com/josh-collinsworth/sveltekit-blog-starter/issues/new)
-if you come across one._)
 
 ## Customization
 
@@ -220,11 +210,3 @@ like plain text when using Tailwind, unless classes are applied.)
 I assume at least a little bit of knowledge of SvelteKit and/or similar static
 site generators here, but be sure to read
 [the SvelteKit docs](https://kit.svelte.dev/docs) for more info.
-
-## Contributing
-
-I've tried my best to make sure this starter is up to date with the latest
-SvelteKit, but I'm sure improvements can be made. Feel free to
-[visit the repo](https://github.com/josh-collinsworth/sveltekit-blog-starter)
-and submit a pull request, or
-[contact me directly](https://joshcollinsworth.com/contact).
