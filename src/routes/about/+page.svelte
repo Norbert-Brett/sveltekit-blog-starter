@@ -401,11 +401,6 @@
     source="Job 1:21"
     subQuote={"blessed be the name of the {highlight}"}
   />
-  
-  <div class="py-24 text-center">
-    <div class="section-divider w-24 h-px bg-primary/40 mx-auto mb-12"></div>
-    <p class="text-[9px] font-mono tracking-[0.6em] text-white/30 uppercase">End of Specification</p>
-  </div>
 </div>
 
 <style>

@@ -7,6 +7,8 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { siteTitle, siteURL } from '$lib/config.js';
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 	let { data, children } = $props();
 	const transitionIn = { delay: 150, duration: 150 };
@@ -17,6 +19,7 @@
 	});
 
 	onMount(() => {
+		gsap.registerPlugin(ScrollTrigger);
 		appState.isMenuOpen = false;
 	});
 </script>
