@@ -12,19 +12,24 @@
   },
   "dependencies": {
     "gsap": "^3.14.2",
-    "motion": "^12.38.0"
+    "motion": "^12.38.0",
+    "three": "^0.183.2"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@fontsource-variable/inter": "^5.2.8",
+    "@internationalized/date": "^3.12.0",
     "@lucide/svelte": "^1.7.0",
     "@sveltejs/adapter-static": "latest",
     "@sveltejs/kit": "^2.56.1",
     "@sveltejs/vite-plugin-svelte": "latest",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
+    "bits-ui": "^2.17.2",
     "clsx": "^2.1.1",
     "eslint": "^10.2.0",
     "eslint-plugin-svelte": "^3.17.0",
+    "globals": "^17.4.0",
     "mdsvex": "^0.12.7",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",

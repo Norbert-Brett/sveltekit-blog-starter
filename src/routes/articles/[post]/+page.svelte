@@ -51,7 +51,7 @@
     <header class="mb-16 text-center">
         {#if categories}
             <div class="flex justify-center gap-2 mb-6">
-                {#each categories as category}
+                {#each categories as category (category)}
                     <span class="text-xs uppercase tracking-wider text-primary font-semibold bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                         {category}
                     </span>
@@ -97,7 +97,7 @@
                 <span class="w-6 h-[2px] bg-primary"></span> Tags
             </h2>
 			<ul class="flex flex-wrap gap-3">
-				{#each categories as category}
+				{#each categories as category (category)}
 					<li>
 						<span class="bg-black/40 border border-white/10 rounded-full px-4 py-2 text-sm font-medium text-muted-foreground">
 							#{category}

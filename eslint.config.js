@@ -15,11 +15,8 @@ export default [
     },
   },
   {
-    files: ["**/*.svelte"],
-    languageOptions: {
-      parserOptions: {
-        parser: svelte.parser,
-      },
+    rules: {
+      "svelte/no-navigation-without-resolve": "off",
     },
   },
   {

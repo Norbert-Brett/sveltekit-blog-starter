@@ -3,7 +3,7 @@
 </script>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-	{#each posts as post}
+	{#each posts as post (post.slug)}
         <a href="/articles/{post.slug}" class="group block h-full">
             <article class="h-full bg-black/40 border border-white/5 rounded-2xl overflow-hidden backdrop-blur-md hover:border-primary/50 transition-all duration-300 flex flex-col shadow-lg hover:shadow-primary/10">
                 
