@@ -1,10 +1,15 @@
-import tailwindcss from '@tailwindcss/vite';
-import { sveltekit } from '@sveltejs/kit/vite';
+import { sveltekit } from "@sveltejs/kit/vite";
+import tailwindcss from "@tailwindcss/vite";
 
 /** @type {import('vite').UserConfig} */
-const config = {
-	plugins: [tailwindcss(), sveltekit()],
-	server: { fs: { allow: ['.'] } }
+export default {
+  staged: {
+    "*": "vp check --fix",
+  },
+  plugins: [tailwindcss(), sveltekit()],
+  server: {
+    fs: {
+      allow: ["."],
+    },
+  },
 };
-
-export default config;

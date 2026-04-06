@@ -3,8 +3,8 @@
 	import { onMount } from 'svelte';
 	import gsap from 'gsap';
 
-	let formRef;
-	let headlineRef;
+	let formRef = $state();
+	let headlineRef = $state();
 
 	onMount(() => {
 		const ctx = gsap.context(() => {

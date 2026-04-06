@@ -8,8 +8,8 @@
 		gsap.registerPlugin(ScrollTrigger);
 	}
 
-	let heroRef;
-	let headlineRef;
+	let heroRef = $state();
+	let headlineRef = $state();
 
 	onMount(() => {
 		const ctx = gsap.context(() => {

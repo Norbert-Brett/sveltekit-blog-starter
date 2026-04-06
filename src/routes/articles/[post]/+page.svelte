@@ -15,7 +15,7 @@
 	let categories = $derived(data.meta.categories);
 	let PostContent = $derived(data.PostContent);
     
-    let progressRef;
+    let progressRef = $state();
 
     onMount(() => {
         const updateProgress = () => {

@@ -15,35 +15,36 @@ excerpt: This post shows you how syntax highlighting works here.
 
 mdsvex has automatic, built-in syntax highlighting with [Prism.js](https://prismjs.com/); just include the language name after the triple backticks, like so:
 
-```
+````
 \```css
 /* Your CSS here */
 \```
-```
+````
 
 And that will render just like so:
 
 ```css
 .my-css-class {
-	color: #ffd100;
-	box-sizing: border-box;
-	/* etc... */
+  color: #ffd100;
+  box-sizing: border-box;
+  /* etc... */
 }
 ```
 
 Here's how you'd do JavaScript:
 
-```
+````
 \```js
 // You can use js or javascript for the language
 \```
-```
+````
 
 Highlighted code sample:
+
 ```js
 const invertNumberInRange = (num, range) => {
-	return range - num;
-}
+  return range - num;
+};
 
 invertNumberInRange(25, 100); // 75
 ```

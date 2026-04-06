@@ -8,7 +8,7 @@
 		gsap.registerPlugin(ScrollTrigger);
 	}
 
-	let sectionRef;
+	let sectionRef = $state();
 
 	onMount(() => {
 		const ctx = gsap.context(() => {

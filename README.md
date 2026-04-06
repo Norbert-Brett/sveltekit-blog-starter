@@ -38,7 +38,6 @@ view the
 
 ## Quick Start
 
-
 ```
 npm install
 npm run dev -- --open
@@ -53,7 +52,6 @@ Now all you need to do is:
 - Update the `src/lib/config.js` file
 - Drop your Markdown posts into `src/lib/posts`
 - Optionally, customize the styles in `static/css`
-
 
 ## Customization
 

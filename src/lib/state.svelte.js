@@ -1,4 +1,4 @@
 export const appState = $state({
-	currentPage: '',
-	isMenuOpen: false
+  currentPage: "",
+  isMenuOpen: false,
 });
