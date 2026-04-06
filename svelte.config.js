@@ -11,18 +11,13 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			"@/*": "./path/to/lib/*",
+			"$lib": "./src/lib",
+			"@/*": "./src/lib/*",
 		},
 		prerender: {
 			entries: [
 				"*",
-				"/api/posts/page/*",
-				"/blog/category/*/page/",
-				"/blog/category/*/page/*",
-				"/blog/category/page/",
-				"/blog/category/page/*",
-				"/blog/page/",
-				"/blog/page/*",
+				"/api/posts/page/*"
 			],
 		},
 	},

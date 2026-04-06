@@ -1,13 +1,13 @@
 <script>
-	import { currentPage, isMenuOpen } from '../assets/js/store';
+	import { appState } from '$lib/state.svelte.js';
 
 	let { href, children } = $props();
 
-	let isCurrentPage = $derived($currentPage.startsWith(href));
+	let isCurrentPage = $derived(appState.currentPage.startsWith(href));
 
 	const maybeCloseMenu = () => {
-		if (href != $currentPage) {
-			isMenuOpen.set(false);
+		if (href != appState.currentPage) {
+			appState.isMenuOpen = false;
 		}
 	};
 </script>
@@ -18,6 +18,7 @@
 		onclick={maybeCloseMenu}
 		class:active={isCurrentPage}
 		aria-current={isCurrentPage ? 'page' : false}
+		class="text-foreground hover:text-primary transition-colors {isCurrentPage ? 'text-primary font-bold' : ''}"
 	>
 		{@render children?.()}
 	</a>
