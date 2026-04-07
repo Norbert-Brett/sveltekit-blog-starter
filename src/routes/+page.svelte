@@ -1,5 +1,6 @@
 <script>
 	import { siteTitle } from '$lib/config';
+	import { MetaTags } from 'svelte-meta-tags';
 	import Hero from '$lib/components/Hero.svelte';
 	import Stats from '$lib/components/Stats.svelte';
 	import HeroAbout from '$lib/components/HeroAbout.svelte';
@@ -11,9 +12,9 @@
 	let { data } = $props();
 </script>
 
-<svelte:head>
-	<title>{siteTitle} | Portfolio</title>
-</svelte:head>
+<MetaTags
+	title="Portfolio"
+/>
 
 <Hero />
 <Stats />

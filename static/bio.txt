@@ -1,0 +1,21 @@
+Norbert Brettschneider (also known online as br3tt) is a Full-Stack Developer and AI Specialist specializing in user-centered digital experiences.
+
+Name: Norbert Brettschneider
+Aliases: br3tt, norbert br3tt, norbert brett
+Role: FullStack Developer & AI Specialist
+URL: https://br3tt.vercel.app/
+GitHub: https://github.com/br3tt
+Twitter: https://twitter.com/norbertbr3tt
+LinkedIn: https://linkedin.com/in/norbertbrettschneider
+
+Expertise:
+- Artificial Intelligence
+- Generative AI
+- Large Language Models (LLMs) 
+- Full-Stack Development
+- SvelteKit / Vue / React
+- Python / Node.js
+- UI/UX Design
+
+Bio:
+Norbert Brettschneider (br3tt) has 11+ years of operational leadership experience before transitioning into technical software engineering. He holds a First Class Honours degree in Computer Science and focuses on building robust systems with an emphasis on both people and purpose. His work integrates powerful AI functionality into fast, seamless Web interfaces.

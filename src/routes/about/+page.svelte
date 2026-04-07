@@ -9,6 +9,7 @@
   if (browser) {
     gsap.registerPlugin(ScrollTrigger);
   }
+  import { MetaTags } from 'svelte-meta-tags';
 
   // --- DATA ---
   const stats = [
@@ -162,9 +163,14 @@
   });
 </script>
 
-<svelte:head>
-  <title>About | {siteTitle}</title>
-</svelte:head>
+<MetaTags
+  title="About"
+  description="Norbert Brettschneider (br3tt) is a full-stack developer and AI specialist specializing in user-centered digital experiences."
+  openGraph={{
+    title: 'About | Norbert Brettschneider',
+    description: 'Learn about Norbert Brettschneider (br3tt), a Full-Stack Developer and AI Specialist with a foundation in operational leadership.'
+  }}
+/>
 
 <div bind:this={pageRef} onmousemove={handleMouseMove} class="min-h-screen text-white overflow-x-hidden bg-background" role="main">
 
@@ -175,11 +181,11 @@
         src="https://res.cloudinary.com/nbrett/image/upload/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg"
         alt="Norbert Brett"
         class="hero-bg-img w-full h-[120%] object-cover grayscale contrast-110 opacity-40 shadow-2xl" />
-      <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-background/70 via-transparent to-background/50"></div>
+      <div class="absolute inset-0 bg-linear-to-t from-background via-background/80 to-transparent"></div>
+      <div class="absolute inset-0 bg-linear-to-r from-background/70 via-transparent to-background/50"></div>
     </div>
     
-    <div class="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] bg-primary/[0.04] rounded-full blur-[150px] pointer-events-none"></div>
+    <div class="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] bg-primary/4 rounded-full blur-[150px] pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
       <div class="hero-eyebrow flex items-center gap-4 mb-8">
@@ -214,8 +220,8 @@
         
         <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4">
           {#each stats as stat, i (i)}
-            <div class="hero-stat group p-5 md:p-6 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-primary/20 transition-all duration-500">
-              <span class="text-[9px] font-mono text-white/70 uppercase tracking-wider block mb-3 uppercase">{stat.code}</span>
+            <div class="hero-stat group p-5 md:p-6 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-primary/20 transition-all duration-500">
+              <span class="text-[9px] font-mono text-white/70 uppercase tracking-wider block mb-3">{stat.code}</span>
               <span class="text-3xl md:text-4xl font-serif font-black text-white group-hover:text-primary transition-colors duration-300 block leading-none">{stat.number}</span>
               <span class="text-[10px] font-mono text-white/70 mt-2 uppercase tracking-wider block">{stat.label}</span>
             </div>
@@ -226,7 +232,7 @@
     
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
       <span class="text-[9px] font-mono tracking-[0.4em] uppercase text-white/50">Scroll</span>
-      <div class="w-px h-8 bg-gradient-to-b from-white/50 to-transparent animate-pulse"></div>
+      <div class="w-px h-8 bg-linear-to-b from-white/50 to-transparent animate-pulse"></div>
     </div>
   </section>
 
@@ -251,8 +257,17 @@
         </div>
         
         <div class="md:col-span-7 space-y-8 text-lg text-white/80 font-light leading-relaxed">
-          <p class="story-para">My journey isn't typical. Before I wrote code, I spent <strong class="text-white font-semibold">11 years leading teams</strong> in high-pressure environments across multinational brands like McDonalds and KFC.</p>
-          <p class="story-para">That discipline became my foundation. I earned a <strong class="text-white font-semibold">First Class Honours</strong> degree in Computer Science and now build software with rigor, efficiency, and a focus on scalability.</p>
+          <div class="story-para space-y-4">
+             <h2 class="text-xl md:text-2xl font-serif font-bold text-primary mb-2">Who is Norbert Brettschneider?</h2>
+             <p>Norbert Brettschneider, also known online as <strong>br3tt</strong>, is a <strong class="text-white font-semibold">Full-Stack Developer and AI Specialist</strong>.</p>
+             <p>My journey isn't typical. Before I wrote code, I spent <strong class="text-white font-semibold">11 years leading teams</strong> in high-pressure environments across multinational brands like McDonalds and KFC. That discipline became my foundation.</p>
+             <p>I earned a <strong class="text-white font-semibold">First Class Honours</strong> degree in Computer Science and now build software with rigor, efficiency, and a focus on scalability.</p>
+             <ul class="list-disc pl-5 mt-4 space-y-2 text-base text-white/70">
+               <li>Specializes in bridging user-centered design with Generative AI technologies.</li>
+               <li>Builds highly performant, animation-rich interfaces using SvelteKit.</li>
+               <li>Architects scalable Python and Node.js backend infrastructure.</li>
+             </ul>
+          </div>
         </div>
       </div>
       
@@ -260,7 +275,7 @@
       
       <div class="values-grid grid md:grid-cols-3 gap-6 md:gap-8">
         {#each values as val, i (i)}
-          <div class="value-card group relative p-8 md:p-10 rounded-2xl border border-white/5 bg-white/[0.015] hover:border-primary/20 transition-all duration-500 hover:bg-white/[0.03]">
+          <div class="value-card group relative p-8 md:p-10 rounded-2xl border border-white/5 bg-white/1.5 hover:border-primary/20 transition-all duration-500 hover:bg-white/3">
             <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:border-primary transition-all duration-500 shadow-xl">
                <!-- SVG Icons for Purpose, Shield, Sparkles -->
                {#if val.icon === 'target'}
@@ -294,11 +309,11 @@
       
       <div class="skills-grid grid md:grid-cols-2 gap-6 md:gap-8">
         {#each skillCategories as cat, i (i)}
-          <div class="skill-category-card spotlight-card group relative p-8 md:p-10 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-primary/20 transition-all duration-500 overflow-hidden shadow-2xl">
+          <div class="skill-category-card spotlight-card group relative p-8 md:p-10 rounded-2xl border border-white/5 bg-white/2 hover:border-primary/20 transition-all duration-500 overflow-hidden shadow-2xl">
             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" style="background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201,168,76,0.06), transparent 60%);"></div>
             <div class="relative z-10 mb-8 flex items-start justify-between">
               <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-white/[0.03] flex items-center justify-center rounded-xl border border-white/10 text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
+                <div class="w-12 h-12 bg-white/3 flex items-center justify-center rounded-xl border border-white/10 text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
                   {#if cat.icon === 'layout'}
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m9 21 0-12"/></svg>
                   {:else if cat.icon === 'server'}
@@ -324,7 +339,7 @@
                     <span class="text-[10px] font-mono text-white/70">{skill.level}%</span>
                   </div>
                   <div class="h-1 rounded-full bg-white/5 overflow-hidden">
-                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-primary/60 to-primary transition-all shadow-[0_0_10px_rgba(var(--primary),0.2)]" data-level={skill.level} style="width: 0%"></div>
+                    <div class="skill-bar-fill h-full rounded-full bg-linear-to-r from-primary/60 to-primary transition-all shadow-[0_0_10px_rgba(var(--primary),0.2)]" data-level={skill.level} style="width: 0%"></div>
                   </div>
                 </div>
               {/each}
@@ -360,12 +375,12 @@
               {/if}
             </div>
             
-            <div class={i % 2 === 0 ? 'pl-16 md:pl-0 md:text-right md:order-1 md:pr-12' : 'pl-16 md:pl-0 md:order-2 md:text-left md:pl-12'}>
+            <div class={i % 2 === 0 ? 'pl-16 md:pl-0 md:text-right md:order-1 md:pr-12' : 'pl-16 md:order-2 md:text-left md:pl-12'}>
               <span class="font-mono text-5xl md:text-7xl font-black text-white/10 group-hover:text-primary/30 transition-colors duration-500 leading-none block">{item.year}</span>
             </div>
             
-            <div class={i % 2 === 0 ? 'pl-16 md:pl-0 md:order-2 md:pl-12' : 'pl-16 md:pl-0 md:order-1 md:text-right md:pr-12'}>
-              <div class="p-6 rounded-2xl border border-white/5 bg-white/[0.015] group-hover:border-primary/15 group-hover:bg-white/[0.03] transition-all duration-500 shadow-2xl">
+            <div class={i % 2 === 0 ? 'pl-16 md:order-2 md:pl-12' : 'pl-16 md:pl-0 md:order-1 md:text-right md:pr-12'}>
+              <div class="p-6 rounded-2xl border border-white/5 bg-white/1.5 group-hover:border-primary/15 group-hover:bg-white/3 transition-all duration-500 shadow-2xl">
                 <div class="flex items-center gap-3 mb-3 {i % 2 !== 0 ? 'md:flex-row-reverse' : ''}">
                   <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     {#if item.icon === 'truck'}

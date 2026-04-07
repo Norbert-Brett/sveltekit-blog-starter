@@ -24,6 +24,9 @@ importers:
       motion:
         specifier: ^12.38.0
         version: 12.38.0
+      svelte-meta-tags:
+        specifier: ^4.5.2
+        version: 4.5.2(svelte@5.55.1)
       three:
         specifier: ^0.183.2
         version: 0.183.2
@@ -1472,6 +1475,9 @@ packages:
       '@sveltejs/kit':
         optional: true
 
+  schema-dts@1.1.5:
+    resolution: {integrity: sha512-RJr9EaCmsLzBX2NDiO5Z3ux2BVosNZN5jo0gWgsyKvxKIUL5R3swNvoorulAeL9kLB0iTSX7V6aokhla2m7xbg==}
+
   semver@7.7.4:
     resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
     engines: {node: '>=10'}
@@ -1526,6 +1532,11 @@ packages:
     peerDependenciesMeta:
       svelte:
         optional: true
+
+  svelte-meta-tags@4.5.2:
+    resolution: {integrity: sha512-zU22mSbj0y/hr2neP6K+aGsXX3Ul7retfLOlr4Yq2Edm7PbZatCi4qYQvbK38/StbN6G0FQLR0cVlWN1RPhyyA==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   svelte-toolbelt@0.10.6:
     resolution: {integrity: sha512-YWuX+RE+CnWYx09yseAe4ZVMM7e7GRFZM6OYWpBKOb++s+SQ8RBIMMe+Bs/CznBMc0QPLjr+vDBxTAkozXsFXQ==}
@@ -2796,6 +2807,8 @@ snapshots:
     optionalDependencies:
       '@sveltejs/kit': 2.56.1(@sveltejs/vite-plugin-svelte@7.0.0(@voidzero-dev/vite-plus-core@0.1.15(jiti@2.6.1))(svelte@5.55.1))(@voidzero-dev/vite-plus-core@0.1.15(jiti@2.6.1))(svelte@5.55.1)
 
+  schema-dts@1.1.5: {}
+
   semver@7.7.4: {}
 
   set-cookie-parser@3.1.0: {}
@@ -2856,6 +2869,11 @@ snapshots:
       postcss-selector-parser: 7.1.1
       semver: 7.7.4
     optionalDependencies:
+      svelte: 5.55.1
+
+  svelte-meta-tags@4.5.2(svelte@5.55.1):
+    dependencies:
+      schema-dts: 1.1.5
       svelte: 5.55.1
 
   svelte-toolbelt@0.10.6(@sveltejs/kit@2.56.1(@sveltejs/vite-plugin-svelte@7.0.0(@voidzero-dev/vite-plus-core@0.1.15(jiti@2.6.1))(svelte@5.55.1))(@voidzero-dev/vite-plus-core@0.1.15(jiti@2.6.1))(svelte@5.55.1))(svelte@5.55.1):

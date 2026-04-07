@@ -32,7 +32,7 @@ const config = {
           if (!shikiPromise) {
             shikiPromise = import("shiki").then(({ createHighlighter }) =>
               createHighlighter({
-                themes: ["github-dark-default"],
+                themes: ["vitesse-dark"],
                 langs: [
                   "javascript",
                   "typescript",
@@ -44,8 +44,11 @@ const config = {
                   "markdown",
                   "python",
                   "yaml",
-                  "diff",
+                  "go",
                   "text",
+                  "python",
+                  "java",
+                  "docker",
                 ],
               }),
             );
@@ -59,7 +62,7 @@ const config = {
 
           const html = highlighter.codeToHtml(code, {
             lang: renderLang,
-            theme: "github-dark-default",
+            theme: "vitesse-dark",
           });
           return `{@html \`${html.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\` }`;
         },
