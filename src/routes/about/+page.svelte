@@ -32,8 +32,8 @@
       icon: 'layout',
       skills: [
         { name: 'Svelte/SvelteKit', level: 95 },
-        { name: 'Vue/Nuxt', level: 90 },
-        { name: 'React', level: 75 },
+        { name: 'Vue/Nuxt', level: 95 },
+        { name: 'React', level: 80 },
         { name: 'Tailwind', level: 98 },
         { name: 'GSAP', level: 92 },
         { name: 'TypeScript', level: 88 }
@@ -46,10 +46,10 @@
       skills: [
         { name: 'Python', level: 92 },
         { name: 'Django', level: 88 },
-        { name: 'FastAPI', level: 85 },
+        { name: 'Go', level: 80 },
         { name: 'Node.js', level: 82 },
         { name: 'PostgreSQL', level: 88 },
-        { name: 'Redis', level: 75 }
+        { name: 'Java', level: 80 }
       ]
     },
     {
@@ -59,8 +59,8 @@
       skills: [
         { name: 'AWS', level: 80 },
         { name: 'Docker', level: 88 },
-        { name: 'CI/CD', level: 85 },
-        { name: 'Linux', level: 82 },
+        { name: 'CI/CD', level: 80 },
+        { name: 'Linux', level: 85 },
         { name: 'Nginx', level: 78 },
         { name: 'Git', level: 95 }
       ]
