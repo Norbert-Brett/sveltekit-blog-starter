@@ -1,6 +1,30 @@
 .DS_Store
-node_modules
-/build
+.gemini
+
+
+# Common files that should be ignored in all projects
+
+# Logs
+*.log
+# Temporary files
+*.tmp
+*~
+
+*.bak
+# Environment files (containing secrets, API keys, credentials)
+.env
+*.env
+.env.*
+
+# Local configuration that shouldn't be shared
+*.local
+
+### Svelte ###
+# svelte specific files
+
+node_modules/
+build/
+.cache/
+*.log
 /.svelte-kit
 /package
-.gemini

@@ -11,6 +11,7 @@ export const siteDescription =
 export const siteURL = "br3tt.vercel.app";
 export const siteLink = "https://br3tt.vercel.app/";
 export const siteAuthor = "Norbert Brettschneider";
+export const siteEmail = "norbertbrett@outlook.com";
 
 // Controls how many posts are shown per page on the main blog index pages
 export const postsPerPage = 10;
