@@ -1,6 +1,12 @@
-export const load = async ({ url, fetch }) => {
-  const postRes = await fetch(`${url.origin}/api/posts.json?limit=-1`);
-  const posts = await postRes.json();
+import fetchPosts from "$lib/assets/js/fetchPosts";
+import { error } from "@sveltejs/kit";
 
-  return { posts, total: posts.length };
+export const load = async () => {
+  try {
+    const { posts } = await fetchPosts({ limit: -1 });
+    return { posts, total: posts.length };
+  } catch (err) {
+    console.error("Error fetching posts:", err);
+    error(500, "Could not fetch posts");
+  }
 };
