@@ -108,16 +108,16 @@
 
 <section bind:this={sectionRef} class="relative w-full h-screen overflow-hidden bg-background">
   <!-- Background accent orb -->
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] rounded-full bg-primary/[0.03] blur-[150px] pointer-events-none animate-[glow-breathe_10s_ease-in-out_infinite]"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] rounded-full bg-primary/3 blur-[150px] pointer-events-none animate-[glow-breathe_10s_ease-in-out_infinite]"></div>
 
   <!-- Decorative Left Gold Line -->
-  <div class="about-accent-line hidden md:block absolute left-12 top-[15%] bottom-[15%] w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent origin-top"></div>
+  <div class="about-accent-line hidden md:block absolute left-12 top-[15%] bottom-[15%] w-px bg-linear-to-b from-transparent via-primary/30 to-transparent origin-top"></div>
 
   <div class="absolute inset-0 flex items-center justify-center px-6 md:px-24">
     <div class="max-w-5xl w-full relative">
       <!-- Floating years counter -->
       <div class="absolute -top-20 right-0 md:right-12 flex items-end gap-3 z-30">
-        <span bind:this={counterRef} class="text-7xl md:text-9xl font-serif font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-primary via-[#e8d48b] to-primary/40 leading-none drop-shadow-[0_0_60px_rgba(201,168,76,0.2)]">0</span>
+        <span bind:this={counterRef} class="text-7xl md:text-9xl font-serif font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-primary via-[#e8d48b] to-primary/40 leading-none drop-shadow-[0_0_60px_rgba(201,168,76,0.2)]">0</span>
         <span class="text-[10px] md:text-xs font-mono tracking-[0.4em] uppercase text-white/50 pb-3 md:pb-4 border-l border-white/10 pl-3">Years<br/>Exp.</span>
       </div>
 
@@ -130,7 +130,7 @@
           >
             <div class="flex items-center gap-4 mb-6">
               <span class="text-[10px] md:text-xs font-mono tracking-[0.4em] uppercase text-primary font-bold">{ panel.label }</span>
-              <div class="w-16 h-px bg-gradient-to-r from-primary/50 to-transparent"></div>
+              <div class="w-16 h-px bg-linear-to-r from-primary/50 to-transparent"></div>
             </div>
             <h2 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-black tracking-[-.04em] leading-[0.9] text-white mb-8 drop-shadow-2xl text-balance">
               { panel.title }

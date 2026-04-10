@@ -1,21 +1,22 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
-  import * as THREE from 'three';
 
   let containerRef = $state(null);
   let animationId;
   let scene, camera, renderer, particles, shaderMaterial;
   let clock;
 
-  const PARTICLE_COUNT = 1500;
-  const BASE_COLOR = new THREE.Color('#c9a84c'); // Our primary accent
-
-  onMount(() => {
+  onMount(async () => {
     if (!browser || !containerRef) return;
+
+    // Dynamically import THREE to split it into a separate chunk and improve initial load time
+    const THREE = await import('three');
 
     // 1. Setup WebGL Scene
     scene = new THREE.Scene();
+    const PARTICLE_COUNT = 1500;
+    const BASE_COLOR = new THREE.Color('#c9a84c');
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 50;
 
@@ -98,71 +99,68 @@
     particles = new THREE.Points(geometry, shaderMaterial);
     scene.add(particles);
 
-    // 4. Interactive mouse tracking
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    const onMouseMove = (event) => {
-      const halfX = window.innerWidth / 2;
-      const halfY = window.innerHeight / 2;
-      mouseX = (event.clientX - halfX);
-      mouseY = (event.clientY - halfY);
-    };
-
-    const onResize = () => {
-      if (!camera || !renderer) return;
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      shaderMaterial.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
-    };
-
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('resize', onResize);
-
-    // 5. Render loop
     clock = new THREE.Clock();
+    animate();
+  });
 
-    const animate = () => {
-      if (!renderer) return;
-      animationId = requestAnimationFrame(animate);
+  const animate = () => {
+    if (!renderer || !clock) return;
+    animationId = requestAnimationFrame(animate);
 
-      const elTime = clock.getElapsedTime();
-      shaderMaterial.uniforms.uTime.value = elTime;
+    const elTime = clock.getElapsedTime();
+    if (shaderMaterial) shaderMaterial.uniforms.uTime.value = elTime;
 
-      // Smooth inertia mouse follow
-      targetX = mouseX * 0.001;
-      targetY = mouseY * 0.001;
-      
-      // Rotate entire particle cloud softly
+    // Smooth inertia mouse follow
+    let targetX = mouseState.mouseX * 0.001;
+    let targetY = mouseState.mouseY * 0.001;
+    
+    // Rotate entire particle cloud softly
+    if (particles) {
       particles.rotation.y += 0.001;
       particles.rotation.x += 0.0005;
-      
-      // Mouse interaction parallax
+    }
+    
+    // Mouse interaction parallax
+    if (camera && scene) {
       camera.position.x += (targetX - camera.position.x) * 0.02;
       camera.position.y += (-targetY - camera.position.y) * 0.02;
       camera.lookAt(scene.position);
-
       renderer.render(scene, camera);
-    };
-    
-    animate();
-
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('resize', onResize);
-      if (animationId) cancelAnimationFrame(animationId);
-      if (renderer) renderer.dispose();
-      if (scene) scene.clear();
-    };
-  });
+    }
+  };
 
   onDestroy(() => {
+    // Cleanup listeners and WebGL resources
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('resize', onResize);
+    }
     if (animationId) cancelAnimationFrame(animationId);
     if (renderer) renderer.dispose();
+    if (scene) scene.clear();
   });
+
+  // Event handlers declared in outer scope for onDestroy access
+  let onMouseMove = (event) => {
+    if (!browser) return;
+    const halfX = window.innerWidth / 2;
+    const halfY = window.innerHeight / 2;
+    // Shared state update
+    mouseState.mouseX = (event.clientX - halfX);
+    mouseState.mouseY = (event.clientY - halfY);
+  };
+
+  let onResize = () => {
+    if (!camera || !renderer) return;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (shaderMaterial) shaderMaterial.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+  };
+
+  let mouseState = { mouseX: 0, mouseY: 0 };
 </script>
 
 <div bind:this={containerRef} class="fixed inset-0 z-[-1] pointer-events-none bg-[#020202]"></div>

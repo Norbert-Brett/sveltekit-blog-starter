@@ -62,9 +62,9 @@
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: bubble,
-            start: 'top 90%',
-            end: 'top 10%',
-            scrub: 0.3
+            start: 'top 95%',
+            end: 'bottom 5%',
+            scrub: 0.4
           }
         });
 
@@ -74,19 +74,20 @@
           x: 0, 
           scale: 1, 
           filter: 'blur(0px)',
-          duration: 0.4,
+          duration: 0.15,
           ease: 'power2.out'
         })
-        .to(bubble, { duration: 0.3 }) // sustain
+        .to(bubble, { duration: 0.7 }) // sustain much longer
         .to(bubble, {
           opacity: 0.15, 
-          y: -30, 
-          scale: 0.92, 
+          y: -40, 
+          scale: 0.9, 
           filter: 'blur(12px)',
-          duration: 0.3,
+          duration: 0.15,
           ease: 'power2.in'
         });
       });
+      ScrollTrigger.refresh();
     }, sectionRef);
 
     return () => {
@@ -102,7 +103,7 @@
 <section bind:this={sectionRef} class="relative py-32 md:py-48 overflow-hidden bg-background flex flex-col items-center">
   <!-- Interactive Parallax Background Header -->
   <div class="absolute inset-0 flex items-center justify-center md:items-start pointer-events-none whitespace-nowrap opacity-100 select-none overflow-hidden mt-12 md:mt-0 z-0">
-    <h2 class="testimonial-bg-text text-[20vw] font-serif font-black leading-none text-white/[0.03] tracking-tighter uppercase sticky top-1/4">
+    <h2 class="testimonial-bg-text text-[20vw] font-serif font-black leading-none text-white/3 tracking-tighter uppercase sticky top-1/4">
       Testimonials
     </h2>
   </div>
@@ -128,7 +129,7 @@
           {index === 2 ? 'md:max-w-[720px]' : ''}"
       >
         <!-- Gold Inner Atmosphere -->
-        <div class="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
+        <div class="absolute inset-0 rounded-[2.5rem] bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
 
         <div class="relative z-10 flex flex-col gap-8">
           <!-- Stylized Quotation Anchor -->
@@ -142,7 +143,7 @@
           <!-- Author Identity -->
           <div class="flex items-center gap-5 mt-4 pt-8 border-t border-white/5">
             <div class="flex flex-col">
-              <h4 class="text-sm md:text-base font-bold uppercase tracking-[0.1em] text-white underline underline-offset-8 decoration-primary/30">{ item.author.name }</h4>
+              <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-white underline underline-offset-8 decoration-primary/30">{ item.author.name }</h4>
               <p class="mt-2 text-[10px] md:text-xs font-mono text-primary font-semibold uppercase tracking-[0.2em]">{ item.author.description }</p>
             </div>
           </div>
