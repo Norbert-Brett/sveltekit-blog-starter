@@ -3,15 +3,19 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import WebGLBackground from '$lib/components/WebGLBackground.svelte';
+	import CustomCursor from '$lib/components/CustomCursor.svelte';
 	import { appState } from '$lib/state.svelte.js';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import { siteTitle, siteURL, siteDescription } from '$lib/config.js';
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 	import { MetaTags } from 'svelte-meta-tags';
+	import Lenis from 'lenis';
 
 	let { data, children } = $props();
+	let transitionOverlay = $state(null);
 	const transitionIn = { delay: 150, duration: 150 };
 	const transitionOut = { duration: 100 };
 
@@ -22,6 +26,62 @@
 	onMount(() => {
 		gsap.registerPlugin(ScrollTrigger);
 		appState.isMenuOpen = false;
+
+		// Initialize Lenis Smooth Scrolling
+		const lenis = new Lenis({
+			duration: 1.2,
+			easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+			direction: 'vertical',
+			gestureDirection: 'vertical',
+			smooth: true,
+		});
+
+		// Sync GSAP ScrollTrigger with Lenis
+		lenis.on('scroll', ScrollTrigger.update);
+		gsap.ticker.add((time) => {
+			lenis.raf(time * 1000);
+		});
+		gsap.ticker.lagSmoothing(0, 0);
+
+		// Initialize Scroll Progress Bar
+		gsap.set('.scroll-progress', { scaleX: 0 });
+		gsap.to('.scroll-progress', {
+			scaleX: 1,
+			ease: 'none',
+			scrollTrigger: {
+				trigger: document.body,
+				start: 'top top',
+				end: 'bottom bottom',
+				scrub: 0.3
+			}
+		});
+
+		return () => {
+			lenis.destroy();
+			gsap.ticker.remove(lenis.raf);
+		};
+	});
+
+	beforeNavigate(({ willUnload }) => {
+		if (willUnload || !transitionOverlay) return;
+		const cols = transitionOverlay.querySelectorAll('.t-col');
+		gsap.fromTo(cols, 
+			{ scaleY: 0, transformOrigin: 'bottom' },
+			{ scaleY: 1, duration: 0.5, stagger: 0.05, ease: 'expo.inOut' }
+		);
+	});
+
+	afterNavigate(() => {
+		if (!transitionOverlay) return;
+		const cols = transitionOverlay.querySelectorAll('.t-col');
+		gsap.to(cols, {
+			scaleY: 0,
+			transformOrigin: 'top',
+			duration: 0.5,
+			stagger: 0.05,
+			ease: 'expo.inOut',
+			delay: 0.1
+		});
 	});
 </script>
 
@@ -80,8 +140,10 @@
 />
 
 <div class="layout min-h-screen flex flex-col transition-colors duration-1000 text-foreground" class:open={appState.isMenuOpen}>
+	<CustomCursor />
+
 	<!-- Cinematic Transition Overlay -->
-	<div id="transition-overlay">
+	<div bind:this={transitionOverlay} id="transition-overlay">
 		<div class="t-col"></div>
 		<div class="t-col"></div>
 		<div class="t-col"></div>

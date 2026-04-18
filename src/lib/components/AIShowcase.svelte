@@ -116,10 +116,14 @@
 </script>
 
 <section bind:this={sectionRef} class="relative py-32 md:py-48 px-6 md:px-24 overflow-hidden bg-background">
-  <!-- Interactive background light -->
-  <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-[150px] pointer-events-none animate-[glow-breathe_10s_ease-in-out_infinite]"></div>
+  <!-- Premium Dark Grid Background -->
+  <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center opacity-[0.1]">
+    <div class="w-full h-full" 
+         style="background-image: linear-gradient(var(--color-primary) 1px, transparent 1px), linear-gradient(90deg, var(--color-primary) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse at center, black 10%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 70%);">
+    </div>
+  </div>
 
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-6xl mx-auto relative z-10">
     <!-- Header -->
     <div class="mb-20">
       <span class="ai-label text-xs font-mono tracking-[0.4em] uppercase text-primary font-medium mb-4 flex items-center gap-3">
@@ -132,11 +136,11 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
       <!-- Interactive LLM Console -->
-      <div class="ai-terminal relative">
-        <!-- Accent glow behind terminal -->
-        <div class="absolute -inset-4 bg-primary/[0.03] rounded-3xl blur-[60px] animate-[pulse-glow_4s_ease-in-out_infinite] pointer-events-none"></div>
+      <div class="ai-terminal relative group">
+        <div class="relative rounded-2xl border border-white/5 bg-[#050505]/90 overflow-hidden backdrop-blur-xl transition-all duration-700 group-hover:border-primary/30 group-hover:shadow-[0_0_40px_-10px_rgba(201,168,76,0.15)]">
+          <!-- Glass Reflection Sweep -->
+          <div class="absolute inset-0 w-[200%] h-full bg-linear-to-r from-transparent via-white/4 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1.5s] ease-in-out pointer-events-none"></div>
 
-        <div class="relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden backdrop-blur-sm">
           <!-- Terminal Controls -->
           <div class="flex items-center gap-2 px-4 py-3 border-b border-white/5">
             <div class="w-3 h-3 rounded-full bg-red-500/60 animate-[pulse-glow_3s_ease-in-out_infinite_0.5s]"></div>
@@ -184,13 +188,13 @@
       <div class="grid grid-cols-2 gap-6">
         {#each stats as stat, i}
           <div
-            class="ai-stat-card flex flex-col justify-center p-8 rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-sm hover:border-primary/20 hover:bg-white/[0.03] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(201,168,76,0.1)]"
+            class="ai-stat-card flex flex-col justify-center p-8 rounded-2xl border border-white/5 bg-white/1 backdrop-blur-sm hover:border-primary/20 hover:bg-white/3 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(201,168,76,0.1)]"
           >
             <div class="flex items-end gap-1 mb-3">
               <span class="ai-stat-num text-4xl md:text-6xl font-serif font-black text-white leading-none">0</span>
               <span class="text-xl md:text-2xl font-serif font-bold text-primary leading-none">{ stat.suffix }</span>
             </div>
-            <span class="text-[10px] font-mono tracking-[0.2em] uppercase text-white/60 group-hover:text-white/80 uppercase">{ stat.label }</span>
+            <span class="text-[10px] font-mono tracking-[0.2em] uppercase text-white/60 group-hover:text-white/80">{ stat.label }</span>
           </div>
         {/each}
       </div>

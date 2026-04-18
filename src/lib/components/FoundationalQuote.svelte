@@ -118,32 +118,41 @@
   class="fq-section relative py-40 md:py-56 lg:py-64 overflow-hidden flex flex-col items-center justify-center text-center px-6 bg-[#020202]"
 >
   <!-- Background Layers -->
-  <div class="absolute inset-0 opacity-[0.025] mix-blend-overlay noise-bg z-[1] pointer-events-none"></div>
+  <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay noise-bg z-1 pointer-events-none"></div>
 
-  <!-- Ambient Orbs -->
-  <div class="fq-orb absolute -top-[30%] left-[10%] w-[60vw] h-[60vw] rounded-full bg-primary/[0.04] blur-[180px] pointer-events-none z-[1]"></div>
-  <div class="fq-orb absolute -bottom-[20%] right-[5%] w-[50vw] h-[50vw] rounded-full bg-white/[0.015] blur-[150px] pointer-events-none z-[1]"></div>
+  <!-- Premium Architectural Grid -->
+  <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center">
+    <div class="w-full h-full opacity-[0.15]" 
+         style="background-image: radial-gradient(var(--color-primary) 1px, transparent 1px); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, black 10%, transparent 60%); -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 60%);">
+    </div>
+  </div>
+
+  <!-- Focused Spotlight (Not a generic orb) -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(201,168,76,0.1)_0%,transparent_70%)] pointer-events-none z-0"></div>
 
   <!-- Top/Bottom Fade -->
-  <div class="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202] z-[2] pointer-events-none"></div>
-  <div class="absolute inset-0 z-[2] pointer-events-none" style="background: radial-gradient(ellipse at center, transparent 40%, #020202 85%);"></div>
+  <div class="absolute inset-0 bg-linear-to-b from-[#000000] via-transparent to-[#000000] z-2 pointer-events-none"></div>
 
-  <!-- Decorative Corner Elements -->
-  <div class="absolute top-12 left-12 w-16 h-16 z-[3] pointer-events-none hidden md:block">
-    <div class="fq-corner-line absolute top-0 left-0 w-full h-px bg-gradient-to-r from-primary/40 to-transparent origin-left"></div>
-    <div class="fq-corner-line absolute top-0 left-0 h-full w-px bg-gradient-to-b from-primary/40 to-transparent origin-top"></div>
+  <!-- Decorative Corner Elements (Refined) -->
+  <div class="absolute top-12 left-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
+    <div class="absolute top-0 left-0 w-full h-px bg-linear-to-r from-primary/60 to-transparent"></div>
+    <div class="absolute top-0 left-0 h-full w-px bg-linear-to-b from-primary/60 to-transparent"></div>
+    <div class="absolute -top-[3px] -left-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
   </div>
-  <div class="absolute top-12 right-12 w-16 h-16 z-[3] pointer-events-none hidden md:block">
-    <div class="fq-corner-line absolute top-0 right-0 w-full h-px bg-gradient-to-l from-primary/40 to-transparent origin-right"></div>
-    <div class="fq-corner-line absolute top-0 right-0 h-full w-px bg-gradient-to-b from-primary/40 to-transparent origin-top"></div>
+  <div class="absolute top-12 right-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
+    <div class="absolute top-0 right-0 w-full h-px bg-linear-to-l from-primary/60 to-transparent"></div>
+    <div class="absolute top-0 right-0 h-full w-px bg-linear-to-b from-primary/60 to-transparent"></div>
+    <div class="absolute -top-[3px] -right-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
   </div>
-  <div class="absolute bottom-12 left-12 w-16 h-16 z-[3] pointer-events-none hidden md:block">
-    <div class="fq-corner-line absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-primary/40 to-transparent origin-left"></div>
-    <div class="fq-corner-line absolute bottom-0 left-0 h-full w-px bg-gradient-to-t from-primary/40 to-transparent origin-bottom"></div>
+  <div class="absolute bottom-12 left-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
+    <div class="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-primary/60 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 h-full w-px bg-linear-to-t from-primary/60 to-transparent"></div>
+    <div class="absolute -bottom-[3px] -left-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
   </div>
-  <div class="absolute bottom-12 right-12 w-16 h-16 z-[3] pointer-events-none hidden md:block">
-    <div class="fq-corner-line absolute bottom-0 right-0 w-full h-px bg-gradient-to-l from-primary/40 to-transparent origin-right"></div>
-    <div class="fq-corner-line absolute bottom-0 right-0 h-full w-px bg-gradient-to-t from-primary/40 to-transparent origin-bottom"></div>
+  <div class="absolute bottom-12 right-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
+    <div class="absolute bottom-0 right-0 w-full h-px bg-linear-to-l from-primary/60 to-transparent"></div>
+    <div class="absolute bottom-0 right-0 h-full w-px bg-linear-to-t from-primary/60 to-transparent"></div>
+    <div class="absolute -bottom-[3px] -right-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
   </div>
 
   <!-- Content -->
@@ -178,7 +187,7 @@
       {/each}
     </h2>
 
-    <div class="fq-divider w-24 md:w-40 h-px my-12 md:my-16 origin-center bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+    <div class="fq-divider w-24 md:w-40 h-px my-12 md:my-16 origin-center bg-linear-to-r from-transparent via-primary/50 to-transparent"></div>
 
     <!-- Sub-Quote -->
     {#if subQuote}
