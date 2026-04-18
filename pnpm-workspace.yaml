@@ -1,13 +1,13 @@
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@^0.1.16
+  vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plus: ^0.1.16
   vitest: npm:@voidzero-dev/vite-plus-test@latest
 onlyBuiltDependencies:
   - esbuild
   - "@tailwindcss/oxide"
 overrides:
-  vite: "catalog:"
-  vitest: "catalog:"
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vitest: npm:@voidzero-dev/vite-plus-test@latest
 peerDependencyRules:
   allowAny:
     - vite
