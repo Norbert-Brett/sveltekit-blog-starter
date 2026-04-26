@@ -3,6 +3,7 @@
   import { browser } from '$app/environment';
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { magnetic } from '$lib/actions/magnetic.js';
 
   if (browser) {
     gsap.registerPlugin(ScrollTrigger);
@@ -40,15 +41,15 @@
     window.addEventListener('resize', handleResize);
 
     ctx = gsap.context(() => {
-      // 1. High-Speed Kinetic Entrance
+      // 1. High-Speed Kinetic Entrance (Trending Split-Text Mask Reveal)
       gsap.fromTo('.hero-char', 
-        { y: 40, opacity: 0, rotateX: -30 },
-        { y: 0, opacity: 1, rotateX: 0, duration: 0.5, stagger: 0.015, ease: 'expo.out', delay: 0.05 }
+        { yPercent: 120, rotateX: -45, scale: 0.9, opacity: 0 },
+        { yPercent: 0, rotateX: 0, scale: 1, opacity: 1, duration: 1, stagger: 0.02, ease: 'power4.out', delay: 0.1 }
       );
 
-      gsap.fromTo('.hero-subtitle, .hero-badge, .hero-ticker', 
-        { y: 15, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: 'expo.out', delay: 0.2 }
+      gsap.fromTo('.hero-subtitle, .hero-cta, .hero-ticker', 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'expo.out', delay: 0.4 }
       );
 
       gsap.fromTo('.scroll-indicator', { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 0.6 });
@@ -123,7 +124,7 @@
     </video>
     
     <!-- Mobile Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent lg:hidden"></div>
+    <div class="absolute inset-0 bg-linear-to-r from-background via-background/60 to-transparent lg:hidden"></div>
   </div>
 
   <!-- Orbs -->
@@ -153,16 +154,20 @@
       Full Stack Developer · AI Specialist
     </p>
 
-    <div class="hero-badge mt-10 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full border border-primary/30 bg-primary/[0.06] backdrop-blur-sm">
-      <span class="w-2 h-2 rounded-full bg-primary animate-pulse-glow shadow-[0_0_8px_rgba(var(--primary),0.5)]"></span>
-      <span class="text-[9px] md:text-[10px] font-mono tracking-[0.25em] uppercase text-primary/90">Available</span>
-    </div>
+    <!-- Hick's Law & Von Restorff Effect: Single, highly isolated CTA -->
+    <a href="/contact" use:magnetic={{ strength: 0.4, textStrength: 0.15 }} class="hero-cta mt-10 z-30 flex items-center gap-4 px-8 py-4 rounded-full bg-primary text-black hover:bg-white hover:scale-105 transition-all duration-500 shadow-[0_0_40px_rgba(var(--primary),0.4)] interactive group">
+      <span class="magnetic-text flex items-center gap-4">
+        <span class="w-2 h-2 rounded-full bg-black animate-pulse"></span>
+        <span class="text-[11px] md:text-xs font-mono font-bold tracking-[0.2em] uppercase">Start a Project</span>
+        <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </span>
+    </a>
   </div>
 
   <!-- Ticker -->
   <div class="hero-ticker absolute bottom-20 left-0 w-full overflow-hidden z-20 pointer-events-none">
-    <div class="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-background to-transparent z-10"></div>
-    <div class="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-background to-transparent z-10"></div>
+    <div class="absolute left-0 top-0 w-24 h-full bg-linear-to-r from-background to-transparent z-10"></div>
+    <div class="absolute right-0 top-0 w-24 h-full bg-linear-to-l from-background to-transparent z-10"></div>
     <div class="marquee-track flex whitespace-nowrap animate-marquee">
       {#each Array(6) as _, i (i)}
         <span class="text-xs md:text-sm font-mono tracking-[0.3em] uppercase text-white/50 pr-12">
@@ -172,7 +177,7 @@
     </div>
   </div>
 
-  <div class="hero-bottom-border absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent z-20 origin-center"></div>
+  <div class="hero-bottom-border absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/40 to-transparent z-20 origin-center"></div>
 
   <!-- Scroll Indicator -->
   <div class="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 opacity-0">
@@ -212,13 +217,7 @@
     animation: glow-breathe 12s ease-in-out infinite 2s;
   }
 
-  @keyframes pulse-glow {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
-  }
-  .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
-  }
+
 
   .hero-char {
     text-shadow: 0 0 40px rgba(0,0,0,0.6);

@@ -1,5 +1,4 @@
 <script>
-	import { siteTitle } from '$lib/config';
 	import { MetaTags } from 'svelte-meta-tags';
 	import Hero from '$lib/components/Hero.svelte';
 	import Stats from '$lib/components/Stats.svelte';

@@ -4,6 +4,7 @@
   import { fade, scale } from 'svelte/transition';
   import { siteTitle, navItems } from '$lib/config.js';
   import { appState } from '$lib/state.svelte.js';
+  import { magnetic } from '$lib/actions/magnetic.js';
   import gsap from 'gsap';
 
   // State
@@ -23,50 +24,7 @@
     closeMenu();
   });
 
-  function magneticHover(element, options = {}) {
-    const { strength = 0.6, textStrength = 0.2 } = options;
-    const text = element.querySelector('.magnetic-text');
 
-    element.addEventListener('mousemove', (e) => {
-      const rect = element.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      gsap.to(element, {
-        x: x * strength,
-        y: y * strength,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
-
-      if (text) {
-        gsap.to(text, {
-          x: x * textStrength,
-          y: y * textStrength,
-          duration: 0.6,
-          ease: 'power2.out',
-        });
-      }
-    });
-
-    element.addEventListener('mouseleave', () => {
-      gsap.to(element, {
-        x: 0,
-        y: 0,
-        duration: 0.6,
-        ease: 'elastic.out(1, 0.3)',
-      });
-
-      if (text) {
-        gsap.to(text, {
-          x: 0,
-          y: 0,
-          duration: 0.6,
-          ease: 'elastic.out(1, 0.3)',
-        });
-      }
-    });
-  }
 
   onMount(() => {
     // Initial values
@@ -88,26 +46,18 @@
       { y: 0, opacity: 1, duration: 0.8, ease: 'expo.out', delay: 0.2 }
     );
 
-    // Setup magnetic hover for links after a short delay
-    const timer = setTimeout(() => {
-      document.querySelectorAll('.nav-link-magnetic').forEach((el) => {
-        magneticHover(el);
-      });
-    }, 500);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
-      clearTimeout(timer);
     };
   });
 </script>
 
-<div class="relative z-[100] w-full">
+<div class="relative z-100 w-full">
   <!-- 1. Top Header -->
   {#if navVisible}
     <header
-      class="main-nav-container fixed top-0 left-0 w-full z-[101] transition-all duration-500 {isScrolled
+      class="main-nav-container fixed top-0 left-0 w-full z-101 transition-all duration-500 {isScrolled
         ? 'py-3 bg-background/90 backdrop-blur-xl border-b border-white/10'
         : 'py-6 sm:py-8 bg-transparent'}"
     >
@@ -141,13 +91,18 @@
             {#each navItems as item, index (index)}
               <a
                 href={item.route}
-                class="nav-link-magnetic flex items-center justify-center px-4 py-2 interactive"
+                use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
+                class="nav-link-magnetic relative flex items-center justify-center px-4 py-2 interactive group/navlink"
               >
                 <span
-                  class="magnetic-text text-[11px] font-mono uppercase tracking-[0.2em] text-white/90 hover:text-primary transition-colors duration-300 pointer-events-none whitespace-nowrap"
+                  class="magnetic-text text-[11px] font-mono uppercase tracking-[0.2em] text-white/90 group-hover/navlink:text-primary transition-colors duration-300 pointer-events-none whitespace-nowrap"
                 >
                   {item.title}
                 </span>
+                <!-- Jakob's Law: Familiar Active/Hover State -->
+                <span 
+                  class="absolute bottom-0 left-4 right-4 h-px bg-primary origin-left transition-transform duration-300 ease-out {appState.currentPage === item.route ? 'scale-x-100' : 'scale-x-0 group-hover/navlink:scale-x-100'}"
+                ></span>
               </a>
             {/each}
           </nav>
@@ -157,6 +112,7 @@
             <div in:scale={{ duration: 300, start: 0.6 }}>
               <button
                 class="nav-link-magnetic shrink-0 bg-primary text-black rounded-full flex flex-col items-center justify-center gap-[4px] transition-all duration-300 interactive w-11 h-11"
+                use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
                 onclick={() => (appState.isMenuOpen = true)}
                 aria-label="Open menu"
               >
@@ -179,7 +135,7 @@
     <button
       in:fade={{ duration: 300 }}
       out:fade={{ duration: 300 }}
-      class="fixed top-6 right-6 sm:right-12 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center z-[120] shadow-2xl interactive hover:rotate-90 transition-transform duration-500"
+      class="fixed top-6 right-6 sm:right-12 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center z-120 shadow-2xl interactive hover:rotate-90 transition-transform duration-500"
       onclick={() => (appState.isMenuOpen = false)}
       aria-label="Close menu"
     >
@@ -195,7 +151,7 @@
     <div
       in:fade={{ duration: 300 }}
       out:fade={{ duration: 300 }}
-      class="fixed inset-0 bg-black/70 backdrop-blur-md z-[105]"
+      class="fixed inset-0 bg-black/70 backdrop-blur-md z-105"
       onclick={() => (appState.isMenuOpen = false)}
       aria-hidden="true"
     ></div>
@@ -203,7 +159,7 @@
 
   <!-- 4. Side Menu Drawer -->
   <div
-    class="fixed inset-y-0 right-0 w-full sm:w-[500px] bg-background text-white z-[108] flex flex-col pt-32 pb-16 transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] shadow-2xl overflow-hidden {appState.isMenuOpen
+    class="fixed inset-y-0 right-0 w-full sm:w-[500px] bg-background text-white z-108 flex flex-col pt-32 pb-16 transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] shadow-2xl overflow-hidden {appState.isMenuOpen
       ? 'translate-x-0'
       : 'translate-x-full'}"
   >

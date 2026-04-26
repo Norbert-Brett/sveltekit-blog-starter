@@ -52,14 +52,15 @@
 
     ctx = gsap.context(() => {
       gsap.fromTo('.metric-card-wrapper',
-        { y: 60, opacity: 0, rotateX: 15, scale: 0.95 },
+        { y: 100, opacity: 0, rotateX: 25, skewY: 5, scale: 0.9 },
         { 
           y: 0, 
           opacity: 1,
           rotateX: 0,
+          skewY: 0,
           scale: 1,
-          stagger: 0.1, 
-          duration: 1.2, 
+          stagger: 0.15, 
+          duration: 1.5, 
           ease: 'expo.out',
           scrollTrigger: {
             trigger: statsRef,
@@ -92,16 +93,16 @@
       
       {#each stats as stat, index (index)}
         <div 
-          class="metric-card-wrapper relative group rounded-[2rem] bg-white/[0.02] overflow-hidden"
+          class="metric-card-wrapper relative group rounded-4xl bg-white/2 overflow-hidden"
         >
           <!-- Border Glow -->
           <div 
-            class="pointer-events-none absolute -inset-px rounded-[2rem] opacity-0 transition duration-300 group-hover:opacity-100"
+            class="pointer-events-none absolute -inset-px rounded-4xl opacity-0 transition duration-300 group-hover:opacity-100"
             style="background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.4), transparent 40%); mix-blend-mode: overlay;"
           ></div>
           
           <!-- Inner Background -->
-          <div class="absolute inset-[1px] rounded-[calc(2rem-1px)] bg-[#0A0D0B]/80 backdrop-blur-2xl z-0"></div>
+          <div class="absolute inset-px rounded-[calc(2rem-1px)] bg-[#0A0D0B]/80 backdrop-blur-2xl z-0"></div>
           
           <!-- Hover Shine -->
           <div 
@@ -115,15 +116,15 @@
               <div class="w-1.5 h-1.5 rounded-full bg-white/20 transition-all duration-500 group-hover:bg-white group-hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
             </div>
             
-            <div class="mt-auto">
-              <div class="flex items-baseline gap-1 mb-3">
+            <div class="mt-auto space-y-1"> <!-- Proximity Law: Tightening group -->
+              <div class="flex items-baseline gap-1">
                 <span class="text-6xl lg:text-7xl font-sans font-light text-white tracking-tighter tabular-nums leading-none">
                   {displayedValues[index]}
                 </span>
                 <span class="text-2xl lg:text-3xl font-light text-white/60">{stat.suffix}</span>
               </div>
               
-              <div class="text-xs uppercase tracking-[0.2em] text-white/70 font-medium group-hover:text-white/80 transition-colors duration-500">
+              <div class="text-[10px] uppercase tracking-[0.3em] text-primary/80 font-bold group-hover:text-primary transition-colors duration-500">
                 {stat.label}
               </div>
             </div>

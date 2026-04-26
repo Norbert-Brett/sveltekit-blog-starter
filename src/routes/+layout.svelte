@@ -4,6 +4,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import WebGLBackground from '$lib/components/WebGLBackground.svelte';
 	import CustomCursor from '$lib/components/CustomCursor.svelte';
+	import Preloader from '$lib/components/Preloader.svelte';
 	import { appState } from '$lib/state.svelte.js';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -16,6 +17,7 @@
 
 	let { data, children } = $props();
 	let transitionOverlay = $state(null);
+	let showPreloader = $state(true);
 	const transitionIn = { delay: 150, duration: 150 };
 	const transitionOut = { duration: 100 };
 
@@ -24,6 +26,13 @@
 	});
 
 	onMount(() => {
+		// Check preloader state
+		if (sessionStorage.getItem('preloaderPlayed') === 'true') {
+			showPreloader = false;
+		} else {
+			sessionStorage.setItem('preloaderPlayed', 'true');
+		}
+
 		gsap.registerPlugin(ScrollTrigger);
 		appState.isMenuOpen = false;
 
@@ -140,6 +149,10 @@
 />
 
 <div class="layout min-h-screen flex flex-col transition-colors duration-1000 text-foreground" class:open={appState.isMenuOpen}>
+	{#if showPreloader}
+		<Preloader onComplete={() => showPreloader = false} />
+	{/if}
+
 	<CustomCursor />
 
 	<!-- Cinematic Transition Overlay -->

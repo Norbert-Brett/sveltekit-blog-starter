@@ -1,6 +1,7 @@
 .DS_Store
 .gemini
-
+.agent
+.antigravityignore
 
 # Common files that should be ignored in all projects
 
