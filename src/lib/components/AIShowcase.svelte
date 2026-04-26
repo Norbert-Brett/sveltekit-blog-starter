@@ -14,6 +14,7 @@
   let prompt = $state('');
   let isTyping = $state(false);
   let response = $state('');
+  let hasAutoPlayed = $state(false);
 
   const stats = [
     { label: 'Models Trained', value: 12, suffix: '+' },
@@ -73,16 +74,16 @@
         }
       );
 
-      // 5. Stat cards stagger
+      // 5. Stat cards stagger with clip-path reveal
       gsap.fromTo('.ai-stat-card', 
-        { y: 20, opacity: 0, scale: 0.95 }, 
+        { clipPath: 'inset(100% 0 0 0)', opacity: 0 }, 
         {
-          y: 0, opacity: 1, scale: 1, duration: 0.3, stagger: 0.03, ease: 'back.out(1.4)',
+          clipPath: 'inset(0% 0 0 0)', opacity: 1, duration: 0.8, stagger: 0.08, ease: 'expo.out',
           scrollTrigger: { trigger: sectionRef, start: 'top 50%' }
         }
       );
 
-      // 6. Counter animations
+      // 6. Counter animations with glow burst on completion
       const counters = document.querySelectorAll('.ai-stat-num');
       counters.forEach((el, i) => {
         const stat = stats[i];
@@ -100,8 +101,28 @@
           },
           onUpdate: () => {
             el.innerText = Math.floor(obj.val);
+          },
+          onComplete: () => {
+            // Glow burst effect on counter completion
+            gsap.fromTo(el, 
+              { scale: 1, textShadow: '0 0 0px rgba(201,168,76,0)' },
+              { scale: 1.08, textShadow: '0 0 20px rgba(201,168,76,0.5)', duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1 }
+            );
           }
         });
+      });
+
+      // 7. Auto-trigger typing demo on scroll-enter (Hick's Law: removes decision to click)
+      ScrollTrigger.create({
+        trigger: sectionRef,
+        start: 'top 40%',
+        once: true,
+        onEnter: () => {
+          if (!hasAutoPlayed) {
+            hasAutoPlayed = true;
+            setTimeout(() => typeResponse(), 800);
+          }
+        }
       });
     }, sectionRef);
 
@@ -141,6 +162,11 @@
           <!-- Glass Reflection Sweep -->
           <div class="absolute inset-0 w-[200%] h-full bg-linear-to-r from-transparent via-white/4 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1.5s] ease-in-out pointer-events-none"></div>
 
+          <!-- Cinematic Scanline (trending CRT terminal effect) -->
+          <div class="absolute inset-0 pointer-events-none z-30 overflow-hidden opacity-[0.03]">
+            <div class="w-full h-[2px] bg-primary/80 animate-scanline"></div>
+          </div>
+
           <!-- Terminal Controls -->
           <div class="flex items-center gap-2 px-4 py-3 border-b border-white/5">
             <div class="w-3 h-3 rounded-full bg-red-500/60 animate-[pulse-glow_3s_ease-in-out_infinite_0.5s]"></div>
@@ -172,7 +198,7 @@
               </div>
             {/if}
 
-            <!-- Execution Trigger -->
+            <!-- Re-trigger button (shows after auto-play completes) -->
             <button
               class="mt-6 px-6 py-3 rounded-full bg-primary text-black text-[10px] font-mono font-bold tracking-[0.15em] uppercase hover:bg-[#b8983f] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               onclick={typeResponse}
@@ -184,12 +210,13 @@
         </div>
       </div>
 
-      <!-- Performance Metrics Grid -->
+      <!-- Performance Metrics Grid (Proximity Law: tight internal grouping) -->
       <div class="grid grid-cols-2 gap-6">
         {#each stats as stat, i}
           <div
             class="ai-stat-card flex flex-col justify-center p-8 rounded-2xl border border-white/5 bg-white/1 backdrop-blur-sm hover:border-primary/20 hover:bg-white/3 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(201,168,76,0.1)]"
           >
+            <!-- Proximity Law: number + suffix are one tight baseline group -->
             <div class="flex items-end gap-1 mb-3">
               <span class="ai-stat-num text-4xl md:text-6xl font-serif font-black text-white leading-none">0</span>
               <span class="text-xl md:text-2xl font-serif font-bold text-primary leading-none">{ stat.suffix }</span>
@@ -207,6 +234,6 @@
     font-family: var(--font-mono);
   }
   .ai-stat-card {
-    will-change: transform, opacity;
+    will-change: transform, opacity, clip-path;
   }
 </style>

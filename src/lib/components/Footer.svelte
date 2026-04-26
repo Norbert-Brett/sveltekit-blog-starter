@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { siteTitle, navItems } from '$lib/config';
+  import { magnetic } from '$lib/actions/magnetic.js';
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -50,35 +51,59 @@
 
   const currentYear = new Date().getFullYear();
 
+  // Split "Let's work together" into characters for mask reveal
+  const ctaLine1 = "Let's work";
+  const ctaLine2 = "together";
+
   onMount(() => {
     updateTime();
     timer = setInterval(updateTime, 1000);
 
     ctx = gsap.context(() => {
-      // CTA Animations
-      gsap.fromTo('.footer-cta-el', 
-        { y: 40, opacity: 0 },
+      // 1. CTA character-by-character mask reveal (cinematic)
+      gsap.fromTo('.footer-cta-label',
+        { y: 20, opacity: 0 },
         {
-          y: 0, 
-          opacity: 1, 
-          duration: 1, 
-          stagger: 0.1, 
-          ease: 'expo.out',
-          scrollTrigger: {
-            trigger: '.footer-cta',
-            start: 'top 90%',
-          }
+          y: 0, opacity: 1, duration: 0.6, ease: 'expo.out',
+          scrollTrigger: { trigger: '.footer-cta', start: 'top 90%' }
         }
       );
 
-      // Grid Animations
-      gsap.fromTo('.footer-col', 
-        { y: 30, opacity: 0 },
+      // Character mask reveal on CTA headline
+      const ctaChars = gsap.utils.toArray('.cta-char');
+      if (ctaChars.length > 0) {
+        gsap.fromTo(ctaChars,
+          { yPercent: 110, rotateX: -40, opacity: 0 },
+          {
+            yPercent: 0, rotateX: 0, opacity: 1,
+            duration: 0.8,
+            stagger: { each: 0.015, from: 'start' },
+            ease: 'expo.out',
+            scrollTrigger: {
+              trigger: '.footer-cta',
+              start: 'top 85%',
+            }
+          }
+        );
+      }
+
+      // Arrow circle entrance
+      gsap.fromTo('.footer-arrow-circle',
+        { scale: 0, opacity: 0, rotate: -45 },
         {
-          y: 0, 
-          opacity: 1, 
-          duration: 0.8, 
-          stagger: 0.1, 
+          scale: 1, opacity: 1, rotate: 0,
+          duration: 0.8, ease: 'back.out(1.7)', delay: 0.3,
+          scrollTrigger: { trigger: '.footer-cta', start: 'top 85%' }
+        }
+      );
+
+      // 2. Grid columns — staggered line-wipe reveals
+      gsap.fromTo('.footer-col', 
+        { clipPath: 'inset(0 0 100% 0)', opacity: 0 },
+        {
+          clipPath: 'inset(0 0 0% 0)', opacity: 1,
+          duration: 1, 
+          stagger: 0.15, 
           ease: 'expo.out',
           scrollTrigger: {
             trigger: '.footer-grid',
@@ -87,13 +112,29 @@
         }
       );
 
-      // Social Links & Nav
-      gsap.fromTo(['.social-link', '.footer-nav-link'], 
+      // 3. Social Links stagger
+      gsap.fromTo('.social-link', 
+        { opacity: 0, x: -15 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.5,
+          stagger: 0.05,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.footer-grid',
+            start: 'top 90%',
+          }
+        }
+      );
+
+      // Footer nav links stagger
+      gsap.fromTo('.footer-nav-link', 
         { opacity: 0, x: -10 },
         {
           opacity: 1,
           x: 0,
-          duration: 0.6,
+          duration: 0.5,
           stagger: 0.05,
           ease: 'power2.out',
           scrollTrigger: {
@@ -117,32 +158,47 @@
   bind:this={footerRef}
   class="relative bg-background text-white pt-32 pb-0 overflow-hidden border-t border-white/10"
 >
-  <!-- Large CTA Section -->
+  <!-- Von Restorff: "Let's Work Together" is massive, visually isolated CTA -->
   <div class="footer-cta max-w-7xl mx-auto px-6 mb-32 relative z-10">
     <div class="flex flex-col items-start">
-      <p class="footer-cta-el text-primary font-medium font-mono text-xs tracking-[0.2em] uppercase mb-6 flex items-center gap-2">
+      <p class="footer-cta-label text-primary font-medium font-mono text-xs tracking-[0.2em] uppercase mb-6 flex items-center gap-2">
         <span class="w-2 h-2 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary),0.5)] animate-pulse"></span>
         Open for Opportunities
       </p>
 
       <a href="mailto:norbertbrett@outlook.com" class="group relative block w-full interactive">
         <h3
-          class="footer-cta-el text-[10vw] md:text-[8vw] leading-[0.85] font-black uppercase tracking-tighter text-transparent border-white/20 [-webkit-text-stroke:1px_rgba(255,255,255,0.2)] group-hover:[-webkit-text-stroke:1px_rgba(var(--primary),0.8)] group-hover:text-white transition-all duration-700 drop-shadow-[0_0_80px_rgba(var(--primary),0)] group-hover:drop-shadow-[0_0_80px_rgba(var(--primary),0.15)]"
+          class="text-[10vw] md:text-[8vw] leading-[0.85] font-black uppercase tracking-tighter text-transparent border-white/20 [-webkit-text-stroke:1px_rgba(255,255,255,0.2)] group-hover:[-webkit-text-stroke:1px_rgba(var(--primary),0.8)] group-hover:text-white transition-all duration-700 drop-shadow-[0_0_80px_rgba(var(--primary),0)] group-hover:drop-shadow-[0_0_80px_rgba(var(--primary),0.15)]"
         >
-          Let's work<br />
-          <span class="ml-[5vw] group-hover:ml-[7vw] transition-all duration-500">together</span>
+          <!-- Character mask reveal -->
+          <span class="block overflow-hidden">
+            {#each ctaLine1.split('') as char, i}
+              <span class="cta-char inline-block will-change-transform {char === ' ' ? 'w-[0.3em]' : ''}">{char === ' ' ? '\u00A0' : char}</span>
+            {/each}
+          </span>
+          <span class="block overflow-hidden">
+            <span class="inline-block ml-[5vw] group-hover:ml-[7vw] transition-all duration-500">
+              {#each ctaLine2.split('') as char, i}
+                <span class="cta-char inline-block will-change-transform">{char}</span>
+              {/each}
+            </span>
+          </span>
         </h3>
 
+        <!-- Magnetic arrow circle -->
         <div
-          class="absolute top-1/2 right-[5%] -translate-y-1/2 hidden md:flex w-20 h-20 bg-primary text-black rounded-full items-center justify-center group-hover:scale-110 group-hover:rotate-45 transition-all duration-500 shadow-[0_0_30px_rgba(var(--primary),0.2)]"
+          use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
+          class="footer-arrow-circle absolute top-1/2 right-[5%] -translate-y-1/2 hidden md:flex w-20 h-20 bg-primary text-black rounded-full items-center justify-center group-hover:scale-110 group-hover:rotate-45 transition-all duration-500 shadow-[0_0_30px_rgba(var(--primary),0.2)] interactive"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          <span class="magnetic-text flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          </span>
         </div>
       </a>
     </div>
   </div>
 
-  <!-- Grid Layout -->
+  <!-- Jakob's Law: Standard brand/nav/social 3-column footer pattern -->
   <div class="footer-grid border-t border-white/5 relative z-10">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-white/5">
@@ -239,5 +295,11 @@
 <style>
   :global(.text-stroke-white) {
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+  }
+  .cta-char {
+    will-change: transform, opacity;
+  }
+  .footer-col {
+    will-change: clip-path, opacity;
   }
 </style>

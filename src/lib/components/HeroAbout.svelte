@@ -11,6 +11,7 @@
   let sectionRef = $state(null);
   let counterRef = $state(null);
   let activePanel = $state(0);
+  let scrollProgress = $state(0);
   let ctx;
 
   const panels = [
@@ -45,6 +46,7 @@
           scrub: 0.5,
           onUpdate: (self) => {
             const progress = self.progress;
+            scrollProgress = progress;
             activePanel = Math.min(Math.floor(progress * panels.length), panels.length - 1);
           }
         }
@@ -94,11 +96,29 @@
           scrollTrigger: { trigger: sectionRef, start: 'top 70%' }
         }
       );
+
+      // 5. Panel headings — clip-path mask reveal
+      panels.forEach((_, i) => {
+        gsap.set(`.about-heading-${i}`, { clipPath: 'inset(0 100% 0 0)' });
+      });
+      // First panel heading reveals immediately
+      gsap.to('.about-heading-0', { clipPath: 'inset(0 0% 0 0)', duration: 1, ease: 'expo.out', delay: 0.3,
+        scrollTrigger: { trigger: sectionRef, start: 'top 70%' }
+      });
     }, sectionRef);
 
     return () => {
       if (ctx) ctx.revert();
     };
+  });
+
+  // Trigger heading reveal when panel changes
+  $effect(() => {
+    if (!browser || !sectionRef) return;
+    const heading = sectionRef.querySelector(`.about-heading-${activePanel}`);
+    if (heading) {
+      gsap.to(heading, { clipPath: 'inset(0 0% 0 0)', duration: 0.8, ease: 'expo.out' });
+    }
   });
 
   onDestroy(() => {
@@ -107,6 +127,14 @@
 </script>
 
 <section bind:this={sectionRef} class="relative w-full h-screen overflow-hidden bg-background">
+  <!-- Scroll-driven progress bar (Jakob's Law: familiar step indicator) -->
+  <div class="absolute top-0 left-0 w-full h-[2px] z-40">
+    <div 
+      class="h-full bg-linear-to-r from-primary via-[#e8d48b] to-primary/60 origin-left transition-transform duration-100"
+      style="transform: scaleX({scrollProgress})"
+    ></div>
+  </div>
+
   <!-- Background accent orb -->
   <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] rounded-full bg-primary/3 blur-[150px] pointer-events-none animate-[glow-breathe_10s_ease-in-out_infinite]"></div>
 
@@ -132,7 +160,8 @@
               <span class="text-[10px] md:text-xs font-mono tracking-[0.4em] uppercase text-primary font-bold">{ panel.label }</span>
               <div class="w-16 h-px bg-linear-to-r from-primary/50 to-transparent"></div>
             </div>
-            <h2 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-black tracking-[-.04em] leading-[0.9] text-white mb-8 drop-shadow-2xl text-balance">
+            <!-- Heading with clip-path mask reveal -->
+            <h2 class="about-heading-{i} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-black tracking-[-.04em] leading-[0.9] text-white mb-8 drop-shadow-2xl text-balance gpu-accelerated">
               { panel.title }
             </h2>
             <p class="text-base sm:text-lg md:text-xl font-sans font-light text-white/70 max-w-2xl leading-relaxed tracking-wide">
@@ -142,7 +171,7 @@
         {/each}
       </div>
 
-      <!-- Progress dots -->
+      <!-- Progress dots (Miller's Law: 3 panels = easy to chunk; Jakob's Law: familiar step dots) -->
       <div class="absolute bottom-0 left-0 flex gap-3">
         {#each Array(panels.length) as _, i}
           <div

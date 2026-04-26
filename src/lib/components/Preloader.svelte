@@ -5,6 +5,7 @@
 	let { onComplete } = $props();
 
 
+	let container = $state(null);
 	let counterElement;
 	let percentage = $state(0);
 

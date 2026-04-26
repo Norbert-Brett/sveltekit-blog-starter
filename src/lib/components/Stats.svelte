@@ -12,14 +12,15 @@
   const exp = currentYear - 2021;
 
   const stats = [
-    { label: 'Years Experience', value: exp, suffix: '+' },
-    { label: 'Core Projects', value: 15, suffix: '+' },
-    { label: 'System Uptime', value: 100, suffix: '%' },
-    { label: 'Customer Satisfaction', value: 100, suffix: '%' },
+    { label: 'Years Experience', value: exp, suffix: '+', featured: true },
+    { label: 'Core Projects', value: 15, suffix: '+', featured: false },
+    { label: 'System Uptime', value: 100, suffix: '%', featured: false },
+    { label: 'Customer Satisfaction', value: 100, suffix: '%', featured: false },
   ];
 
   let statsRef = $state(null);
   let displayedValues = $state(stats.map(() => 0));
+  let countersFinished = $state(stats.map(() => false));
   let ctx;
 
   const handleMouseMove = (e) => {
@@ -30,6 +31,19 @@
     const y = e.clientY - rect.top;
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
+
+    // 3D tilt effect (Proximity Law: physical depth creates visual grouping)
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    const card = e.target.closest('.metric-card-wrapper');
+    if (!card) return;
+    card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
   };
 
   const startCounters = () => {
@@ -42,6 +56,17 @@
         ease: "power2.out",
         onUpdate: () => {
           displayedValues[index] = Math.floor(obj.val);
+        },
+        onComplete: () => {
+          // Glow burst on completion (Von Restorff: isolation effect on finished counters)
+          countersFinished[index] = true;
+          const numEl = statsRef?.querySelector(`.stat-num-${index}`);
+          if (numEl) {
+            gsap.fromTo(numEl, 
+              { scale: 1, textShadow: '0 0 0px rgba(201,168,76,0)' },
+              { scale: 1.1, textShadow: '0 0 25px rgba(201,168,76,0.5)', duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1 }
+            );
+          }
         }
       });
     });
@@ -51,16 +76,15 @@
     if (!browser || !statsRef) return;
 
     ctx = gsap.context(() => {
+      // Clip-path reveal (cinematic) + stagger
       gsap.fromTo('.metric-card-wrapper',
-        { y: 100, opacity: 0, rotateX: 25, skewY: 5, scale: 0.9 },
+        { clipPath: 'inset(100% 0 0 0)', opacity: 0, y: 40 },
         { 
+          clipPath: 'inset(0% 0 0 0)',
           y: 0, 
           opacity: 1,
-          rotateX: 0,
-          skewY: 0,
-          scale: 1,
-          stagger: 0.15, 
-          duration: 1.5, 
+          stagger: 0.12, 
+          duration: 1.2, 
           ease: 'expo.out',
           scrollTrigger: {
             trigger: statsRef,
@@ -89,11 +113,13 @@
   class="relative z-30 py-32 bg-transparent overflow-hidden"
 >
   <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <!-- Miller's Law: exactly 4 stats — within 7±2 sweet spot -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       
       {#each stats as stat, index (index)}
         <div 
-          class="metric-card-wrapper relative group rounded-4xl bg-white/2 overflow-hidden"
+          class="metric-card-wrapper relative group rounded-4xl bg-white/2 overflow-hidden {stat.featured ? 'ring-1 ring-primary/20' : ''}"
+          onmouseleave={handleMouseLeave}
         >
           <!-- Border Glow -->
           <div 
@@ -110,15 +136,21 @@
             style="background: radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.03), transparent 40%);"
           ></div>
 
+          <!-- Von Restorff: Featured stat gets accent top border -->
+          {#if stat.featured}
+            <div class="absolute top-0 left-[15%] right-[15%] h-[2px] bg-linear-to-r from-transparent via-primary/60 to-transparent z-20"></div>
+          {/if}
+
           <div class="relative z-20 flex flex-col justify-between h-full min-h-[180px] p-8 md:p-10">
             <div class="flex items-center justify-between mb-12">
               <span class="text-sm font-mono text-white/60 transition-colors group-hover:text-white/70">0{index + 1}</span>
               <div class="w-1.5 h-1.5 rounded-full bg-white/20 transition-all duration-500 group-hover:bg-white group-hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
             </div>
             
-            <div class="mt-auto space-y-1"> <!-- Proximity Law: Tightening group -->
+            <!-- Proximity Law: Number + suffix + label are one tight group -->
+            <div class="mt-auto space-y-1">
               <div class="flex items-baseline gap-1">
-                <span class="text-6xl lg:text-7xl font-sans font-light text-white tracking-tighter tabular-nums leading-none">
+                <span class="stat-num-{index} text-6xl lg:text-7xl font-sans font-light text-white tracking-tighter tabular-nums leading-none">
                   {displayedValues[index]}
                 </span>
                 <span class="text-2xl lg:text-3xl font-light text-white/60">{stat.suffix}</span>
@@ -137,7 +169,8 @@
 
 <style>
   .metric-card-wrapper {
-    will-change: transform, opacity;
+    will-change: transform, opacity, clip-path;
     transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 </style>

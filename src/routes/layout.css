@@ -230,6 +230,110 @@ body::after {
   }
 }
 
+/* ─── Cinematic Scroll Animations ─── */
+@keyframes clip-reveal-up {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0% 0 0 0);
+  }
+}
+
+@keyframes ken-burns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.08) translate(-1%, -1%);
+  }
+}
+
+@keyframes glow-burst {
+  0% {
+    text-shadow: 0 0 0px rgba(201, 168, 76, 0);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(201, 168, 76, 0.6);
+    transform: scale(1.12);
+  }
+  100% {
+    text-shadow: 0 0 0px rgba(201, 168, 76, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes line-wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes slide-mask-up {
+  from {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0% 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes subtle-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-4px) rotate(0.5deg);
+  }
+  66% {
+    transform: translateY(2px) rotate(-0.3deg);
+  }
+}
+
+/* Cinematic utilities */
+@utility animate-clip-reveal {
+  animation: clip-reveal-up 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-ken-burns {
+  animation: ken-burns 20s ease-in-out infinite alternate;
+}
+
+@utility animate-glow-burst {
+  animation: glow-burst 0.6s ease-out;
+}
+
+@utility animate-scanline {
+  animation: scanline 4s linear infinite;
+}
+
+@utility perspective-tilt {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+@utility gpu-accelerated {
+  will-change: transform, opacity, clip-path;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 /* ─── Section Fade Edges ─── */
 .section-fade-top::before {
   content: "";

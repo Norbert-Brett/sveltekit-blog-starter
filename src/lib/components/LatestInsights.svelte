@@ -4,6 +4,7 @@
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import { splitReveal } from '$lib/actions/splitReveal.js';
+  import { magnetic } from '$lib/actions/magnetic.js';
   import { ArrowRight } from '@lucide/svelte';
 
   if (browser) {
@@ -20,18 +21,16 @@
     if (!browser || !sectionRef) return;
 
     ctx = gsap.context(() => {
-      // Section label
+      // Section label clip-reveal
       gsap.fromTo('.blog-label', 
-        { y: 15, opacity: 0 }, 
+        { clipPath: 'inset(0 100% 0 0)', opacity: 0 }, 
         {
-          y: 0, opacity: 1, duration: 0.4, ease: 'expo.out',
+          clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.8, ease: 'expo.out',
           scrollTrigger: { trigger: sectionRef, start: 'top 72%' }
         }
       );
 
-
-
-      // Button reveal
+      // Button reveal with spring
       gsap.fromTo('.blog-action', 
         { scale: 0.8, opacity: 0 }, 
         {
@@ -54,6 +53,15 @@
           }
         });
       });
+
+      // Accordion cards stagger entrance
+      gsap.fromTo('.accordion-card',
+        { clipPath: 'inset(0 0 100% 0)', opacity: 0 },
+        {
+          clipPath: 'inset(0 0 0% 0)', opacity: 1, duration: 1, stagger: 0.1, ease: 'expo.out',
+          scrollTrigger: { trigger: sectionRef, start: 'top 65%' }
+        }
+      );
     }, sectionRef);
 
     return () => {
@@ -83,14 +91,17 @@
         </h2>
       </div>
 
+      <!-- Magnetic hover on "All" button -->
       <a
         href="/articles"
-        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-white/20 text-xs font-mono uppercase tracking-widest hover:bg-primary hover:text-black hover:border-primary transition-all duration-300"
+        use:magnetic={{ strength: 0.5, textStrength: 0.2 }}
+        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-white/20 text-xs font-mono uppercase tracking-widest hover:bg-primary hover:text-black hover:border-primary transition-all duration-300 interactive"
       >
-        All
+        <span class="magnetic-text">All</span>
       </a>
     </div>
     
+    <!-- Hick's Law: Limited to 4 articles maximum; "View All" is progressive disclosure -->
     <div 
       class="w-full h-[600px] md:h-[700px] flex flex-col md:flex-row gap-3 md:gap-4 group/accordion" 
       onmouseleave={() => activeIndex = 0}
@@ -99,7 +110,7 @@
       {#each posts.slice(0, 4) as post, index}
         <a
           href="/articles/{post.slug}/"
-          class="relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex border bg-white/2 group/card
+          class="accordion-card relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex border bg-white/2 group/card
             {activeIndex === index ? 'flex-[1_1_75%] md:flex-[1_1_70%] border-primary/40 shadow-[0_0_50px_rgba(201,168,76,0.15)]' : 'flex-[1_1_10%] md:flex-[1_1_10%] border-white/5 hover:border-white/20'}"
           onmouseenter={() => activeIndex = index}
         >
@@ -110,7 +121,7 @@
                 src={post.coverImage}
                 alt={post.title}
                 class="parallax-img w-full h-[130%] md:h-[130%] object-cover transition-all duration-[1.5s] ease-out object-center origin-center
-                  {activeIndex === index ? 'scale-100 opacity-100 blur-[0px]' : 'scale-105 opacity-40 blur-[2px] grayscale-[0.8]'}"
+                  {activeIndex === index ? 'scale-100 opacity-100 blur-[0px] animate-ken-burns' : 'scale-105 opacity-40 blur-[2px] grayscale-[0.8]'}"
               />
               <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-black/10 transition-opacity duration-700 {activeIndex === index ? 'opacity-100' : 'opacity-80 md:opacity-40'}"></div>
             {:else}
@@ -118,12 +129,17 @@
             {/if}
           </div>
 
+          <!-- Von Restorff: First (default active) article has primary border glow -->
+          {#if index === 0 && activeIndex === 0}
+            <div class="absolute inset-0 rounded-3xl shadow-[inset_0_0_30px_rgba(201,168,76,0.05)] pointer-events-none z-10"></div>
+          {/if}
+
           <!-- Active Content Card -->
           <div 
              class="absolute inset-0 p-6 md:p-12 flex flex-col justify-end transition-all duration-500 delay-100
                {activeIndex === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 md:translate-y-0 pointer-events-none'}"
           >
-            <!-- Story Header -->
+            <!-- Story Header (Proximity Law: date + category grouped tightly, separated from title) -->
             <div class="flex flex-wrap items-center gap-4 mb-4">
               <span class="px-3 py-1.5 bg-white/10 backdrop-blur-md text-[10px] font-mono tracking-widest text-white uppercase rounded-full border border-white/10">
                 Article 0{ index + 1 }
@@ -187,5 +203,7 @@
 </section>
 
 <style>
-  /* Base styles for the accordion container */
+  .accordion-card {
+    will-change: transform, opacity, clip-path;
+  }
 </style>
