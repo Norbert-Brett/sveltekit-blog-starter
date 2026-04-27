@@ -39,19 +39,23 @@
         }
       );
 
-      // Deep Parallax on images
+      // Deep Parallax + Scale Zoom on images (Ken Burns reverse)
       const images = gsap.utils.toArray('.parallax-img');
       images.forEach((img) => {
-        gsap.to(img, {
-          yPercent: 15,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true
+        gsap.fromTo(img,
+          { yPercent: -10, scale: 1.2 },
+          {
+            yPercent: 15,
+            scale: 1.0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true
+            }
           }
-        });
+        );
       });
 
       // Accordion cards stagger entrance
@@ -83,10 +87,10 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-20">
       <div>
-        <span class="blog-label text-xs font-mono tracking-[0.4em] uppercase text-primary font-medium mb-4 flex items-center gap-3">
+        <span class="blog-label text-xs font-sans tracking-widest uppercase text-primary font-medium mb-4 flex items-center gap-3">
           <span class="w-8 h-px bg-primary/60"></span> Writing
         </span>
-        <h2 use:splitReveal={{ type: 'chars', delay: 0.2 }} class="blog-title text-5xl md:text-7xl lg:text-8xl font-serif font-black tracking-tighter leading-[0.9] text-white uppercase relative">
+        <h2 use:splitReveal={{ type: 'chars', delay: 0.2 }} class="blog-title text-5xl md:text-7xl lg:text-8xl font-sans font-bold tracking-tight leading-[0.9] text-white">
           Latest Insights
         </h2>
       </div>
@@ -95,7 +99,7 @@
       <a
         href="/articles"
         use:magnetic={{ strength: 0.5, textStrength: 0.2 }}
-        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-white/20 text-xs font-mono uppercase tracking-widest hover:bg-primary hover:text-black hover:border-primary transition-all duration-300 interactive"
+        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-white/20 text-xs font-sans font-medium tracking-wide hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 interactive"
       >
         <span class="magnetic-text">All</span>
       </a>
@@ -111,7 +115,7 @@
         <a
           href="/articles/{post.slug}/"
           class="accordion-card relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex border bg-white/2 group/card
-            {activeIndex === index ? 'flex-[1_1_75%] md:flex-[1_1_70%] border-primary/40 shadow-[0_0_50px_rgba(201,168,76,0.15)]' : 'flex-[1_1_10%] md:flex-[1_1_10%] border-white/5 hover:border-white/20'}"
+            {activeIndex === index ? 'flex-[1_1_75%] md:flex-[1_1_70%] border-primary/40 shadow-[0_0_50px_rgba(41,151,255,0.15)]' : 'flex-[1_1_10%] md:flex-[1_1_10%] border-white/5 hover:border-white/20'}"
           onmouseenter={() => activeIndex = index}
         >
           <!-- Background Image & Overlays -->
@@ -131,7 +135,7 @@
 
           <!-- Von Restorff: First (default active) article has primary border glow -->
           {#if index === 0 && activeIndex === 0}
-            <div class="absolute inset-0 rounded-3xl shadow-[inset_0_0_30px_rgba(201,168,76,0.05)] pointer-events-none z-10"></div>
+            <div class="absolute inset-0 rounded-3xl shadow-[inset_0_0_30px_rgba(41,151,255,0.05)] pointer-events-none z-10"></div>
           {/if}
 
           <!-- Active Content Card -->
@@ -139,18 +143,18 @@
              class="absolute inset-0 p-6 md:p-12 flex flex-col justify-end transition-all duration-500 delay-100
                {activeIndex === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 md:translate-y-0 pointer-events-none'}"
           >
-            <!-- Story Header (Proximity Law: date + category grouped tightly, separated from title) -->
+            <!-- Story Header -->
             <div class="flex flex-wrap items-center gap-4 mb-4">
-              <span class="px-3 py-1.5 bg-white/10 backdrop-blur-md text-[10px] font-mono tracking-widest text-white uppercase rounded-full border border-white/10">
+              <span class="px-3 py-1.5 bg-white/10 backdrop-blur-md text-[10px] font-sans font-semibold tracking-widest text-white uppercase rounded-full border border-white/10">
                 Article 0{ index + 1 }
               </span>
-              <span class="text-[10px] font-mono tracking-[0.25em] uppercase text-primary font-bold">
+              <span class="text-[10px] font-sans font-bold tracking-widest uppercase text-primary">
                 { formatDate(post.date) }
               </span>
             </div>
 
             <!-- Focus Title -->
-            <h3 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[-.02em] text-white leading-[1.05] mb-4 lg:whitespace-nowrap truncate max-w-full drop-shadow-2xl">
+            <h3 class="text-3xl sm:text-4xl lg:text-5xl font-sans font-bold tracking-tight text-white leading-[1.05] mb-4 lg:whitespace-nowrap truncate max-w-full drop-shadow-2xl">
               { post.title }
             </h3>
             
@@ -163,11 +167,11 @@
                 
                 <div class="flex items-center gap-6">
                   <div class="h-px w-12 bg-white/10"></div>
-                  <span class="text-[10px] font-mono tracking-[0.2em] text-white/40 uppercase italic">Est. 5 min read</span>
+                  <span class="text-[10px] font-sans font-medium tracking-widest text-white/40 uppercase">Est. 5 min read</span>
                 </div>
               </div>
 
-              <div class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-primary text-black text-xs font-mono font-bold tracking-widest uppercase hover:bg-white transition-all transform hover:scale-105 w-fit shadow-xl shadow-primary/10">
+              <div class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-white text-black text-xs font-sans font-semibold tracking-wide hover:bg-primary hover:text-white transition-all transform hover:scale-105 w-fit shadow-xl">
                 Read Article
                 <ArrowRight class="w-4 h-4" />
               </div>
@@ -179,10 +183,10 @@
             class="absolute inset-0 hidden md:flex items-center justify-center p-4 transition-opacity duration-500
               {activeIndex === index ? 'opacity-0 pointer-events-none' : 'opacity-100'}"
           >
-            <h3 class="text-xl font-serif font-bold text-white/70 -rotate-90 origin-center whitespace-nowrap tracking-wider drop-shadow-md">
+            <h3 class="text-xl font-sans font-bold text-white/70 -rotate-90 origin-center whitespace-nowrap tracking-wide drop-shadow-md">
               { post.title.length > 25 ? post.title.slice(0, 25) + '...' : post.title }
             </h3>
-            <span class="absolute bottom-8 text-[10px] font-mono tracking-widest text-primary font-bold">
+            <span class="absolute bottom-8 text-[10px] font-sans font-semibold tracking-widest text-primary">
               0{ index + 1 }
             </span>
           </div>
@@ -194,9 +198,9 @@
     <div class="mt-16 md:hidden">
       <a
         href="/articles"
-        class="flex items-center justify-center gap-3 h-14 w-full rounded-2xl border border-white/10 bg-white/3 text-white font-mono text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all"
+        class="flex items-center justify-center gap-3 h-14 w-full rounded-2xl border border-white/10 bg-white/5 text-white font-sans font-medium text-xs tracking-widest uppercase hover:bg-white/10 transition-all"
       >
-        View All <span class="text-primary">Articles</span>
+        View All <span class="text-primary font-bold">Articles</span>
       </a>
     </div>
   </div>

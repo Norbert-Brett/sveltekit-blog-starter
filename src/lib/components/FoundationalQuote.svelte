@@ -115,10 +115,10 @@
 
 <section
   bind:this={sectionRef}
-  class="fq-section relative py-40 md:py-56 lg:py-64 overflow-hidden flex flex-col items-center justify-center text-center px-6 bg-[#020202]"
+  class="fq-section relative py-40 md:py-56 lg:py-64 overflow-hidden flex flex-col items-center justify-center text-center px-6 bg-black"
 >
   <!-- Background Layers -->
-  <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay noise-bg z-1 pointer-events-none"></div>
+  <div class="absolute inset-0 z-1 pointer-events-none"></div>
 
   <!-- Premium Architectural Grid -->
   <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center">
@@ -127,8 +127,8 @@
     </div>
   </div>
 
-  <!-- Focused Spotlight (Not a generic orb) -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(201,168,76,0.1)_0%,transparent_70%)] pointer-events-none z-0"></div>
+  <!-- Focused Spotlight -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(41,151,255,0.1)_0%,transparent_70%)] pointer-events-none z-0"></div>
 
   <!-- Top/Bottom Fade -->
   <div class="absolute inset-0 bg-linear-to-b from-[#000000] via-transparent to-[#000000] z-2 pointer-events-none"></div>
@@ -166,7 +166,7 @@
     </div>
 
     <!-- Eyebrow -->
-    <span class="fq-sub text-[9px] md:text-[10px] font-mono text-primary/70 tracking-[1em] uppercase mb-10 md:mb-14 block">
+    <span class="fq-sub text-[10px] font-sans font-semibold text-primary/70 tracking-widest uppercase mb-10 md:mb-14 block">
       Foundation
     </span>
 
@@ -209,7 +209,7 @@
     {#if source}
       <div class="fq-sub flex items-center group cursor-default">
         <div class="h-px w-8 bg-primary/20 group-hover:w-12 transition-all duration-700"></div>
-        <span class="px-5 text-[9px] md:text-[10px] font-mono text-white/70 tracking-[0.6em] uppercase transition-colors group-hover:text-primary">
+        <span class="px-5 text-xs font-sans font-semibold text-white/70 tracking-widest uppercase transition-colors group-hover:text-primary">
           {source}
         </span>
         <div class="h-px w-8 bg-primary/20 group-hover:w-12 transition-all duration-700"></div>
@@ -219,10 +219,6 @@
 </section>
 
 <style>
-  .noise-bg {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
-
   .font-serif {
     font-family: 'Cormorant Garamond', serif;
   }

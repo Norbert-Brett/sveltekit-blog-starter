@@ -63,8 +63,8 @@
           const numEl = statsRef?.querySelector(`.stat-num-${index}`);
           if (numEl) {
             gsap.fromTo(numEl, 
-              { scale: 1, textShadow: '0 0 0px rgba(201,168,76,0)' },
-              { scale: 1.1, textShadow: '0 0 25px rgba(201,168,76,0.5)', duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1 }
+              { scale: 1, textShadow: '0 0 0px rgba(41,151,255,0)' },
+              { scale: 1.1, textShadow: '0 0 25px rgba(41,151,255,0.5)', duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1 }
             );
           }
         }
@@ -76,24 +76,27 @@
     if (!browser || !statsRef) return;
 
     ctx = gsap.context(() => {
-      // Clip-path reveal (cinematic) + stagger
-      gsap.fromTo('.metric-card-wrapper',
-        { clipPath: 'inset(100% 0 0 0)', opacity: 0, y: 40 },
-        { 
-          clipPath: 'inset(0% 0 0 0)',
-          y: 0, 
-          opacity: 1,
-          stagger: 0.12, 
-          duration: 1.2, 
-          ease: 'expo.out',
-          scrollTrigger: {
-            trigger: statsRef,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-            onEnter: startCounters
+      // Scroll-scrubbed scale+blur reveal (cinematic depth)
+      const cards = gsap.utils.toArray('.metric-card-wrapper');
+      cards.forEach((card, i) => {
+        gsap.fromTo(card,
+          { scale: 0.8, opacity: 0, filter: 'blur(12px)', y: 60 },
+          { 
+            scale: 1,
+            y: 0, 
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: statsRef,
+              start: `top ${85 - i * 3}%`,
+              end: `top ${55 - i * 3}%`,
+              scrub: 0.5,
+              onEnter: i === 0 ? startCounters : undefined
+            }
           }
-        }
-      );
+        );
+      });
     }, statsRef);
 
     return () => {
@@ -143,7 +146,7 @@
 
           <div class="relative z-20 flex flex-col justify-between h-full min-h-[180px] p-8 md:p-10">
             <div class="flex items-center justify-between mb-12">
-              <span class="text-sm font-mono text-white/60 transition-colors group-hover:text-white/70">0{index + 1}</span>
+              <span class="text-xs font-sans font-semibold tracking-widest text-white/60 transition-colors group-hover:text-white/70">0{index + 1}</span>
               <div class="w-1.5 h-1.5 rounded-full bg-white/20 transition-all duration-500 group-hover:bg-white group-hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
             </div>
             
@@ -155,8 +158,7 @@
                 </span>
                 <span class="text-2xl lg:text-3xl font-light text-white/60">{stat.suffix}</span>
               </div>
-              
-              <div class="text-[10px] uppercase tracking-[0.3em] text-primary/80 font-bold group-hover:text-primary transition-colors duration-500">
+              <div class="text-xs font-sans font-semibold uppercase tracking-widest text-primary/80 group-hover:text-primary transition-colors duration-500">
                 {stat.label}
               </div>
             </div>

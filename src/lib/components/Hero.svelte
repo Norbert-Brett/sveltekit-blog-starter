@@ -18,7 +18,7 @@
   let ctx;
   let animationFrameId;
 
-  const headline = ['BUILDING', 'INTELLIGENT', 'SYSTEMS'];
+  const headline = ['Building', 'intelligent', 'systems.'];
   const tickerText = 'Open to work · Full Stack · AI/ML · Svelte · Node · Python · LLMs · ';
 
   onMount(() => {
@@ -43,34 +43,36 @@
     ctx = gsap.context(() => {
       // 1. High-Speed Kinetic Entrance (Trending Split-Text Mask Reveal)
       gsap.fromTo('.hero-char', 
-        { yPercent: 120, rotateX: -45, scale: 0.9, opacity: 0 },
-        { yPercent: 0, rotateX: 0, scale: 1, opacity: 1, duration: 1, stagger: 0.02, ease: 'power4.out', delay: 0.1 }
+        { yPercent: 120, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1.2, stagger: 0.02, ease: 'power4.out', delay: 0.1 }
       );
 
-      // Subtitle line-wipe reveal
+      // Subtitle reveal
       gsap.fromTo('.hero-subtitle', 
-        { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
-        { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 1.2, ease: 'expo.out', delay: 0.5 }
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.6 }
       );
 
       gsap.fromTo('.hero-cta', 
-        { y: 30, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)', delay: 0.6 }
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.7 }
       );
 
       gsap.fromTo('.hero-ticker', 
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, ease: 'expo.out', delay: 0.7 }
+        { y: 10, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.8 }
       );
 
       gsap.fromTo('.scroll-indicator', { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 0.8 });
 
-      // 2. Cinematic scroll-out: text shrinks + fades as user scrolls past (Jakob's Law: familiar parallax feel)
+      // 2. Cinematic scroll-out: multi-layer depth system
+      // Layer 1: Hero text — scales down + letterSpacing expands ("exhales")
       gsap.to('.hero-text-group', {
         scale: 0.85,
         opacity: 0,
         y: -80,
-        filter: 'blur(8px)',
+        letterSpacing: '0.15em',
+        filter: 'blur(12px)',
         ease: 'none',
         scrollTrigger: {
           trigger: heroSection,
@@ -80,39 +82,42 @@
         }
       });
 
-      // 3. Background video parallax (moves slower = depth)
+      // Layer 2: Background video — moves slowest + gains blur (depth of field)
       gsap.to('.hero-bg-video', {
-        y: 120,
-        scale: 1.15,
+        y: 80,
+        scale: 1.1,
+        filter: 'blur(6px)',
         ease: 'none',
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
           end: 'bottom top',
-          scrub: 1
+          scrub: 1.5
         }
       });
-      
-      // 4. Parallax Orbs (enhanced with scale)
-      gsap.to('.orb-1', {
-        y: -200,
-        scale: 1.2,
-        opacity: 0.3,
+
+      // Layer 3: Overlay darkens on scroll (camera iris closing)
+      gsap.to('.hero-overlay', {
+        opacity: 1,
+        ease: 'none',
         scrollTrigger: {
           trigger: heroSection,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1
+          start: '30% top',
+          end: '90% top',
+          scrub: true
         }
       });
-      gsap.to('.orb-2', {
-        y: -100,
-        scale: 0.8,
+
+      // Layer 4: Ticker — moves fastest (closest to camera), independent fade
+      gsap.to('.hero-ticker', {
+        y: -40,
+        opacity: 0,
+        ease: 'none',
         scrollTrigger: {
           trigger: heroSection,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1
+          start: '10% top',
+          end: '40% top',
+          scrub: 0.3
         }
       });
 
@@ -170,7 +175,7 @@
 >
   <!-- Background Video (parallax layer) -->
   <div 
-    class="absolute inset-0 lg:left-auto lg:right-0 lg:w-[55%] z-0 overflow-hidden lg:mask-[linear-gradient(to_right,transparent,black_20%)] lg:[-webkit-mask-image:linear-gradient(to_right,transparent,black_20%)]"
+    class="absolute inset-0 w-full h-full z-0 overflow-hidden bg-black"
   >
     <video 
       autoplay 
@@ -178,30 +183,26 @@
       muted 
       playsinline
       poster="https://res.cloudinary.com/nbrett/image/upload/f_auto,q_auto/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg"
-      class="hero-bg-video w-full h-full object-cover grayscale brightness-75 scale-110 gpu-accelerated"
+      class="hero-bg-video w-full h-full object-cover grayscale opacity-20 scale-105 gpu-accelerated mix-blend-screen"
     >
       <source src="https://res.cloudinary.com/nbrett/video/upload/f_auto:video,q_auto/v1768848615/video_un63ox.mov" type="video/mp4" />
     </video>
     
-    <!-- Mobile Overlay -->
-    <div class="absolute inset-0 bg-linear-to-r from-background via-background/60 to-transparent lg:hidden"></div>
+    <!-- Mobile/Global Fade Overlay -->
+    <div class="absolute inset-0 bg-linear-to-b from-black/40 via-black/10 to-black"></div>
+    <!-- Scroll-driven darkness overlay (camera iris) -->
+    <div class="hero-overlay absolute inset-0 bg-black opacity-0 pointer-events-none"></div>
   </div>
-
-  <!-- Orbs -->
-  <div class="orb-1 absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-primary/10 blur-[120px] pointer-events-none animate-glow-breathe gpu-accelerated"></div>
-  <div class="orb-2 absolute bottom-[-30%] right-[-15%] w-[50vw] h-[50vw] rounded-full bg-primary/5 blur-[100px] pointer-events-none animate-glow-breathe-delayed gpu-accelerated"></div>
 
   <!-- Kinetic Text (scroll-shrink group) -->
   <div bind:this={textRef} class="hero-text-group relative z-30 flex flex-col items-center pointer-events-auto interactive px-6 gpu-accelerated">
-    <div class="kinetic-overlay absolute inset-[-100px] z-0 pointer-events-none opacity-60"></div>
-
-    <h1 class="relative z-10 font-bold uppercase text-center flex flex-col leading-[0.85] tracking-tighter text-white drop-shadow-[0_0_60px_rgba(0,0,0,0.8)]">
+    <h1 class="relative z-10 font-bold text-center flex flex-col leading-[0.9] tracking-tight text-white drop-shadow-2xl">
       {#each headline as word, wi (wi)}
         <span class="flex justify-center overflow-hidden pb-1 md:pb-2">
           {#each word.split('') as char, ci (ci)}
             <span
-              class="hero-char inline-block text-[12vw] md:text-[10vw] lg:text-[9vw] will-change-transform {wi === 1 ? 'hero-char--glow' : ''}"
-              style="{wi === 1 ? 'font-style: italic; opacity: 0.9;' : ''}"
+              class="hero-char inline-block text-[12vw] md:text-[10vw] lg:text-[8vw] will-change-transform {wi === 1 ? 'hero-char--subtle' : ''}"
+              style="{wi === 1 ? 'color: rgba(255, 255, 255, 0.7);' : ''}"
             >
               {char}
             </span>
@@ -210,40 +211,36 @@
       {/each}
     </h1>
 
-    <!-- Subtitle with line-wipe reveal -->
-    <p class="hero-subtitle relative z-10 mt-10 text-[10px] md:text-xs font-mono tracking-[0.6em] uppercase text-white/70 text-center drop-shadow-lg">
+    <!-- Subtitle -->
+    <p class="hero-subtitle relative z-10 mt-8 text-sm md:text-base font-sans tracking-wide text-white/60 text-center font-medium">
       Full Stack Developer · AI Specialist
     </p>
 
     <!-- Hick's Law & Von Restorff Effect: Single, highly isolated CTA -->
-    <a href="/contact" use:magnetic={{ strength: 0.4, textStrength: 0.15 }} class="hero-cta mt-10 z-30 flex items-center gap-4 px-8 py-4 rounded-full bg-primary text-black hover:bg-white hover:scale-105 transition-all duration-500 shadow-[0_0_40px_rgba(var(--primary),0.4)] interactive group">
-      <span class="magnetic-text flex items-center gap-4">
-        <span class="w-2 h-2 rounded-full bg-black animate-pulse"></span>
-        <span class="text-[11px] md:text-xs font-mono font-bold tracking-[0.2em] uppercase">Start a Project</span>
+    <a href="/contact" use:magnetic={{ strength: 0.3, textStrength: 0.1 }} class="hero-cta mt-10 z-30 flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 rounded-full bg-white text-black hover:bg-white/90 hover:scale-105 transition-all duration-300 shadow-2xl interactive group">
+      <span class="magnetic-text flex items-center gap-3">
+        <span class="text-sm font-sans font-semibold tracking-wide">Start a project</span>
         <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </span>
     </a>
   </div>
 
   <!-- Ticker -->
-  <div class="hero-ticker absolute bottom-20 left-0 w-full overflow-hidden z-20 pointer-events-none">
-    <div class="absolute left-0 top-0 w-24 h-full bg-linear-to-r from-background to-transparent z-10"></div>
-    <div class="absolute right-0 top-0 w-24 h-full bg-linear-to-l from-background to-transparent z-10"></div>
+  <div class="hero-ticker absolute bottom-12 left-0 w-full overflow-hidden z-20 pointer-events-none opacity-50">
     <div class="marquee-track flex whitespace-nowrap animate-marquee">
       {#each Array(6) as _, i (i)}
-        <span class="text-xs md:text-sm font-mono tracking-[0.3em] uppercase text-white/50 pr-12">
+        <span class="text-xs md:text-sm font-sans font-medium tracking-widest text-white pr-12">
           {tickerText}
         </span>
       {/each}
     </div>
   </div>
 
-  <div class="hero-bottom-border absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-primary/40 to-transparent z-20 origin-center"></div>
+  <div class="hero-bottom-border absolute bottom-0 left-0 w-full h-px bg-white/10 z-20 origin-center"></div>
 
   <!-- Scroll Indicator (Jakob's Law: universally recognised scroll-down pattern) -->
-  <div class="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 opacity-0">
-    <span class="text-[9px] font-mono tracking-[0.4em] uppercase text-white/60">Scroll</span>
-    <svg width="20" height="30" viewBox="0 0 20 30" class="text-white/60">
+  <div class="scroll-indicator absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 opacity-0">
+    <svg width="20" height="30" viewBox="0 0 20 30" class="text-white/40">
       <rect x="1" y="1" width="18" height="28" rx="9" stroke="currentColor" stroke-width="1.5" fill="none" />
       <circle cx="10" cy="10" r="2" fill="currentColor" class="animate-float" />
     </svg>
@@ -265,30 +262,5 @@
   }
   .animate-float {
     animation: float 2s ease-in-out infinite;
-  }
-
-  @keyframes glow-breathe {
-    0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.5; }
-    50% { transform: scale(1.1) translate(20px, 20px); opacity: 0.8; }
-  }
-  .animate-glow-breathe {
-    animation: glow-breathe 8s ease-in-out infinite;
-  }
-  .animate-glow-breathe-delayed {
-    animation: glow-breathe 12s ease-in-out infinite 2s;
-  }
-
-  .hero-char {
-    text-shadow: 0 0 40px rgba(0,0,0,0.6);
-  }
-
-  .hero-char--glow {
-    text-shadow: 0 0 60px rgba(var(--primary), 0.25), 0 0 120px rgba(var(--primary), 0.1);
-    color: rgba(255, 255, 255, 0.92);
-  }
-
-  .kinetic-overlay {
-    background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, transparent 80%);
-    filter: blur(40px);
   }
 </style>

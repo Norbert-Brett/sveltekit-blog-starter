@@ -130,7 +130,7 @@
   <!-- Scroll-driven progress bar (Jakob's Law: familiar step indicator) -->
   <div class="absolute top-0 left-0 w-full h-[2px] z-40">
     <div 
-      class="h-full bg-linear-to-r from-primary via-[#e8d48b] to-primary/60 origin-left transition-transform duration-100"
+      class="h-full bg-linear-to-r from-primary via-primary/80 to-primary/40 origin-left transition-transform duration-100"
       style="transform: scaleX({scrollProgress})"
     ></div>
   </div>
@@ -145,8 +145,8 @@
     <div class="max-w-5xl w-full relative">
       <!-- Floating years counter -->
       <div class="absolute -top-20 right-0 md:right-12 flex items-end gap-3 z-30">
-        <span bind:this={counterRef} class="text-7xl md:text-9xl font-serif font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-primary via-[#e8d48b] to-primary/40 leading-none drop-shadow-[0_0_60px_rgba(201,168,76,0.2)]">0</span>
-        <span class="text-[10px] md:text-xs font-mono tracking-[0.4em] uppercase text-white/50 pb-3 md:pb-4 border-l border-white/10 pl-3">Years<br/>Exp.</span>
+        <span bind:this={counterRef} class="text-7xl md:text-9xl font-sans font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-primary via-primary/80 to-primary/40 leading-none drop-shadow-lg">0</span>
+        <span class="text-[10px] md:text-xs font-sans font-semibold tracking-widest uppercase text-white/50 pb-3 md:pb-4 border-l border-white/10 pl-3">Years<br/>Exp.</span>
       </div>
 
       <!-- Panels stacked on top of each other -->
@@ -157,11 +157,11 @@
             style="opacity: {i === 0 ? 1 : 0}"
           >
             <div class="flex items-center gap-4 mb-6">
-              <span class="text-[10px] md:text-xs font-mono tracking-[0.4em] uppercase text-primary font-bold">{ panel.label }</span>
+              <span class="text-[10px] md:text-xs font-sans tracking-widest uppercase text-primary font-bold">{ panel.label }</span>
               <div class="w-16 h-px bg-linear-to-r from-primary/50 to-transparent"></div>
             </div>
             <!-- Heading with clip-path mask reveal -->
-            <h2 class="about-heading-{i} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-black tracking-[-.04em] leading-[0.9] text-white mb-8 drop-shadow-2xl text-balance gpu-accelerated">
+            <h2 class="about-heading-{i} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-sans font-bold tracking-tight leading-[0.9] text-white mb-8 drop-shadow-2xl text-balance gpu-accelerated">
               { panel.title }
             </h2>
             <p class="text-base sm:text-lg md:text-xl font-sans font-light text-white/70 max-w-2xl leading-relaxed tracking-wide">
@@ -171,11 +171,11 @@
         {/each}
       </div>
 
-      <!-- Progress dots (Miller's Law: 3 panels = easy to chunk; Jakob's Law: familiar step dots) -->
+      <!-- Progress dots -->
       <div class="absolute bottom-0 left-0 flex gap-3">
         {#each Array(panels.length) as _, i}
           <div
-            class="w-2 h-2 rounded-full transition-all duration-500 ease-out {activePanel >= i ? 'bg-primary shadow-[0_0_8px_rgba(201,168,76,0.4)] scale-125' : 'bg-white/10 scale-100'}"
+            class="w-2 h-2 rounded-full transition-all duration-500 ease-out {activePanel >= i ? 'bg-primary shadow-[0_0_8px_rgba(41,151,255,0.4)] scale-125' : 'bg-white/10 scale-100'}"
           ></div>
         {/each}
       </div>

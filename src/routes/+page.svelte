@@ -7,6 +7,7 @@
 	import Testimonials from '$lib/components/Testimonials.svelte';
 	import LatestInsights from '$lib/components/LatestInsights.svelte';
     import FoundationalQuote from '$lib/components/FoundationalQuote.svelte';
+	import ScrollMarquee from '$lib/components/ScrollMarquee.svelte';
 
 	let { data } = $props();
 </script>
@@ -17,9 +18,10 @@
 
 <Hero />
 <Stats />
+<ScrollMarquee text="Design · Develop · Deploy · Innovate · Scale · " />
 <HeroAbout />
 <AIShowcase />
 <Testimonials />
+<ScrollMarquee text="Insights · Architecture · AI · Systems · Code · " />
 <LatestInsights posts={data.posts} />
 <FoundationalQuote />
-

@@ -77,9 +77,9 @@
 
   <div class="max-w-6xl mx-auto z-10 relative">
     <div class="mb-24 md:mb-32">
-      <span class="inline-block text-[10px] font-mono tracking-[0.4em] uppercase text-primary mb-6">--- WRITINGS & INSIGHTS</span>
-      <h1 class="page-header-title text-6xl md:text-8xl lg:text-9xl font-serif font-black tracking-[-0.04em] text-white leading-[0.85] mb-8">
-        Articles<span class="text-primary italic">.</span>
+      <span class="inline-block text-xs font-sans font-semibold tracking-widest uppercase text-primary mb-6">--- WRITINGS & INSIGHTS</span>
+      <h1 class="page-header-title text-6xl md:text-8xl lg:text-9xl font-sans font-bold tracking-tight text-white leading-[0.85] mb-8">
+        Articles<span class="text-primary">.</span>
       </h1>
       <p class="page-header-desc text-lg md:text-xl text-white/70 font-sans font-light max-w-2xl leading-relaxed">
         Deep dives into software architecture, the evolution of AI-driven interfaces, and the philosophy of building resilient, beautiful digital products.
@@ -110,7 +110,7 @@
         <div class="absolute bottom-0 left-6 right-6 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent scale-x-0 group-focus-within:scale-x-100 transition-transform duration-700 z-20"></div>
       </div>
 
-      <div class="flex items-center gap-4 text-[10px] font-mono tracking-[0.2em] text-white/60 uppercase">
+      <div class="flex items-center gap-4 text-xs font-sans font-semibold tracking-widest text-white/60 uppercase">
         <span class="w-1.5 h-1.5 rounded-full bg-primary/60 animate-pulse"></span>
         <span>{filteredPosts.length} matches discovered</span>
       </div>
@@ -123,13 +123,13 @@
         <PostsList posts={visiblePosts} />
       {:else}
         <div class="py-24 text-center border border-white/5 rounded-3xl bg-white/1 backdrop-blur-md">
-          <h3 class="text-2xl md:text-3xl font-serif text-white/70 mb-4 tracking-tight">No articles discovered matching <br class="md:hidden"/> "<span class="text-white/90 italic">{searchQuery}</span>"</h3>
+          <h3 class="text-2xl md:text-3xl font-sans font-semibold text-white/70 mb-4 tracking-tight">No articles discovered matching <br class="md:hidden"/> "<span class="text-white/90">{searchQuery}</span>"</h3>
           <p class="text-white/50 mb-12 max-w-md mx-auto font-sans font-light px-6 text-sm md:text-base leading-relaxed">We couldn't find any documents matching your criteria. Try adjusting your research parameters or clearing the filter.</p>
           <button 
             onclick={clearSearch}
             class="group flex items-center gap-3 mx-auto px-8 py-3 rounded-full border border-primary/20 hover:bg-primary/10 transition-all duration-500"
           >
-             <span class="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-primary">Reset Collective Search</span>
+             <span class="text-xs font-sans font-semibold tracking-widest text-primary uppercase">Reset Search</span>
              <X class="w-3 h-3 text-primary group-hover:rotate-90 transition-transform duration-500" />
           </button>
         </div>
@@ -151,11 +151,11 @@
                {/if}
             </div>
             <div class="flex flex-col items-center gap-1.5">
-              <span class="text-[11px] font-mono font-bold uppercase tracking-[0.4em] text-white group-hover:text-primary transition-colors">
+              <span class="text-xs font-sans font-semibold tracking-widest text-white group-hover:text-primary transition-colors uppercase">
                 {isLoading ? 'Discovering...' : 'Discover More'}
               </span>
-              <span class="text-[9px] font-mono text-white/50 tracking-[0.2em] uppercase group-hover:text-primary/40">
-                {isLoading ? 'Fetching Article Library' : `Showing ${visibleCount} / ${filteredPosts.length}`}
+              <span class="text-xs font-sans text-white/50 tracking-wide group-hover:text-primary/40">
+                {isLoading ? 'Fetching articles...' : `Showing ${visibleCount} / ${filteredPosts.length}`}
               </span>
             </div>
           </button>

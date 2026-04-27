@@ -57,11 +57,11 @@
   <!-- 1. Top Header -->
   {#if navVisible}
     <header
-      class="main-nav-container fixed top-0 left-0 w-full z-101 transition-all duration-500 {isScrolled
-        ? 'py-3 bg-background/90 backdrop-blur-xl border-b border-white/10'
-        : 'py-6 sm:py-8 bg-transparent'}"
+      class="main-nav-container fixed top-2 sm:top-6 left-0 w-full z-101 transition-all duration-500 px-4 sm:px-6 flex justify-center pointer-events-none"
     >
-      <div class="max-w-[1440px] mx-auto px-6 sm:px-12 flex items-center justify-between">
+      <div class="pointer-events-auto w-full max-w-[1000px] flex items-center justify-between transition-all duration-500 {isScrolled
+        ? 'px-6 sm:px-8 py-3 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]'
+        : 'px-2 sm:px-4 py-4 bg-transparent border border-transparent'}">
         <!-- Logo -->
         <a href="/" class="group flex items-center gap-1 interactive shrink-0">
           <div class="relative w-32 sm:w-48 h-8 sm:h-10 flex items-center">
@@ -69,17 +69,17 @@
               <span
                 in:fade={{ duration: 400 }}
                 out:fade={{ duration: 400 }}
-                class="absolute left-0 text-xl sm:text-2xl font-black tracking-tighter leading-none text-white uppercase whitespace-nowrap"
+                class="absolute left-0 text-xl font-bold tracking-tight leading-none text-white whitespace-nowrap"
               >
-                {siteTitle.split(' ')[0]} <span class="text-primary">{siteTitle.split(' ').slice(1).join(' ')}</span>
+                {siteTitle.split(' ')[0]} <span class="text-white/60">{siteTitle.split(' ').slice(1).join(' ')}</span>
               </span>
             {:else}
               <span
                 in:scale={{ duration: 600, start: 0.8, opacity: 0 }}
                 out:fade={{ duration: 300 }}
-                class="absolute left-0 text-xl sm:text-2xl font-black tracking-tighter leading-none text-white uppercase"
+                class="absolute left-0 text-xl font-bold tracking-tight leading-none text-white"
               >
-                {siteTitle.split(' ').map(n => n[0]).join('')}<span class="text-primary">.</span>
+                {siteTitle.split(' ').map(n => n[0]).join('')}<span class="text-white/60">.</span>
               </span>
             {/if}
           </div>
@@ -95,13 +95,13 @@
                 class="nav-link-magnetic relative flex items-center justify-center px-4 py-2 interactive group/navlink"
               >
                 <span
-                  class="magnetic-text text-[11px] font-mono uppercase tracking-[0.2em] text-white/90 group-hover/navlink:text-primary transition-colors duration-300 pointer-events-none whitespace-nowrap"
+                  class="magnetic-text text-[13px] font-sans font-medium tracking-wide text-white/70 group-hover/navlink:text-white transition-colors duration-300 pointer-events-none whitespace-nowrap"
                 >
                   {item.title}
                 </span>
-                <!-- Jakob's Law: Familiar Active/Hover State -->
+                <!-- Apple-style Active Indicator -->
                 <span 
-                  class="absolute bottom-0 left-4 right-4 h-px bg-primary origin-left transition-transform duration-300 ease-out {appState.currentPage === item.route ? 'scale-x-100' : 'scale-x-0 group-hover/navlink:scale-x-100'}"
+                  class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white transition-transform duration-300 ease-out {appState.currentPage === item.route ? 'scale-100 opacity-100' : 'scale-0 opacity-0 group-hover/navlink:scale-100 group-hover/navlink:opacity-50'}"
                 ></span>
               </a>
             {/each}
@@ -111,7 +111,7 @@
           {#if isMobile}
             <div in:scale={{ duration: 300, start: 0.6 }}>
               <button
-                class="nav-link-magnetic shrink-0 bg-primary text-black rounded-full flex flex-col items-center justify-center gap-[4px] transition-all duration-300 interactive w-11 h-11"
+                class="nav-link-magnetic shrink-0 bg-white/10 text-white border border-white/20 rounded-full flex flex-col items-center justify-center gap-[4px] transition-all duration-300 interactive w-10 h-10 hover:bg-white/20"
                 use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
                 onclick={() => (appState.isMenuOpen = true)}
                 aria-label="Open menu"
@@ -135,7 +135,7 @@
     <button
       in:fade={{ duration: 300 }}
       out:fade={{ duration: 300 }}
-      class="fixed top-6 right-6 sm:right-12 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center z-120 shadow-2xl interactive hover:rotate-90 transition-transform duration-500"
+      class="fixed top-6 right-6 sm:right-12 w-12 h-12 bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-full flex items-center justify-center z-120 shadow-2xl interactive hover:bg-white hover:text-black transition-all duration-500"
       onclick={() => (appState.isMenuOpen = false)}
       aria-label="Close menu"
     >
@@ -167,11 +167,11 @@
       {#each navItems as item, index (index)}
         <a
           href={item.route}
-          class="nav-link group flex items-baseline gap-5 text-4xl sm:text-5xl font-serif font-black uppercase tracking-tighter hover:text-primary transition-all duration-500 ease-out interactive {appState.isMenuOpen ? 'animate-slide-in' : ''}"
+          class="nav-link group flex items-baseline gap-5 text-4xl sm:text-5xl font-sans font-bold tracking-tight hover:text-white/70 transition-all duration-500 ease-out interactive {appState.isMenuOpen ? 'animate-slide-in' : ''}"
           style="animation-delay: {0.05 + index * 0.05}s"
           onclick={closeMenu}
         >
-          <span class="text-sm font-mono tracking-widest text-primary font-medium group-hover:text-primary"
+          <span class="text-sm font-sans tracking-wide text-white/50 font-medium group-hover:text-white/30"
             >0{index + 1}</span
           >
           <span class="link-text">{item.title}</span>
@@ -182,10 +182,10 @@
     <!-- Bottom Info -->
     <div class="px-12 sm:px-16 mt-8 space-y-10">
       <div class="flex flex-col gap-4">
-        <p class="text-white/80 text-[10px] uppercase tracking-[0.2em] font-mono">Say Hello</p>
+        <p class="text-white/50 text-xs tracking-widest font-sans font-medium">SAY HELLO</p>
         <a
           href="mailto:norbertbrett@outlook.com"
-          class="text-lg font-mono text-primary hover:text-white transition-colors interactive tracking-tight"
+          class="text-lg font-sans text-white hover:text-white/70 transition-colors interactive tracking-tight"
           >norbertbrett@outlook.com</a
         >
       </div>

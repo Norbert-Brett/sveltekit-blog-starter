@@ -39,7 +39,10 @@
     if (!browser || !sectionRef) return;
 
     ctx = gsap.context(() => {
-      // 1. Parallax background text
+      // 1. Parallax background text + scroll-velocity skew
+      const bgText = sectionRef.querySelector('.testimonial-bg-text');
+      const skewTo = gsap.quickTo(bgText, 'skewY', { duration: 0.8, ease: 'power3.out' });
+      
       gsap.to('.testimonial-bg-text', {
         yPercent: 30,
         ease: 'none',
@@ -47,7 +50,13 @@
           trigger: sectionRef,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 0.5
+          scrub: 0.5,
+          onUpdate: (self) => {
+            // Skew based on scroll velocity — creates momentum feel
+            const velocity = self.getVelocity();
+            const skew = gsap.utils.clamp(-4, 4, velocity / 500);
+            skewTo(skew);
+          }
         }
       });
 
@@ -135,17 +144,17 @@
 <section bind:this={sectionRef} class="relative py-32 md:py-48 overflow-hidden bg-background flex flex-col items-center">
   <!-- Interactive Parallax Background Header -->
   <div class="absolute inset-0 flex items-center justify-center md:items-start pointer-events-none whitespace-nowrap opacity-100 select-none overflow-hidden mt-12 md:mt-0 z-0">
-    <h2 class="testimonial-bg-text text-[20vw] font-serif font-black leading-none text-white/3 tracking-tighter uppercase sticky top-1/4">
+    <h2 class="testimonial-bg-text text-[20vw] font-sans font-black leading-none text-white/3 tracking-tighter uppercase sticky top-1/4">
       Testimonials
     </h2>
   </div>
 
   <!-- Section Header -->
   <div class="testimonial-header relative z-10 w-full max-w-7xl px-6 mb-24 md:mb-32 text-center md:text-left">
-    <span class="text-[11px] font-mono tracking-[0.3em] uppercase text-primary mb-4 block md:inline-block">
+    <span class="text-xs font-sans font-semibold tracking-widest uppercase text-primary mb-4 block md:inline-block">
       --- KIND WORDS
     </span>
-    <h2 class="text-4xl md:text-7xl font-serif font-black tracking-tighter text-white leading-[0.9]">
+    <h2 class="text-4xl md:text-7xl font-sans font-bold tracking-tight text-white leading-[0.9]">
       What people say<br class="hidden md:block"/> about me
     </h2>
   </div>
@@ -170,21 +179,21 @@
 
         <div class="relative z-10 flex flex-col gap-8">
           <!-- Stylized Quotation Anchor -->
-          <span class="text-6xl md:text-8xl font-serif leading-none text-primary/10 select-none -mb-8 -ml-4" aria-hidden="true">"</span>
+          <span class="text-6xl md:text-8xl font-serif leading-none text-primary/20 select-none -mb-8 -ml-4" aria-hidden="true">"</span>
 
           <!-- Testimonial Content -->
-          <p class="text-lg md:text-xl lg:text-2xl font-serif text-white/90 leading-relaxed italic pr-4">
+          <p class="text-lg md:text-xl lg:text-2xl font-sans font-light text-white/90 leading-relaxed pr-4">
             { item.quote }
           </p>
 
           <!-- Horizontal line wipe (cinematic entrance accent) -->
           <div class="bubble-line-wipe w-full h-px bg-linear-to-r from-primary/30 via-white/10 to-transparent origin-left"></div>
           
-          <!-- Author Identity (Proximity Law: name + role grouped tightly) -->
+          <!-- Author Identity -->
           <div class="flex items-center gap-5">
             <div class="flex flex-col">
-              <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-white underline underline-offset-8 decoration-primary/30">{ item.author.name }</h4>
-              <p class="mt-2 text-[10px] md:text-xs font-mono text-primary font-semibold uppercase tracking-[0.2em]">{ item.author.description }</p>
+              <h4 class="text-sm md:text-base font-sans font-semibold tracking-wide text-white">{ item.author.name }</h4>
+              <p class="mt-1 text-[10px] md:text-xs font-sans tracking-widest text-primary font-medium uppercase">{ item.author.description }</p>
             </div>
           </div>
         </div>

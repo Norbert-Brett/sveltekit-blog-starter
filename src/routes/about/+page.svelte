@@ -190,10 +190,10 @@
     <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
       <div class="hero-eyebrow flex items-center gap-4 mb-8">
         <div class="h-px w-12 bg-primary"></div>
-        <span class="text-primary font-mono text-[10px] tracking-[0.5em] uppercase opacity-90">Developer Profile</span>
+        <span class="text-primary font-sans text-xs font-medium tracking-widest uppercase">Developer Profile</span>
       </div>
       
-      <h1 class="text-[14vw] md:text-[10vw] lg:text-[9rem] leading-[0.85] font-serif font-black tracking-tighter mb-12 overflow-hidden drop-shadow-2xl">
+      <h1 class="text-[14vw] md:text-[10vw] lg:text-[9rem] leading-[0.85] font-sans font-bold tracking-tight mb-12 overflow-hidden drop-shadow-2xl">
         {#each nameChars as char, i}
           <span
             class="hero-char inline-block will-change-transform {char === ' ' ? 'w-[0.25em]' : char === '.' ? 'text-primary' : 'text-white'}"
@@ -213,7 +213,7 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
               </span>
-              <span class="text-xs font-mono text-primary tracking-widest uppercase">Available for work</span>
+              <span class="text-xs font-sans font-medium text-primary tracking-widest uppercase">Available for work</span>
             </div>
           </div>
         </div>
@@ -221,9 +221,9 @@
         <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4">
           {#each stats as stat, i (i)}
             <div class="hero-stat group p-5 md:p-6 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-primary/20 transition-all duration-500">
-              <span class="text-[9px] font-mono text-white/70 uppercase tracking-wider block mb-3">{stat.code}</span>
-              <span class="text-3xl md:text-4xl font-serif font-black text-white group-hover:text-primary transition-colors duration-300 block leading-none">{stat.number}</span>
-              <span class="text-[10px] font-mono text-white/70 mt-2 uppercase tracking-wider block">{stat.label}</span>
+              <span class="text-xs font-sans font-medium text-white/50 tracking-widest uppercase block mb-3">{stat.code}</span>
+              <span class="text-3xl md:text-4xl font-sans font-bold text-white group-hover:text-primary transition-colors duration-300 block leading-none">{stat.number}</span>
+              <span class="text-xs font-sans font-medium text-white/50 mt-2 tracking-wide block">{stat.label}</span>
             </div>
           {/each}
         </div>
@@ -231,7 +231,7 @@
     </div>
     
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
-      <span class="text-[9px] font-mono tracking-[0.4em] uppercase text-white/50">Scroll</span>
+      <span class="text-xs font-sans font-semibold tracking-widest uppercase text-white/50">Scroll</span>
       <div class="w-px h-8 bg-linear-to-b from-white/50 to-transparent animate-pulse"></div>
     </div>
   </section>
@@ -242,7 +242,7 @@
       <div class="mb-20 md:mb-28">
         <div class="flex items-center gap-4 mb-6">
           <div class="h-px w-12 bg-primary/40"></div>
-          <span class="text-[10px] font-mono text-primary font-medium tracking-[0.5em] uppercase">The Story</span>
+          <span class="text-xs font-sans font-medium text-primary tracking-widest uppercase">The Story</span>
         </div>
       </div>
       
@@ -250,7 +250,7 @@
         <div class="md:col-span-5">
           <blockquote class="story-pullquote relative">
             <div class="absolute -top-6 -left-2 text-[8rem] leading-none text-primary/10 font-serif select-none pointer-events-none">"</div>
-            <p class="text-3xl md:text-4xl lg:text-5xl font-serif font-light text-white leading-[1.3] relative z-10 italic">
+            <p class="text-3xl md:text-4xl lg:text-5xl font-sans font-light text-white leading-[1.3] relative z-10">
               Systems fail without <em class="text-primary font-medium not-italic">people</em>, and code fails without <em class="text-primary font-medium not-italic">purpose</em>.
             </p>
           </blockquote>
@@ -258,7 +258,7 @@
         
         <div class="md:col-span-7 space-y-8 text-lg text-white/80 font-light leading-relaxed">
           <div class="story-para space-y-4">
-             <h2 class="text-xl md:text-2xl font-serif font-bold text-primary mb-2">Who is Norbert Brettschneider?</h2>
+             <h2 class="text-xl md:text-2xl font-sans font-bold text-primary mb-2">Who is Norbert Brettschneider?</h2>
              <p>Norbert Brettschneider, also known online as <strong>br3tt</strong>, is a <strong class="text-white font-semibold">Full-Stack Developer and AI Specialist</strong>.</p>
              <p>My journey isn't typical. Before I wrote code, I spent <strong class="text-white font-semibold">11 years leading teams</strong> in high-pressure environments across multinational brands like McDonalds and KFC. That discipline became my foundation.</p>
              <p>I earned a <strong class="text-white font-semibold">First Class Honours</strong> degree in Computer Science and now build software with rigor, efficiency, and a focus on scalability.</p>
@@ -271,7 +271,7 @@
         </div>
       </div>
       
-      <div class="section-divider w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent origin-center mb-24 md:mb-32"></div>
+      <div class="section-divider w-full h-px bg-linear-to-r from-transparent via-primary/20 to-transparent origin-center mb-24 md:mb-32"></div>
       
       <div class="values-grid grid md:grid-cols-3 gap-6 md:gap-8">
         {#each values as val, i (i)}
@@ -286,7 +286,7 @@
                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary group-hover:text-black transition-colors"><path d="m12 3 1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                {/if}
             </div>
-            <h3 class="text-xl font-serif font-bold text-white mb-3 group-hover:text-primary transition-colors duration-300 uppercase tracking-tight">{val.title}</h3>
+            <h3 class="text-xl font-sans font-semibold text-white mb-3 group-hover:text-primary transition-colors duration-300 tracking-tight">{val.title}</h3>
             <p class="text-sm text-white/60 leading-relaxed font-light">{val.text}</p>
           </div>
         {/each}
@@ -301,16 +301,16 @@
         <div>
           <div class="flex items-center gap-4 mb-6">
             <div class="h-px w-12 bg-primary/40"></div>
-            <span class="text-[10px] font-mono text-primary/70 tracking-[0.5em] uppercase">Capabilities</span>
+            <span class="text-xs font-sans font-medium text-primary/70 tracking-widest uppercase">Capabilities</span>
           </div>
-          <h2 class="text-4xl md:text-6xl lg:text-7xl font-serif font-black tracking-tighter leading-[0.9] uppercase underline decoration-primary/20 underline-offset-8">System <span class="text-primary">Specs</span></h2>
+          <h2 class="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight leading-[0.9]">System <span class="text-primary">Specs</span></h2>
         </div>
       </div>
       
       <div class="skills-grid grid md:grid-cols-2 gap-6 md:gap-8">
         {#each skillCategories as cat, i (i)}
           <div class="skill-category-card spotlight-card group relative p-8 md:p-10 rounded-2xl border border-white/5 bg-white/2 hover:border-primary/20 transition-all duration-500 overflow-hidden shadow-2xl">
-            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" style="background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201,168,76,0.06), transparent 60%);"></div>
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" style="background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(41,151,255,0.06), transparent 60%);"></div>
             <div class="relative z-10 mb-8 flex items-start justify-between">
               <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-white/3 flex items-center justify-center rounded-xl border border-white/10 text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
@@ -325,8 +325,8 @@
                   {/if}
                 </div>
                 <div>
-                  <h3 class="text-xl font-serif font-bold text-white group-hover:text-primary transition-colors tracking-tight">{cat.name}</h3>
-                  <span class="font-mono text-[9px] text-white/50 tracking-wider uppercase">{cat.code}</span>
+                  <h3 class="text-xl font-sans font-semibold text-white group-hover:text-primary transition-colors tracking-tight">{cat.name}</h3>
+                  <span class="font-sans text-xs font-medium text-white/40 tracking-widest uppercase">{cat.code}</span>
                 </div>
               </div>
             </div>
@@ -335,8 +335,8 @@
               {#each cat.skills as skill}
                 <div class="group/skill">
                   <div class="flex justify-between mb-2">
-                    <span class="text-xs font-mono text-white/80 group-hover/skill:text-white transition-colors">{skill.name}</span>
-                    <span class="text-[10px] font-mono text-white/70">{skill.level}%</span>
+                    <span class="text-xs font-sans text-white/80 group-hover/skill:text-white transition-colors">{skill.name}</span>
+                    <span class="text-xs font-sans text-white/50">{skill.level}%</span>
                   </div>
                   <div class="h-1 rounded-full bg-white/5 overflow-hidden">
                     <div class="skill-bar-fill h-full rounded-full bg-linear-to-r from-primary/60 to-primary transition-all shadow-[0_0_10px_rgba(var(--primary),0.2)]" data-level={skill.level} style="width: 0%"></div>
@@ -356,10 +356,10 @@
       <div class="text-center mb-20 md:mb-28">
         <div class="flex items-center justify-center gap-4 mb-6">
           <div class="h-px w-12 bg-primary/40"></div>
-          <span class="text-[10px] font-mono text-primary font-medium tracking-[0.5em] uppercase">Career</span>
+          <span class="text-xs font-sans font-medium text-primary tracking-widest uppercase">Career</span>
           <div class="h-px w-12 bg-primary/40"></div>
         </div>
-        <h2 class="text-4xl md:text-6xl lg:text-7xl font-serif font-black tracking-tighter uppercase italic">Track <span class="text-primary not-italic">Record</span></h2>
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight">Track <span class="text-primary">Record</span></h2>
       </div>
       
       <div class="relative timeline-container max-w-4xl mx-auto">
@@ -376,7 +376,7 @@
             </div>
             
             <div class={i % 2 === 0 ? 'pl-16 md:pl-0 md:text-right md:order-1 md:pr-12' : 'pl-16 md:order-2 md:text-left md:pl-12'}>
-              <span class="font-mono text-5xl md:text-7xl font-black text-white/10 group-hover:text-primary/30 transition-colors duration-500 leading-none block">{item.year}</span>
+              <span class="font-sans text-5xl md:text-7xl font-bold text-white/10 group-hover:text-primary/30 transition-colors duration-500 leading-none block tracking-tight">{item.year}</span>
             </div>
             
             <div class={i % 2 === 0 ? 'pl-16 md:order-2 md:pl-12' : 'pl-16 md:pl-0 md:order-1 md:text-right md:pr-12'}>
@@ -396,8 +396,8 @@
                     {/if}
                   </div>
                   <div>
-                    <h3 class="text-lg font-serif font-bold text-white group-hover:text-primary transition-colors leading-tight">{item.role}</h3>
-                    <span class="text-[10px] font-mono text-white/80 uppercase tracking-wider">{item.company}</span>
+                    <h3 class="text-lg font-sans font-semibold text-white group-hover:text-primary transition-colors leading-tight">{item.role}</h3>
+                    <span class="text-xs font-sans font-medium text-white/60 tracking-wide">{item.company}</span>
                   </div>
                 </div>
                 <p class="text-sm text-white/80 leading-relaxed {i % 2 !== 0 ? 'md:text-right' : ''}">{item.desc}</p>

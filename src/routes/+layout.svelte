@@ -89,7 +89,8 @@
 			duration: 0.5,
 			stagger: 0.05,
 			ease: 'expo.inOut',
-			delay: 0.1
+			delay: 0.1,
+			onComplete: () => ScrollTrigger.refresh()
 		});
 	});
 </script>

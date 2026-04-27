@@ -15,8 +15,8 @@
 
     // 1. Setup WebGL Scene
     scene = new THREE.Scene();
-    const PARTICLE_COUNT = 1500;
-    const BASE_COLOR = new THREE.Color('#c9a84c');
+    const PARTICLE_COUNT = 800;
+    const BASE_COLOR = new THREE.Color('#ffffff');
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 50;
 
@@ -88,7 +88,7 @@
           // Add subtle pulsing based on time and individual offset
           float pulse = sin(uTime + vOpacity * 10.0) * 0.5 + 0.5;
           // Keep overall opacity extremely subtle
-          gl_FragColor = vec4(uColor, alpha * pulse * 0.15);
+          gl_FragColor = vec4(uColor, alpha * pulse * 0.05);
         }
       `,
       transparent: true,
@@ -163,4 +163,4 @@
   let mouseState = { mouseX: 0, mouseY: 0 };
 </script>
 
-<div bind:this={containerRef} class="fixed inset-0 z-[-1] pointer-events-none bg-[#020202]"></div>
+<div bind:this={containerRef} class="fixed inset-0 z-[-1] pointer-events-none bg-black"></div>
