@@ -19,7 +19,6 @@
   let animationFrameId;
 
   const headline = ['Building', 'intelligent', 'systems.'];
-  const tickerText = 'Open to work · Full Stack · AI/ML · Svelte · Node · Python · LLMs · ';
 
   onMount(() => {
     if (!browser || !heroSection || !textRef) return;
@@ -58,22 +57,18 @@
         { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.7 }
       );
 
-      gsap.fromTo('.hero-ticker', 
-        { y: 10, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.8 }
-      );
+
 
       gsap.fromTo('.scroll-indicator', { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 0.8 });
 
       // 2. Cinematic scroll-out: multi-layer depth system
-      // Layer 1: Hero text — scales down + letterSpacing expands ("exhales")
+      // Layer 1 (The Blast): Hero text shoots towards the camera
       gsap.to('.hero-text-group', {
-        scale: 0.85,
+        scale: 4,
         opacity: 0,
-        y: -80,
-        letterSpacing: '0.15em',
-        filter: 'blur(12px)',
-        ease: 'none',
+        y: 50,
+        filter: 'blur(30px)',
+        ease: 'power3.in',
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
@@ -82,17 +77,16 @@
         }
       });
 
-      // Layer 2: Background video — moves slowest + gains blur (depth of field)
+      // Layer 2 (The Ignition): Video softly scales and blurs out
       gsap.to('.hero-bg-video', {
-        y: 80,
         scale: 1.1,
-        filter: 'blur(6px)',
-        ease: 'none',
+        filter: 'brightness(0.6) blur(6px)',
+        ease: 'power2.in',
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
-          end: 'bottom top',
-          scrub: 1.5
+          end: '70% top',
+          scrub: 1
         }
       });
 
@@ -108,18 +102,7 @@
         }
       });
 
-      // Layer 4: Ticker — moves fastest (closest to camera), independent fade
-      gsap.to('.hero-ticker', {
-        y: -40,
-        opacity: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroSection,
-          start: '10% top',
-          end: '40% top',
-          scrub: 0.3
-        }
-      });
+
 
       // 5. Scroll indicator fade-out on scroll
       gsap.to('.scroll-indicator', {
@@ -225,16 +208,7 @@
     </a>
   </div>
 
-  <!-- Ticker -->
-  <div class="hero-ticker absolute bottom-12 left-0 w-full overflow-hidden z-20 pointer-events-none opacity-50">
-    <div class="marquee-track flex whitespace-nowrap animate-marquee">
-      {#each Array(6) as _, i (i)}
-        <span class="text-xs md:text-sm font-sans font-medium tracking-widest text-white pr-12">
-          {tickerText}
-        </span>
-      {/each}
-    </div>
-  </div>
+
 
   <div class="hero-bottom-border absolute bottom-0 left-0 w-full h-px bg-white/10 z-20 origin-center"></div>
 
@@ -248,13 +222,6 @@
 </section>
 
 <style>
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .animate-marquee {
-    animation: marquee 25s linear infinite;
-  }
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }

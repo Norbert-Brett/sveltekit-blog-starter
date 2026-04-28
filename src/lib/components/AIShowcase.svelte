@@ -65,14 +65,19 @@
         }
       );
 
-      // 4. Terminal card entrance
-      gsap.fromTo('.ai-terminal', 
-        { y: 40, opacity: 0, scale: 0.98 }, 
-        {
-          y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'power3.out',
-          scrollTrigger: { trigger: sectionRef, start: 'top 55%', scrub: 0.5 }
-        }
-      );
+      // The Boot-Up: CRT-style terminal power on
+      const terminalTimeline = gsap.timeline({
+        scrollTrigger: { trigger: sectionRef, start: 'top 60%', toggleActions: 'play reverse play reverse' }
+      });
+      terminalTimeline
+        .fromTo('.ai-terminal',
+          { clipPath: 'inset(50% 50% 50% 50%)', opacity: 0, filter: 'blur(10px)', scale: 0.95 },
+          { clipPath: 'inset(50% 0% 50% 0%)', opacity: 1, filter: 'blur(2px)', scale: 1.02, duration: 0.4, ease: 'power2.inOut' }
+        )
+        .to('.ai-terminal',
+          { clipPath: 'inset(0% 0% 0% 0%)', filter: 'blur(0px)', scale: 1, duration: 0.8, ease: 'power4.out' },
+          "+=0.1"
+        );
 
       // 5. Stat cards stagger with clip-path reveal
       gsap.fromTo('.ai-stat-card', 
@@ -137,10 +142,10 @@
 </script>
 
 <section bind:this={sectionRef} class="relative py-32 md:py-48 px-6 md:px-24 overflow-hidden bg-background">
-  <!-- Premium Dark Grid Background -->
-  <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center opacity-[0.1]">
+  <!-- Unified Architectural Dot Grid (Dense) -->
+  <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center opacity-20">
     <div class="w-full h-full" 
-         style="background-image: linear-gradient(var(--color-primary) 1px, transparent 1px), linear-gradient(90deg, var(--color-primary) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse at center, black 10%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 70%);">
+         style="background-image: radial-gradient(var(--color-primary) 1.5px, transparent 1.5px); background-size: 1.5rem 1.5rem; mask-image: linear-gradient(to bottom, black 10%, transparent 90%); -webkit-mask-image: linear-gradient(to bottom, black 10%, transparent 90%);">
     </div>
   </div>
 
@@ -198,9 +203,8 @@
               </div>
             {/if}
 
-            <!-- Re-trigger button (shows after auto-play completes) -->
             <button
-              class="mt-6 px-6 py-3 rounded-full bg-primary text-white text-xs font-sans font-semibold tracking-wide hover:bg-primary/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              class="mt-6 px-6 py-3 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:shadow-[0_0_20px_rgba(201,168,76,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               onclick={typeResponse}
               disabled={isTyping}
             >

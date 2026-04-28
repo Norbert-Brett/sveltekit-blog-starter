@@ -69,63 +69,35 @@
         }
       );
 
-      // 3. Chat bubbles with parallax depth + subtle rotation
-      const bubbles = gsap.utils.toArray('.chat-bubble');
-      bubbles.forEach((bubble, i) => {
-        const xOffset = i % 2 === 0 ? -40 : 40;
-        // Von Restorff: First bubble is slightly larger (set via class) — depth scroll differs
-        const scrollSpeed = i % 2 === 0 ? 0.4 : 0.5;
-        const rotationAmount = i % 2 === 0 ? 1.5 : -1.5;
-
-        // Initial state
-        gsap.set(bubble, { opacity: 0, y: 60, x: xOffset, scale: 0.85, filter: 'blur(8px)' });
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: bubble,
-            start: 'top 95%',
-            end: 'bottom 5%',
-            scrub: scrollSpeed
-          }
-        });
-
-        tl.to(bubble, {
-          opacity: 1, 
-          y: 0, 
-          x: 0, 
-          scale: 1, 
-          filter: 'blur(0px)',
-          rotation: 0,
-          duration: 0.15,
-          ease: 'power2.out'
-        })
-        .to(bubble, { duration: 0.7 }) // sustain
-        .to(bubble, {
-          opacity: 0.15, 
-          y: -40, 
-          scale: 0.9, 
-          filter: 'blur(12px)',
-          rotation: rotationAmount,
-          duration: 0.15,
-          ease: 'power2.in'
-        });
-      });
-
-      // 4. Horizontal line wipe on each bubble entrance
-      gsap.utils.toArray('.bubble-line-wipe').forEach((line) => {
-        gsap.fromTo(line,
-          { scaleX: 0 },
+      // 3. Split-Screen Scrolling Animation
+      gsap.utils.toArray('.testimonial-card').forEach((card) => {
+        gsap.fromTo(card,
+          { opacity: 0.1, y: 50 },
           {
-            scaleX: 1,
-            duration: 1.2,
-            ease: 'expo.out',
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power2.out',
             scrollTrigger: {
-              trigger: line.closest('.chat-bubble'),
-              start: 'top 85%',
+              trigger: card,
+              start: 'top 75%',
+              end: 'top 25%',
+              toggleActions: 'play reverse play reverse'
             }
           }
         );
       });
+
+      // 4. Robust GSAP Pinning for Left Header
+      ScrollTrigger.create({
+        trigger: '.testimonial-sticky-header',
+        start: 'top 25%',
+        endTrigger: sectionRef,
+        end: 'bottom 80%',
+        pin: true,
+        pinSpacing: false
+      });
+
 
       ScrollTrigger.refresh();
     }, sectionRef);
@@ -141,7 +113,14 @@
 </script>
 
 <!-- Miller's Law: 3 testimonials — within 7±2 sweet spot. Don't add more. -->
-<section bind:this={sectionRef} class="relative py-32 md:py-48 overflow-hidden bg-background flex flex-col items-center">
+<section bind:this={sectionRef} class="relative py-32 md:py-48 overflow-clip bg-background flex flex-col items-center">
+  <!-- Unified Architectural Dot Grid (Rotated) -->
+  <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center opacity-10 rotate-20 scale-150">
+    <div class="w-full h-full" 
+         style="background-image: radial-gradient(var(--color-primary) 1.5px, transparent 1.5px); background-size: 4rem 4rem; mask-image: radial-gradient(ellipse at center, black 10%, transparent 60%); -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 60%);">
+    </div>
+  </div>
+
   <!-- Interactive Parallax Background Header -->
   <div class="absolute inset-0 flex items-center justify-center md:items-start pointer-events-none whitespace-nowrap opacity-100 select-none overflow-hidden mt-12 md:mt-0 z-0">
     <h2 class="testimonial-bg-text text-[20vw] font-sans font-black leading-none text-white/3 tracking-tighter uppercase sticky top-1/4">
@@ -149,69 +128,48 @@
     </h2>
   </div>
 
-  <!-- Section Header -->
-  <div class="testimonial-header relative z-10 w-full max-w-7xl px-6 mb-24 md:mb-32 text-center md:text-left">
-    <span class="text-xs font-sans font-semibold tracking-widest uppercase text-primary mb-4 block md:inline-block">
-      --- KIND WORDS
-    </span>
-    <h2 class="text-4xl md:text-7xl font-sans font-bold tracking-tight text-white leading-[0.9]">
-      What people say<br class="hidden md:block"/> about me
-    </h2>
-  </div>
+  <div class="relative w-full max-w-7xl px-6 flex flex-col md:flex-row gap-20 md:gap-32 z-10">
+    <!-- Left: Sticky Header -->
+    <div class="w-full md:w-5/12">
+      <div class="testimonial-sticky-header pt-12 md:pt-0">
+        <span class="text-xs font-sans font-semibold tracking-widest uppercase text-primary mb-4 block">
+          --- KIND WORDS
+        </span>
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight text-white leading-[1.05]">
+          What people say<br class="hidden md:block"/> about me.
+        </h2>
+        <!-- Massive Decorative Quote Mark -->
+        <span class="absolute -top-4 -left-12 md:-top-16 md:-left-12 text-[15rem] md:text-[20rem] font-serif leading-none text-white/2 pointer-events-none select-none z-[-1]">“</span>
+      </div>
+    </div>
 
-  <!-- Kinetic Floating Bubbles Container -->
-  <div class="relative z-10 w-full max-w-5xl px-6 flex flex-col gap-16 md:gap-32">
-    {#each testimonials as item, index}
-      <div 
-        class="chat-bubble relative w-full rounded-[2.5rem] bg-[#0A0D0B]/60 hover:bg-[#0A0D0B]/80 backdrop-blur-2xl border border-white/10 p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group transition-all duration-700
-          {index % 2 === 0 ? 'self-start md:ml-12' : 'self-end md:mr-12'}
-          {index === 0 ? 'md:max-w-[640px]' : ''}
-          {index === 1 ? 'md:max-w-[480px]' : ''}
-          {index === 2 ? 'md:max-w-[720px]' : ''}"
-      >
-        <!-- Von Restorff: First bubble gets a subtle gold top accent -->
-        {#if index === 0}
-          <div class="absolute top-0 left-[10%] right-[10%] h-[2px] bg-linear-to-r from-transparent via-primary/50 to-transparent rounded-full"></div>
-        {/if}
-
-        <!-- Gold Inner Atmosphere -->
-        <div class="absolute inset-0 rounded-[2.5rem] bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
-
-        <div class="relative z-10 flex flex-col gap-8">
-          <!-- Stylized Quotation Anchor -->
-          <span class="text-6xl md:text-8xl font-serif leading-none text-primary/20 select-none -mb-8 -ml-4" aria-hidden="true">"</span>
-
-          <!-- Testimonial Content -->
-          <p class="text-lg md:text-xl lg:text-2xl font-sans font-light text-white/90 leading-relaxed pr-4">
-            { item.quote }
+    <!-- Right: Scrolling Quotes List -->
+    <div class="w-full md:w-7/12 flex flex-col gap-32 md:gap-48 pb-32">
+      {#each testimonials as item, index}
+        <div class="testimonial-card relative flex flex-col gap-8 opacity-20 will-change-transform">
+          <!-- Quote Text: Editorial Serif -->
+          <p class="text-2xl md:text-3xl lg:text-4xl font-serif font-light text-white/90 leading-[1.4] tracking-wide">
+            "{ item.quote }"
           </p>
 
-          <!-- Horizontal line wipe (cinematic entrance accent) -->
-          <div class="bubble-line-wipe w-full h-px bg-linear-to-r from-primary/30 via-white/10 to-transparent origin-left"></div>
-          
           <!-- Author Identity -->
-          <div class="flex items-center gap-5">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-white/3 flex items-center justify-center border border-white/10 shrink-0">
+              <span class="text-primary font-bold text-lg font-serif">{item.author.name.charAt(0)}</span>
+            </div>
             <div class="flex flex-col">
-              <h4 class="text-sm md:text-base font-sans font-semibold tracking-wide text-white">{ item.author.name }</h4>
-              <p class="mt-1 text-[10px] md:text-xs font-sans tracking-widest text-primary font-medium uppercase">{ item.author.description }</p>
+              <h4 class="text-base md:text-lg font-sans font-bold text-white tracking-wide">{ item.author.name }</h4>
+              <p class="text-[10px] md:text-xs font-sans tracking-widest text-primary font-semibold uppercase mt-1">{ item.author.description }</p>
             </div>
           </div>
         </div>
-
-        <!-- Dynamic Architectural Bubble "Tail" -->
-        <div 
-          class="absolute bottom-[-15px] w-10 h-10 bg-[#0A0D0B]/60 backdrop-blur-md border-b border-r border-white/10 transform rotate-45 pointer-events-none {index % 2 === 0 ? 'left-16' : 'right-16'}"
-        ></div>
-      </div>
-    {/each}
+      {/each}
+    </div>
   </div>
 </section>
 
 <style>
-  .chat-bubble {
-    will-change: transform, opacity, filter;
-  }
-  .bubble-line-wipe {
-    will-change: transform;
+  .testimonial-card {
+    will-change: transform, opacity;
   }
 </style>

@@ -11,7 +11,7 @@
   let sectionRef = $state(null);
   let counterRef = $state(null);
   let activePanel = $state(0);
-  let scrollProgress = $state(0);
+
   let ctx;
 
   const panels = [
@@ -45,9 +45,7 @@
           pin: true,
           scrub: 0.5,
           onUpdate: (self) => {
-            const progress = self.progress;
-            scrollProgress = progress;
-            activePanel = Math.min(Math.floor(progress * panels.length), panels.length - 1);
+            activePanel = Math.min(Math.floor(self.progress * panels.length), panels.length - 1);
           }
         }
       });
@@ -86,16 +84,7 @@
         });
       }
 
-      // 4. Decorative accent line
-      gsap.fromTo('.about-accent-line', 
-        { scaleY: 0 }, 
-        {
-          scaleY: 1, 
-          duration: 1.5, 
-          ease: 'expo.out',
-          scrollTrigger: { trigger: sectionRef, start: 'top 70%' }
-        }
-      );
+
 
       // 5. Panel headings — clip-path mask reveal
       panels.forEach((_, i) => {
@@ -105,6 +94,16 @@
       gsap.to('.about-heading-0', { clipPath: 'inset(0 0% 0 0)', duration: 1, ease: 'expo.out', delay: 0.3,
         scrollTrigger: { trigger: sectionRef, start: 'top 70%' }
       });
+
+      // The Impact: Container catches the momentum
+      gsap.fromTo('.hero-about-inner',
+        { scale: 1.1, opacity: 0, filter: 'blur(20px)' },
+        { 
+          scale: 1, opacity: 1, filter: 'blur(0px)', 
+          duration: 1.5, ease: 'power4.out',
+          scrollTrigger: { trigger: sectionRef, start: 'top 80%' }
+        }
+      );
     }, sectionRef);
 
     return () => {
@@ -127,21 +126,20 @@
 </script>
 
 <section bind:this={sectionRef} class="relative w-full h-screen overflow-hidden bg-background">
-  <!-- Scroll-driven progress bar (Jakob's Law: familiar step indicator) -->
-  <div class="absolute top-0 left-0 w-full h-[2px] z-40">
+
+
+  <!-- Architectural Dot Grid & Scanline Background -->
+  <div class="absolute inset-0 pointer-events-none z-0">
+    <!-- Premium radial dot grid -->
     <div 
-      class="h-full bg-linear-to-r from-primary via-primary/80 to-primary/40 origin-left transition-transform duration-100"
-      style="transform: scaleX({scrollProgress})"
+      class="absolute inset-0 opacity-20"
+      style="background-image: radial-gradient(var(--color-primary) 1.5px, transparent 1.5px); background-size: 3rem 3rem; mask-image: radial-gradient(ellipse at 50% 50%, black 15%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 15%, transparent 75%);"
     ></div>
   </div>
 
-  <!-- Background accent orb -->
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] rounded-full bg-primary/3 blur-[150px] pointer-events-none animate-[glow-breathe_10s_ease-in-out_infinite]"></div>
 
-  <!-- Decorative Left Gold Line -->
-  <div class="about-accent-line hidden md:block absolute left-12 top-[15%] bottom-[15%] w-px bg-linear-to-b from-transparent via-primary/30 to-transparent origin-top"></div>
 
-  <div class="absolute inset-0 flex items-center justify-center px-6 md:px-24">
+  <div class="hero-about-inner absolute inset-0 flex items-center justify-center px-6 md:px-24 will-change-transform">
     <div class="max-w-5xl w-full relative">
       <!-- Floating years counter -->
       <div class="absolute -top-20 right-0 md:right-12 flex items-end gap-3 z-30">

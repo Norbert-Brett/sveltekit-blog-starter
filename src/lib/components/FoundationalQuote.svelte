@@ -120,40 +120,14 @@
   <!-- Background Layers -->
   <div class="absolute inset-0 z-1 pointer-events-none"></div>
 
-  <!-- Premium Architectural Grid -->
-  <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center">
-    <div class="w-full h-full opacity-[0.15]" 
-         style="background-image: radial-gradient(var(--color-primary) 1px, transparent 1px); background-size: 32px 32px; mask-image: radial-gradient(ellipse at center, black 10%, transparent 60%); -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 60%);">
+  <!-- Unified Architectural Dot Grid (Sparse) -->
+  <div class="absolute inset-0 z-0 pointer-events-none flex justify-center items-center opacity-20">
+    <div class="w-full h-full" 
+         style="background-image: radial-gradient(var(--color-primary) 1.5px, transparent 1.5px); background-size: 3rem 3rem; mask-image: radial-gradient(ellipse at 50% 50%, black 15%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 15%, transparent 75%);">
     </div>
   </div>
 
-  <!-- Focused Spotlight -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(41,151,255,0.1)_0%,transparent_70%)] pointer-events-none z-0"></div>
 
-  <!-- Top/Bottom Fade -->
-  <div class="absolute inset-0 bg-linear-to-b from-[#000000] via-transparent to-[#000000] z-2 pointer-events-none"></div>
-
-  <!-- Decorative Corner Elements (Refined) -->
-  <div class="absolute top-12 left-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
-    <div class="absolute top-0 left-0 w-full h-px bg-linear-to-r from-primary/60 to-transparent"></div>
-    <div class="absolute top-0 left-0 h-full w-px bg-linear-to-b from-primary/60 to-transparent"></div>
-    <div class="absolute -top-[3px] -left-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
-  </div>
-  <div class="absolute top-12 right-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
-    <div class="absolute top-0 right-0 w-full h-px bg-linear-to-l from-primary/60 to-transparent"></div>
-    <div class="absolute top-0 right-0 h-full w-px bg-linear-to-b from-primary/60 to-transparent"></div>
-    <div class="absolute -top-[3px] -right-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
-  </div>
-  <div class="absolute bottom-12 left-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
-    <div class="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-primary/60 to-transparent"></div>
-    <div class="absolute bottom-0 left-0 h-full w-px bg-linear-to-t from-primary/60 to-transparent"></div>
-    <div class="absolute -bottom-[3px] -left-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
-  </div>
-  <div class="absolute bottom-12 right-12 w-16 h-16 z-3 pointer-events-none hidden md:block">
-    <div class="absolute bottom-0 right-0 w-full h-px bg-linear-to-l from-primary/60 to-transparent"></div>
-    <div class="absolute bottom-0 right-0 h-full w-px bg-linear-to-t from-primary/60 to-transparent"></div>
-    <div class="absolute -bottom-[3px] -right-[3px] w-1.5 h-1.5 border border-primary/60 bg-black"></div>
-  </div>
 
   <!-- Content -->
   <div class="relative z-10 max-w-5xl w-full flex flex-col items-center">

@@ -57,17 +57,9 @@
         onUpdate: () => {
           displayedValues[index] = Math.floor(obj.val);
         },
-        onComplete: () => {
-          // Glow burst on completion (Von Restorff: isolation effect on finished counters)
-          countersFinished[index] = true;
-          const numEl = statsRef?.querySelector(`.stat-num-${index}`);
-          if (numEl) {
-            gsap.fromTo(numEl, 
-              { scale: 1, textShadow: '0 0 0px rgba(41,151,255,0)' },
-              { scale: 1.1, textShadow: '0 0 25px rgba(41,151,255,0.5)', duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1 }
-            );
+          onComplete: () => {
+            countersFinished[index] = true;
           }
-        }
       });
     });
   };
@@ -76,27 +68,27 @@
     if (!browser || !statsRef) return;
 
     ctx = gsap.context(() => {
-      // Scroll-scrubbed scale+blur reveal (cinematic depth)
+      // The Shrapnel: High-velocity spring entrance
       const cards = gsap.utils.toArray('.metric-card-wrapper');
-      cards.forEach((card, i) => {
-        gsap.fromTo(card,
-          { scale: 0.8, opacity: 0, filter: 'blur(12px)', y: 60 },
-          { 
-            scale: 1,
-            y: 0, 
-            opacity: 1,
-            filter: 'blur(0px)',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: statsRef,
-              start: `top ${85 - i * 3}%`,
-              end: `top ${55 - i * 3}%`,
-              scrub: 0.5,
-              onEnter: i === 0 ? startCounters : undefined
-            }
+      gsap.fromTo(cards,
+        { y: 150, scale: 0.8, opacity: 0, rotationZ: () => Math.random() * 6 - 3, filter: 'blur(10px)' },
+        { 
+          y: 0, 
+          scale: 1, 
+          opacity: 1, 
+          rotationZ: 0,
+          filter: 'blur(0px)',
+          duration: 1.2,
+          stagger: 0.1,
+          ease: 'back.out(1.7)',
+          scrollTrigger: {
+            trigger: statsRef,
+            start: 'top 85%',
+            toggleActions: 'play reverse play reverse',
+            onEnter: startCounters
           }
-        );
-      });
+        }
+      );
     }, statsRef);
 
     return () => {
@@ -115,34 +107,27 @@
   role="presentation"
   class="relative z-30 py-32 bg-transparent overflow-hidden"
 >
+  <!-- Unified Architectural Dot Grid (Subtle Edge-to-Edge) -->
+  <div class="absolute inset-0 z-0 pointer-events-none opacity-[0.05]">
+    <div class="w-full h-full" 
+         style="background-image: radial-gradient(var(--color-primary) 1px, transparent 1px); background-size: 2rem 2rem;">
+    </div>
+  </div>
+
   <div class="max-w-7xl mx-auto px-6 relative z-10">
     <!-- Miller's Law: exactly 4 stats — within 7±2 sweet spot -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       
       {#each stats as stat, index (index)}
         <div 
-          class="metric-card-wrapper relative group rounded-4xl bg-white/2 overflow-hidden {stat.featured ? 'ring-1 ring-primary/20' : ''}"
+          class="metric-card-wrapper relative group rounded-xl bg-[#0A0D0B] border border-white/10 transition-all duration-500 hover:shadow-[15px_15px_0px_rgba(201,168,76,0.1)] hover:-translate-y-1 hover:-translate-x-1"
           onmouseleave={handleMouseLeave}
+          role="presentation"
         >
-          <!-- Border Glow -->
-          <div 
-            class="pointer-events-none absolute -inset-px rounded-4xl opacity-0 transition duration-300 group-hover:opacity-100"
-            style="background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.4), transparent 40%); mix-blend-mode: overlay;"
-          ></div>
-          
-          <!-- Inner Background -->
-          <div class="absolute inset-px rounded-[calc(2rem-1px)] bg-[#0A0D0B]/80 backdrop-blur-2xl z-0"></div>
-          
-          <!-- Hover Shine -->
-          <div 
-            class="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 z-10"
-            style="background: radial-gradient(400px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.03), transparent 40%);"
-          ></div>
+          <!-- Subtle Inner Atmosphere -->
+          <div class="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-          <!-- Von Restorff: Featured stat gets accent top border -->
-          {#if stat.featured}
-            <div class="absolute top-0 left-[15%] right-[15%] h-[2px] bg-linear-to-r from-transparent via-primary/60 to-transparent z-20"></div>
-          {/if}
+
 
           <div class="relative z-20 flex flex-col justify-between h-full min-h-[180px] p-8 md:p-10">
             <div class="flex items-center justify-between mb-12">

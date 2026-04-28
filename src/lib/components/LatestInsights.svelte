@@ -58,12 +58,13 @@
         );
       });
 
-      // Accordion cards stagger entrance
+      // The Cascade: 3D unfold sequence
+      gsap.set('.accordion-card', { transformPerspective: 1500, transformOrigin: 'top center' });
       gsap.fromTo('.accordion-card',
-        { clipPath: 'inset(0 0 100% 0)', opacity: 0 },
+        { rotateX: -90, opacity: 0, y: -50, filter: 'blur(10px)' },
         {
-          clipPath: 'inset(0 0 0% 0)', opacity: 1, duration: 1, stagger: 0.1, ease: 'expo.out',
-          scrollTrigger: { trigger: sectionRef, start: 'top 65%' }
+          rotateX: 0, opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.2, stagger: 0.15, ease: 'back.out(1.4)',
+          scrollTrigger: { trigger: sectionRef, start: 'top 70%', toggleActions: 'play reverse play reverse' }
         }
       );
     }, sectionRef);
@@ -95,11 +96,10 @@
         </h2>
       </div>
 
-      <!-- Magnetic hover on "All" button -->
       <a
         href="/articles"
         use:magnetic={{ strength: 0.5, textStrength: 0.2 }}
-        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-white/20 text-xs font-sans font-medium tracking-wide hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 interactive"
+        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:border-primary hover:shadow-[0_0_20px_rgba(201,168,76,0.4)] transition-all duration-300 interactive"
       >
         <span class="magnetic-text">All</span>
       </a>
@@ -171,7 +171,7 @@
                 </div>
               </div>
 
-              <div class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-white text-black text-xs font-sans font-semibold tracking-wide hover:bg-primary hover:text-white transition-all transform hover:scale-105 w-fit shadow-xl">
+              <div class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:shadow-[0_0_20px_rgba(201,168,76,0.4)] transition-all transform hover:scale-105 w-fit shadow-xl">
                 Read Article
                 <ArrowRight class="w-4 h-4" />
               </div>

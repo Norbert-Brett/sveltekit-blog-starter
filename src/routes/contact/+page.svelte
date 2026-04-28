@@ -287,7 +287,7 @@
               </div>
 
               <div class="pt-2">
-                <Button type="submit" size="lg" disabled={isSubmitting} class="w-full flex items-center justify-center gap-3 group relative overflow-hidden bg-primary text-white font-sans font-semibold text-sm h-14 hover:bg-primary/80 transition-all duration-400 rounded-full tracking-wide shadow-[0_0_40px_rgba(41,151,255,0.15)] hover:shadow-[0_0_60px_rgba(41,151,255,0.25)]">
+                <Button type="submit" size="lg" disabled={isSubmitting} class="w-full flex items-center justify-center gap-3 group relative overflow-hidden border border-primary bg-transparent text-primary hover:bg-primary hover:text-[#0d0c0c] hover:shadow-[0_0_30px_rgba(201,168,76,0.4)] font-sans font-bold text-xs tracking-widest uppercase h-14 transition-all duration-400 rounded-full">
                   {#if !isSubmitting}
                     <span>Send Message</span>
                   {:else}
