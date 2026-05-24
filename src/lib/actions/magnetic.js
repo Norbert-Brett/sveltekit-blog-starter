@@ -15,25 +15,25 @@ export function magnetic(node, options = {}) {
     const { clientX, clientY } = e;
     const { left, top, width, height } = boundingRect;
 
-    const centerX = left + width / 2;
-    const centerY = top + height / 2;
-
-    const moveX = (clientX - centerX) * strength;
-    const moveY = (clientY - centerY) * strength;
+    // Map mouse position relative to boundaries using GSAP utils
+    const mapX = gsap.utils.mapRange(left, left + width, -width / 2, width / 2, clientX);
+    const mapY = gsap.utils.mapRange(top, top + height, -height / 2, height / 2, clientY);
 
     gsap.to(node, {
-      x: moveX,
-      y: moveY,
-      duration: 0.6,
-      ease: "power3.out",
+      x: mapX * strength,
+      y: mapY * strength,
+      duration: 0.4,
+      ease: "power2.out",
+      overwrite: true,
     });
 
     if (textElement) {
       gsap.to(textElement, {
-        x: (clientX - centerX) * textStrength,
-        y: (clientY - centerY) * textStrength,
-        duration: 0.6,
-        ease: "power3.out",
+        x: mapX * textStrength,
+        y: mapY * textStrength,
+        duration: 0.4,
+        ease: "power2.out",
+        overwrite: true,
       });
     }
   };
@@ -49,7 +49,8 @@ export function magnetic(node, options = {}) {
       x: 0,
       y: 0,
       duration: 0.7,
-      ease: "elastic.out(1, 0.3)",
+      ease: "elastic.out(1, 0.4)",
+      overwrite: true,
     });
 
     if (textElement) {
@@ -57,7 +58,8 @@ export function magnetic(node, options = {}) {
         x: 0,
         y: 0,
         duration: 0.7,
-        ease: "elastic.out(1, 0.3)",
+        ease: "elastic.out(1, 0.4)",
+        overwrite: true,
       });
     }
   };

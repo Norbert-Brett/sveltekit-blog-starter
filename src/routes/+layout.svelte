@@ -172,7 +172,7 @@
 	<Header />
 
 	{#key data.path}
-		<main id="main" tabindex="-1" class="grow pt-24 overflow-x-hidden" in:fade|global={transitionIn} out:fade|global={transitionOut}>
+		<main id="main" tabindex="-1" class="grow overflow-x-hidden" in:fade|global={transitionIn} out:fade|global={transitionOut}>
 			{@render children?.()}
         </main>
 	{/key}

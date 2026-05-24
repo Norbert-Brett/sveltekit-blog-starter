@@ -51,22 +51,17 @@
 	bind:this={container}
 	class="fixed inset-0 z-10000 flex flex-col items-center justify-center bg-background text-foreground"
 >
-	<div class="absolute inset-0 flex items-center justify-center overflow-hidden">
-		<!-- Minimalist preloader background -->
-		<div class="pointer-events-none absolute inset-0 bg-black"></div>
-	</div>
-
 	<div class="relative z-10 flex flex-col items-center">
-		<h1 class="text-6xl md:text-8xl font-sans font-light tracking-tighter text-white">
-			<span bind:this={counterElement}>{percentage}</span><span class="text-white/50">%</span>
+		<h1 class="text-6xl md:text-8xl font-sans font-light tracking-tighter text-foreground">
+			<span bind:this={counterElement}>{percentage}</span><span class="text-foreground/50">%</span>
 		</h1>
-		<div class="mt-8 h-px w-48 overflow-hidden bg-white/20">
+		<div class="mt-8 h-px w-48 overflow-hidden bg-foreground/10">
 			<div 
-				class="h-full bg-white transition-all duration-100 ease-out" 
+				class="h-full bg-accent transition-all duration-100 ease-out" 
 				style="width: {percentage}%"
 			></div>
 		</div>
-		<p class="mt-6 text-xs tracking-widest text-white/50 font-sans font-medium uppercase">
+		<p class="mt-6 text-xs tracking-widest text-foreground/50 font-sans font-medium uppercase">
 			Loading Experience
 		</p>
 	</div>

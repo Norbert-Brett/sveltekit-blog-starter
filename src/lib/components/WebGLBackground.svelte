@@ -16,7 +16,10 @@
     // 1. Setup WebGL Scene
     scene = new THREE.Scene();
     const PARTICLE_COUNT = 800;
-    const BASE_COLOR = new THREE.Color('#ffffff');
+    // Dynamically retrieve accent color (Premium Gold) from theme variables
+    const style = getComputedStyle(document.documentElement);
+    const accentHex = style.getPropertyValue('--accent').trim() || '#d4b055';
+    const BASE_COLOR = new THREE.Color(accentHex);
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 50;
 
@@ -163,4 +166,4 @@
   let mouseState = { mouseX: 0, mouseY: 0 };
 </script>
 
-<div bind:this={containerRef} class="fixed inset-0 z-[-1] pointer-events-none bg-black"></div>
+<div bind:this={containerRef} class="fixed inset-0 z-[-1] pointer-events-none bg-background"></div>

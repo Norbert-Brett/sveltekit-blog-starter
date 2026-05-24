@@ -30,23 +30,33 @@
   will-change: transform;
 }
 
-/* ─── Global Dark Theme (Cinematic) ─── */
+/* ─── Global Theme (Warm Titanium & Premium Gold) ─── */
 :root,
 html {
   color-scheme: dark;
-  --background: #0d0c0c; /* Carbon Black */
-  --foreground: #f5f0e8; /* Ivory Mist */
-  --accent: #c9a84c; /* Premium Gold */
-  --muted: #161514; /* Carbon Muted */
-  --border: #252220; /* Carbon Border */
+  --background: #181715; /* Warm Obsidian / Titanium Charcoal - softer & premium */
+  --foreground: #f4efe6; /* Ivory Silk - warm & soft to read */
+  --accent: #d4b055; /* Premium Brushed Gold */
+  --muted: #242220; /* Warm Muted Charcoal */
+  --border: #35322f; /* Sophisticated Bronze Border */
+
+  /* Dynamic Glassmorphism Variables */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: rgba(0, 0, 0, 0.4);
 }
 
 html[data-theme="light"] {
-  --background: #f5f0e8; /* Ivory Mist */
-  --foreground: #0d0c0c; /* Carbon Black */
-  --accent: #a8872e; /* Deeper Gold for light mode */
-  --muted: #ede8df;
-  --border: #d8d0c4;
+  --background: #f6f3eb; /* Soft Cream Linen / Alabaster */
+  --foreground: #181715; /* Warm Obsidian */
+  --accent: #b89230; /* Polished Antique Gold */
+  --muted: #eae3d5; /* Soft Warm Muted Silk */
+  --border: #ddd5c6; /* Warm Stone Border */
+
+  /* Dynamic Glassmorphism Variables */
+  --glass-bg: rgba(0, 0, 0, 0.04);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: rgba(0, 0, 0, 0.08);
 }
 
 /* ─── Design Tokens (from portfolio) ─── */
@@ -177,11 +187,17 @@ html[data-theme="light"] {
 }
 
 @utility glass-panel {
-  @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  @apply backdrop-blur-xl border;
+  background-color: var(--glass-bg);
+  border-color: var(--glass-border);
+  box-shadow: 0 8px 32px 0 var(--glass-shadow);
 }
 
 @utility glass-panel-light {
-  @apply bg-black/5 backdrop-blur-xl border border-black/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)];
+  @apply backdrop-blur-xl border;
+  background-color: var(--glass-bg);
+  border-color: var(--glass-border);
+  box-shadow: 0 8px 32px 0 var(--glass-shadow);
 }
 
 .active-nav {

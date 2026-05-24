@@ -1,7 +1,6 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
-  import { siteTitle } from '$lib/config';
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import FoundationalQuote from '$lib/components/FoundationalQuote.svelte';
@@ -172,10 +171,10 @@
   }}
 />
 
-<div bind:this={pageRef} onmousemove={handleMouseMove} class="min-h-screen text-white overflow-x-hidden bg-background" role="main">
+<div bind:this={pageRef} onmousemove={handleMouseMove} class="min-h-screen text-foreground overflow-x-hidden bg-background" role="main">
 
   <!-- HERO -->
-  <section class="hero-section relative min-h-[90vh] flex flex-col justify-end pb-16 overflow-hidden">
+  <section class="hero-section relative min-h-[95vh] flex flex-col justify-end pb-28 md:pb-36 overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img
         src="https://res.cloudinary.com/nbrett/image/upload/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg"
@@ -185,54 +184,57 @@
       <div class="absolute inset-0 bg-linear-to-r from-background/70 via-transparent to-background/50"></div>
     </div>
     
-    <div class="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] bg-primary/4 rounded-full blur-[150px] pointer-events-none"></div>
+    <div class="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] bg-accent/5 rounded-full blur-[150px] pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
       <div class="hero-eyebrow flex items-center gap-4 mb-8">
-        <div class="h-px w-12 bg-primary"></div>
-        <span class="text-primary font-sans text-xs font-medium tracking-widest uppercase">Developer Profile</span>
+        <div class="h-px w-12 bg-accent"></div>
+        <span class="text-accent font-sans text-xs font-semibold tracking-widest uppercase">Developer Profile</span>
       </div>
       
       <h1 class="text-[14vw] md:text-[10vw] lg:text-[9rem] leading-[0.85] font-sans font-bold tracking-tight mb-12 overflow-hidden drop-shadow-2xl">
         {#each nameChars as char, i}
           <span
-            class="hero-char inline-block will-change-transform {char === ' ' ? 'w-[0.25em]' : char === '.' ? 'text-primary' : 'text-white'}"
+            class="hero-char inline-block will-change-transform {char === ' ' ? 'w-[0.25em]' : char === '.' ? 'text-accent' : 'text-foreground'}"
           >{char === ' ' ? '\u00A0' : char}</span>
         {/each}
-        <span class="hero-char inline-block text-primary">.</span>
+        <span class="hero-char inline-block text-accent">.</span>
       </h1>
 
       <div class="flex flex-col lg:flex-row lg:items-end gap-12 lg:gap-20">
         <div class="hero-bio lg:max-w-md">
-          <div class="border-l-2 border-primary/50 pl-6">
-            <p class="text-lg md:text-xl text-white/90 font-light leading-relaxed mb-4">
-              Full-stack engineer with <strong class="text-white font-semibold">11+ years</strong> of operational leadership.
+          <div class="border-l-2 border-accent/40 pl-6">
+            <p class="text-lg md:text-xl text-foreground/90 font-light leading-relaxed mb-4">
+              Full-stack engineer with <strong class="text-foreground font-semibold">11+ years</strong> of operational leadership.
             </p>
             <div class="flex items-center gap-3">
               <span class="relative flex h-2.5 w-2.5">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent"></span>
               </span>
-              <span class="text-xs font-sans font-medium text-primary tracking-widest uppercase">Available for work</span>
+              <span class="text-xs font-sans font-medium text-accent tracking-[0.15em] uppercase">Available for work</span>
             </div>
           </div>
         </div>
         
         <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4">
           {#each stats as stat, i (i)}
-            <div class="hero-stat group p-5 md:p-6 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 hover:border-primary/20 transition-all duration-500">
-              <span class="text-xs font-sans font-medium text-white/50 tracking-widest uppercase block mb-3">{stat.code}</span>
-              <span class="text-3xl md:text-4xl font-sans font-bold text-white group-hover:text-primary transition-colors duration-300 block leading-none">{stat.number}</span>
-              <span class="text-xs font-sans font-medium text-white/50 mt-2 tracking-wide block">{stat.label}</span>
+            <div class="hero-stat group p-5 md:p-6 rounded-2xl border border-border/40 bg-foreground/[0.02] hover:bg-foreground/[0.05] hover:border-accent/25 transition-all duration-500">
+              <span class="text-[10px] font-sans font-bold text-foreground/45 tracking-[0.15em] uppercase block mb-3">{stat.code}</span>
+              <span class="text-3xl md:text-4xl font-sans font-bold text-foreground group-hover:text-accent transition-colors duration-300 block leading-none">{stat.number}</span>
+              <span class="text-[10px] font-sans font-bold text-foreground/45 mt-2 tracking-wide block uppercase">{stat.label}</span>
             </div>
           {/each}
         </div>
       </div>
     </div>
     
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10">
-      <span class="text-xs font-sans font-semibold tracking-widest uppercase text-white/50">Scroll</span>
-      <div class="w-px h-8 bg-linear-to-b from-white/50 to-transparent animate-pulse"></div>
+    <!-- Premium Interactive Gold Scroll Down Button Capsule -->
+    <div class="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 z-10 pointer-events-none">
+      <span class="text-[9px] font-sans font-bold tracking-[0.25em] text-accent/60 uppercase">SCROLL</span>
+      <div class="w-5 h-8 rounded-full border border-accent/25 flex justify-center p-1.5 bg-background/25 backdrop-blur-xs">
+        <div class="w-1 h-2 bg-accent rounded-full animate-bounce"></div>
+      </div>
     </div>
   </section>
 
@@ -241,28 +243,28 @@
     <div class="max-w-7xl mx-auto px-6 md:px-12">
       <div class="mb-20 md:mb-28">
         <div class="flex items-center gap-4 mb-6">
-          <div class="h-px w-12 bg-primary/40"></div>
-          <span class="text-xs font-sans font-medium text-primary tracking-widest uppercase">The Story</span>
+          <div class="h-px w-12 bg-accent/40"></div>
+          <span class="text-xs font-sans font-medium text-accent tracking-widest uppercase">The Story</span>
         </div>
       </div>
       
       <div class="grid md:grid-cols-12 gap-16 md:gap-20 mb-24 md:mb-32">
         <div class="md:col-span-5">
           <blockquote class="story-pullquote relative">
-            <div class="absolute -top-6 -left-2 text-[8rem] leading-none text-primary/10 font-serif select-none pointer-events-none">"</div>
-            <p class="text-3xl md:text-4xl lg:text-5xl font-sans font-light text-white leading-[1.3] relative z-10">
-              Systems fail without <em class="text-primary font-medium not-italic">people</em>, and code fails without <em class="text-primary font-medium not-italic">purpose</em>.
+            <div class="absolute -top-6 -left-2 text-[8rem] leading-none text-accent/10 font-serif select-none pointer-events-none">"</div>
+            <p class="text-3xl md:text-4xl lg:text-5xl font-sans font-light text-foreground leading-[1.3] relative z-10">
+              Systems fail without <em class="text-accent font-medium not-italic">people</em>, and code fails without <em class="text-accent font-medium not-italic">purpose</em>.
             </p>
           </blockquote>
         </div>
         
-        <div class="md:col-span-7 space-y-8 text-lg text-white/80 font-light leading-relaxed">
+        <div class="md:col-span-7 space-y-8 text-lg text-foreground/80 font-light leading-relaxed">
           <div class="story-para space-y-4">
-             <h2 class="text-xl md:text-2xl font-sans font-bold text-primary mb-2">Who is Norbert Brettschneider?</h2>
-             <p>Norbert Brettschneider, also known online as <strong>br3tt</strong>, is a <strong class="text-white font-semibold">Full-Stack Developer and AI Specialist</strong>.</p>
-             <p>My journey isn't typical. Before I wrote code, I spent <strong class="text-white font-semibold">11 years leading teams</strong> in high-pressure environments across multinational brands like McDonalds and KFC. That discipline became my foundation.</p>
-             <p>I earned a <strong class="text-white font-semibold">First Class Honours</strong> degree in Computer Science and now build software with rigor, efficiency, and a focus on scalability.</p>
-             <ul class="list-disc pl-5 mt-4 space-y-2 text-base text-white/70">
+             <h2 class="text-xl md:text-2xl font-sans font-bold text-accent mb-2">Who is Norbert Brettschneider?</h2>
+             <p>Norbert Brettschneider, also known online as <strong>br3tt</strong>, is a <strong class="text-foreground font-semibold">Full-Stack Developer and AI Specialist</strong>.</p>
+             <p>My journey isn't typical. Before I wrote code, I spent <strong class="text-foreground font-semibold">11 years leading teams</strong> in high-pressure environments across multinational brands like McDonalds and KFC. That discipline became my foundation.</p>
+             <p>I earned a <strong class="text-foreground font-semibold">First Class Honours</strong> degree in Computer Science and now build software with rigor, efficiency, and a focus on scalability.</p>
+             <ul class="list-disc pl-5 mt-4 space-y-2 text-base text-foreground/70">
                <li>Specializes in bridging user-centered design with Generative AI technologies.</li>
                <li>Builds highly performant, animation-rich interfaces using SvelteKit.</li>
                <li>Architects scalable Python and Node.js backend infrastructure.</li>
@@ -271,75 +273,103 @@
         </div>
       </div>
       
-      <div class="section-divider w-full h-px bg-linear-to-r from-transparent via-primary/20 to-transparent origin-center mb-24 md:mb-32"></div>
+      <div class="section-divider w-full h-px bg-linear-to-r from-transparent via-accent/20 to-transparent origin-center mb-24 md:mb-32"></div>
       
       <div class="values-grid grid md:grid-cols-3 gap-6 md:gap-8">
         {#each values as val, i (i)}
-          <div class="value-card group relative p-8 md:p-10 rounded-2xl border border-white/5 bg-white/1.5 hover:border-primary/20 transition-all duration-500 hover:bg-white/3">
-            <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:border-primary transition-all duration-500 shadow-xl">
+          <div class="value-card group relative p-8 md:p-10 rounded-2xl border border-border/40 bg-foreground/[0.02] hover:border-accent/25 transition-all duration-500 hover:bg-foreground/[0.05]">
+            <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:border-accent transition-all duration-500 shadow-xl">
                <!-- SVG Icons for Purpose, Shield, Sparkles -->
                {#if val.icon === 'target'}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary group-hover:text-black transition-colors"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-background transition-colors"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
                {:else if val.icon === 'shield-check'}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary group-hover:text-black transition-colors"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-background transition-colors"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
                {:else if val.icon === 'sparkles'}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary group-hover:text-black transition-colors"><path d="m12 3 1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-background transition-colors"><path d="m12 3 1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                {/if}
             </div>
-            <h3 class="text-xl font-sans font-semibold text-white mb-3 group-hover:text-primary transition-colors duration-300 tracking-tight">{val.title}</h3>
-            <p class="text-sm text-white/60 leading-relaxed font-light">{val.text}</p>
+            <h3 class="text-xl font-sans font-semibold text-foreground mb-3 group-hover:text-accent transition-colors duration-300 tracking-tight">{val.title}</h3>
+            <p class="text-sm text-foreground/60 leading-relaxed font-light">{val.text}</p>
           </div>
         {/each}
       </div>
     </div>
   </section>
 
-  <!-- SKILLS -->
-  <section class="skills-section py-32 md:py-40 relative bg-black/20">
-    <div class="max-w-7xl mx-auto px-6 md:px-12">
+  <!-- SKILLS (Redesigned as an elite, high-end System Matrix Dashboard) -->
+  <section class="skills-section py-32 md:py-40 relative overflow-hidden border-t border-b border-border/30 bg-background">
+    <!-- Fine-line grid pattern in section backdrop -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none select-none">
+      <div class="w-full h-full" style="background-image: radial-gradient(var(--accent) 0.8px, transparent 0.8px); background-size: 2rem 2rem; mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 85%); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 85%);"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
       <div class="skills-header flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-20 gap-6">
         <div>
           <div class="flex items-center gap-4 mb-6">
-            <div class="h-px w-12 bg-primary/40"></div>
-            <span class="text-xs font-sans font-medium text-primary/70 tracking-widest uppercase">Capabilities</span>
+            <div class="h-px w-12 bg-accent/40"></div>
+            <span class="text-xs font-sans font-bold text-accent/70 tracking-[0.25em] uppercase">Capabilities</span>
           </div>
-          <h2 class="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight leading-[0.9]">System <span class="text-primary">Specs</span></h2>
+          <h2 class="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight leading-[0.9]">System <span class="text-accent">Specs</span></h2>
         </div>
+        <p class="text-foreground/50 text-xs font-mono tracking-widest max-w-xs md:text-right uppercase">
+          [ MODULES LOADED: 4 / STACK ENGINE ACTIVE ]
+        </p>
       </div>
       
-      <div class="skills-grid grid md:grid-cols-2 gap-6 md:gap-8">
+      <div class="skills-grid grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         {#each skillCategories as cat, i (i)}
-          <div class="skill-category-card spotlight-card group relative p-8 md:p-10 rounded-2xl border border-white/5 bg-white/2 hover:border-primary/20 transition-all duration-500 overflow-hidden shadow-2xl">
-            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" style="background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(41,151,255,0.06), transparent 60%);"></div>
+          <!-- Large modular plaque cards with interactive spotlight coordinates -->
+          <div class="skill-category-card spotlight-card group relative p-8 md:p-10 rounded-3xl border border-border/40 bg-foreground/[0.02] hover:border-accent/25 transition-all duration-500 overflow-hidden shadow-2xl">
+            <!-- Customized gold accent cursor spotlights -->
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl" style="background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212,176,85,0.07), transparent 65%);"></div>
+            
             <div class="relative z-10 mb-8 flex items-start justify-between">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-white/3 flex items-center justify-center rounded-xl border border-white/10 text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
+              <div class="flex items-center gap-5">
+                <!-- Rotating gold dynamic icon frame -->
+                <div class="w-12 h-12 bg-background/50 flex items-center justify-center rounded-2xl border border-border/40 text-accent group-hover:bg-accent group-hover:text-background transition-all duration-500 shadow-lg group-hover:rotate-[360deg]">
                   {#if cat.icon === 'layout'}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m9 21 0-12"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m9 21 0-12"/></svg>
                   {:else if cat.icon === 'server'}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
                   {:else if cat.icon === 'cloud'}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a5.5 5.5 0 0 0 0-11h-1.5a7 7 0 1 0-13.5 1.5c-2.5.5-2.5 4.5 0 5h15Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a5.5 5.5 0 0 0 0-11h-1.5a7 7 0 1 0-13.5 1.5c-2.5.5-2.5 4.5 0 5h15Z"/></svg>
                   {:else if cat.icon === 'users'}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                   {/if}
                 </div>
                 <div>
-                  <h3 class="text-xl font-sans font-semibold text-white group-hover:text-primary transition-colors tracking-tight">{cat.name}</h3>
-                  <span class="font-sans text-xs font-medium text-white/40 tracking-widest uppercase">{cat.code}</span>
+                  <h3 class="text-xl font-sans font-semibold text-foreground group-hover:text-accent transition-colors duration-300 tracking-tight">{cat.name}</h3>
+                  <span class="font-mono text-[9px] font-bold text-foreground/40 tracking-[0.2em] uppercase">{cat.code}</span>
                 </div>
               </div>
+              
+              <!-- Subtle active terminal readout coordinates in corner -->
+              <span class="text-[9px] font-mono text-accent/30 hidden sm:block tracking-widest">[PORT_ID: {i * 102} // CORE_ENG]</span>
             </div>
             
-            <div class="relative z-10 space-y-5">
+            <!-- Matrix micro-cards chip grid -->
+            <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               {#each cat.skills as skill}
-                <div class="group/skill">
-                  <div class="flex justify-between mb-2">
-                    <span class="text-xs font-sans text-white/80 group-hover/skill:text-white transition-colors">{skill.name}</span>
-                    <span class="text-xs font-sans text-white/50">{skill.level}%</span>
+                <div class="group/skill relative p-4 rounded-2xl border border-border/40 bg-foreground/[0.01] hover:bg-foreground/[0.04] hover:border-accent/35 transition-all duration-300 flex flex-col justify-between min-h-[82px] shadow-sm">
+                  <!-- Bouncing active coordinate beacon -->
+                  <div class="absolute top-3.5 right-3.5 w-1.5 h-1.5 rounded-full bg-accent opacity-20 group-hover/skill:opacity-100 group-hover/skill:scale-125 transition-all duration-500">
+                    <div class="absolute inset-0 bg-accent animate-ping rounded-full opacity-0 group-hover/skill:opacity-50"></div>
                   </div>
-                  <div class="h-1 rounded-full bg-white/5 overflow-hidden">
-                    <div class="skill-bar-fill h-full rounded-full bg-linear-to-r from-primary/60 to-primary transition-all shadow-[0_0_10px_rgba(var(--primary),0.2)]" data-level={skill.level} style="width: 0%"></div>
+                  
+                  <p class="text-[9px] font-mono font-bold text-foreground/45 group-hover/skill:text-accent/80 transition-colors tracking-[0.1em] uppercase">
+                    LVL {skill.level}%
+                  </p>
+                  
+                  <div class="mt-2 flex flex-col gap-2">
+                    <p class="text-sm font-sans font-semibold text-foreground group-hover/skill:text-foreground transition-colors tracking-tight leading-tight">
+                      {skill.name}
+                    </p>
+                    
+                    <!-- Futuristic flat gold meter line -->
+                    <div class="w-full h-[2px] bg-border/25 rounded-full overflow-hidden">
+                      <div class="skill-bar-fill h-full bg-accent origin-left transition-all duration-1000 shadow-[0_0_8px_rgba(212,176,85,0.45)]" data-level={skill.level} style="width: 0%"></div>
+                    </div>
                   </div>
                 </div>
               {/each}
@@ -363,12 +393,12 @@
       </div>
       
       <div class="relative timeline-container max-w-4xl mx-auto">
-        <div class="absolute left-[calc(1.5rem-1px)] md:left-[calc(50%-1px)] top-0 bottom-0 w-[2px] bg-white/5"></div>
+        <div class="absolute left-[calc(1.5rem-1px)] md:left-[calc(50%-1px)] top-0 bottom-0 w-[2px] bg-border"></div>
         <div class="timeline-line absolute left-[calc(1.5rem-1px)] md:left-[calc(50%-1px)] top-0 w-[2px] bg-primary/50 h-0 z-0 shadow-[0_0_15px_rgba(var(--primary),0.3)]"></div>
         
         {#each timeline as item, i (i)}
           <div class="timeline-entry relative grid md:grid-cols-2 gap-8 md:gap-20 mb-20 last:mb-0 group">
-            <div class="timeline-dot absolute left-[calc(1.5rem-8px)] md:left-[calc(50%-8px)] top-2 w-4 h-4 bg-background border-2 border-white/40 z-10 group-hover:border-primary group-hover:scale-125 transition-all duration-500 rounded-full shadow-lg">
+            <div class="timeline-dot absolute left-[calc(1.5rem-8px)] md:left-[calc(50%-8px)] top-2 w-4 h-4 bg-background border-2 border-foreground/40 z-10 group-hover:border-primary group-hover:scale-125 transition-all duration-500 rounded-full shadow-lg">
               {#if item.active}
                 <div class="absolute inset-0 bg-primary animate-ping opacity-50 rounded-full"></div>
                 <div class="absolute inset-0 bg-primary rounded-full"></div>
@@ -376,11 +406,11 @@
             </div>
             
             <div class={i % 2 === 0 ? 'pl-16 md:pl-0 md:text-right md:order-1 md:pr-12' : 'pl-16 md:order-2 md:text-left md:pl-12'}>
-              <span class="font-sans text-5xl md:text-7xl font-bold text-white/10 group-hover:text-primary/30 transition-colors duration-500 leading-none block tracking-tight">{item.year}</span>
+              <span class="font-sans text-5xl md:text-7xl font-bold text-foreground/10 group-hover:text-primary/30 transition-colors duration-500 leading-none block tracking-tight">{item.year}</span>
             </div>
             
             <div class={i % 2 === 0 ? 'pl-16 md:order-2 md:pl-12' : 'pl-16 md:pl-0 md:order-1 md:text-right md:pr-12'}>
-              <div class="p-6 rounded-2xl border border-white/5 bg-white/1.5 group-hover:border-primary/15 group-hover:bg-white/3 transition-all duration-500 shadow-2xl">
+              <div class="p-6 rounded-2xl border border-border/50 bg-foreground/3 group-hover:border-primary/15 group-hover:bg-foreground/5 transition-all duration-500 shadow-2xl">
                 <div class="flex items-center gap-3 mb-3 {i % 2 !== 0 ? 'md:flex-row-reverse' : ''}">
                   <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
                     {#if item.icon === 'truck'}
@@ -396,11 +426,11 @@
                     {/if}
                   </div>
                   <div>
-                    <h3 class="text-lg font-sans font-semibold text-white group-hover:text-primary transition-colors leading-tight">{item.role}</h3>
-                    <span class="text-xs font-sans font-medium text-white/60 tracking-wide">{item.company}</span>
+                    <h3 class="text-lg font-sans font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">{item.role}</h3>
+                    <span class="text-xs font-sans font-medium text-foreground/60 tracking-wide">{item.company}</span>
                   </div>
                 </div>
-                <p class="text-sm text-white/80 leading-relaxed {i % 2 !== 0 ? 'md:text-right' : ''}">{item.desc}</p>
+                <p class="text-sm text-foreground/80 leading-relaxed {i % 2 !== 0 ? 'md:text-right' : ''}">{item.desc}</p>
               </div>
             </div>
           </div>

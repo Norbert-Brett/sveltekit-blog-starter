@@ -47,7 +47,7 @@
     "vite": "npm:@voidzero-dev/vite-plus-core@^0.1.19",
     "vite-plus": "catalog:"
   },
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.2.2",
   "fmt": {
     "useTabs": true,
     "singleQuote": true,
