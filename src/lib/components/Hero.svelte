@@ -19,8 +19,10 @@
   let mouseY = $state(0);
   let windowWidth = $state(0);
   let windowHeight = $state(0);
+  let isMobile = $state(false);
   let ctx;
   let animationFrameId;
+  let resizeTimer;
 
   const headline = ['Building', 'intelligent', 'systems.'];
 
@@ -86,7 +88,7 @@
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
-          end: '+=250%', // Pinned viewport scroll length (extended to make transitions buttery smooth)
+          end: windowWidth < 768 ? '+=150%' : '+=250%',
           scrub: 1.2,    // Highly fluid inertia scrub damping
           pin: true,
           anticipatePin: 1
@@ -182,20 +184,23 @@
         duration: 1.0
       });
 
-      // 3. Magnetic Tracking on the text group
-      const xTo = gsap.quickTo(textRef, 'x', { duration: 0.8, ease: 'power3' });
-      const yTo = gsap.quickTo(textRef, 'y', { duration: 0.8, ease: 'power3' });
+      // 3. Magnetic Tracking on the text group (desktop only)
+      const isMobileDevice = windowWidth < 768 || matchMedia('(pointer: coarse)').matches;
+      if (!isMobileDevice) {
+        const xTo = gsap.quickTo(textRef, 'x', { duration: 0.8, ease: 'power3' });
+        const yTo = gsap.quickTo(textRef, 'y', { duration: 0.8, ease: 'power3' });
 
-      const animateMagnet = () => {
-        const cx = windowWidth / 2;
-        const cy = windowHeight / 2;
-        const dx = (mouseX - cx) / cx;
-        const dy = (mouseY - cy) / cy;
-        xTo(dx * 25);
-        yTo(dy * 15);
-        animationFrameId = requestAnimationFrame(animateMagnet);
-      };
-      animateMagnet();
+        const animateMagnet = () => {
+          const cx = windowWidth / 2;
+          const cy = windowHeight / 2;
+          const dx = (mouseX - cx) / cx;
+          const dy = (mouseY - cy) / cy;
+          xTo(dx * 25);
+          yTo(dy * 15);
+          animationFrameId = requestAnimationFrame(animateMagnet);
+        };
+        animateMagnet();
+      }
     }, heroSection);
   }
 
@@ -204,6 +209,7 @@
 
     windowWidth = window.innerWidth;
     windowHeight = window.innerHeight;
+    isMobile = windowWidth < 768 || matchMedia('(pointer: coarse)').matches;
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
@@ -211,19 +217,28 @@
     };
 
     const handleResize = () => {
-      windowWidth = window.innerWidth;
-      windowHeight = window.innerHeight;
-      setupGSAP();
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        windowWidth = window.innerWidth;
+        windowHeight = window.innerHeight;
+        isMobile = windowWidth < 768 || matchMedia('(pointer: coarse)').matches;
+        setupGSAP();
+      }, 250);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
     window.addEventListener('resize', handleResize);
 
     setupGSAP();
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      if (!isMobile) {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
       window.removeEventListener('resize', handleResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       if (ctx) ctx.revert();
     };
@@ -267,6 +282,7 @@
       loop 
       muted 
       playsinline
+      preload={isMobile ? 'none' : 'metadata'}
       poster="https://res.cloudinary.com/nbrett/image/upload/f_auto,q_auto/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg"
       class="hero-bg-video w-full h-full object-cover grayscale opacity-80 scale-105 gpu-accelerated"
     >

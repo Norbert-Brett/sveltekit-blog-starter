@@ -41,7 +41,7 @@
         scrollTrigger: {
           trigger: sectionRef,
           start: 'top top',
-          end: '+=300%',
+          end: window.innerWidth < 768 ? '+=200%' : '+=300%',
           pin: true,
           scrub: 0.5,
           onUpdate: (self) => {
@@ -54,13 +54,13 @@
       panels.forEach((_, i) => {
         if (i > 0) {
           tl.fromTo(`.about-panel-${i}`, 
-            { yPercent: 100, opacity: 0, filter: 'blur(8px)' }, 
-            { yPercent: 0, opacity: 1, filter: 'blur(0px)', duration: 0.6, ease: 'power2.inOut' }
+            { yPercent: 100, opacity: 0 }, 
+            { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power2.inOut' }
           );
         }
         if (i < panels.length - 1) {
           tl.to(`.about-panel-${i}`, 
-            { yPercent: -50, opacity: 0, filter: 'blur(4px)', duration: 0.6, ease: 'power2.inOut' }, 
+            { yPercent: -50, opacity: 0, duration: 0.6, ease: 'power2.inOut' }, 
             '+=0.3'
           );
         }
@@ -97,9 +97,9 @@
 
       // The Impact: Container catches the momentum
       gsap.fromTo('.hero-about-inner',
-        { scale: 1.1, opacity: 0, filter: 'blur(20px)' },
+        { scale: 1.05, opacity: 0 },
         { 
-          scale: 1, opacity: 1, filter: 'blur(0px)', 
+          scale: 1, opacity: 1, 
           duration: 1.5, ease: 'power4.out',
           scrollTrigger: { trigger: sectionRef, start: 'top 80%' }
         }
@@ -182,7 +182,5 @@
 </section>
 
 <style>
-  .about-panel-[class*="about-panel-"] {
-    will-change: transform, opacity, filter;
-  }
+  /* GSAP handles GPU promotion during animation via force3D */
 </style>

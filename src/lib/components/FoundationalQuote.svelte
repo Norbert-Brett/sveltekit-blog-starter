@@ -113,9 +113,9 @@
       const chars = gsap.utils.toArray('.fq-char');
       if (chars.length > 0) {
         gsap.fromTo(chars,
-          { opacity: 0, filter: 'blur(16px)', y: 25, scale: 1.1 },
+          { opacity: 0, y: 20, scale: 1.08 },
           {
-            opacity: 1, filter: 'blur(0px)', y: 0, scale: 1,
+            opacity: 1, y: 0, scale: 1,
             duration: 1.4, stagger: { each: 0.012, from: 'start' }, ease: 'power4.out',
             scrollTrigger: { trigger: sectionRef, start: 'top 80%' }
           }
@@ -152,6 +152,8 @@
 </script>
 
 <svelte:head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
 </svelte:head>
 
@@ -267,7 +269,6 @@
 
   .fq-char {
     display: inline-block;
-    will-change: transform, filter, opacity;
   }
 
   /* 3D Perspective Card Tilt styling */

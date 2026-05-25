@@ -36,21 +36,27 @@
 		gsap.registerPlugin(ScrollTrigger);
 		appState.isMenuOpen = false;
 
-		// Initialize Lenis Smooth Scrolling
-		const lenis = new Lenis({
-			duration: 1.2,
-			easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-			direction: 'vertical',
-			gestureDirection: 'vertical',
-			smooth: true,
-		});
+		// Detect mobile devices — Lenis fights native momentum scroll on iOS/Android
+		const isMobileDevice = window.innerWidth < 768 || matchMedia('(pointer: coarse)').matches;
 
-		// Sync GSAP ScrollTrigger with Lenis
-		lenis.on('scroll', ScrollTrigger.update);
-		gsap.ticker.add((time) => {
-			lenis.raf(time * 1000);
-		});
-		gsap.ticker.lagSmoothing(0, 0);
+		let lenis;
+		if (!isMobileDevice) {
+			// Desktop: Initialize Lenis Smooth Scrolling
+			lenis = new Lenis({
+				duration: 1.2,
+				easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+				direction: 'vertical',
+				gestureDirection: 'vertical',
+				smooth: true,
+			});
+
+			// Sync GSAP ScrollTrigger with Lenis
+			lenis.on('scroll', ScrollTrigger.update);
+			gsap.ticker.add((time) => {
+				lenis.raf(time * 1000);
+			});
+			gsap.ticker.lagSmoothing(0, 0);
+		}
 
 		// Initialize Scroll Progress Bar
 		gsap.set('.scroll-progress', { scaleX: 0 });
@@ -66,8 +72,10 @@
 		});
 
 		return () => {
-			lenis.destroy();
-			gsap.ticker.remove(lenis.raf);
+			if (lenis) {
+				lenis.destroy();
+				gsap.ticker.remove(lenis.raf);
+			}
 		};
 	});
 

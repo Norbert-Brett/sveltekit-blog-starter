@@ -71,11 +71,11 @@
       });
       terminalTimeline
         .fromTo('.ai-terminal',
-          { clipPath: 'inset(50% 50% 50% 50%)', opacity: 0, filter: 'blur(10px)', scale: 0.95 },
-          { clipPath: 'inset(50% 0% 50% 0%)', opacity: 1, filter: 'blur(2px)', scale: 1.02, duration: 0.4, ease: 'power2.inOut' }
+          { clipPath: 'inset(50% 50% 50% 50%)', opacity: 0, scale: 0.95 },
+          { clipPath: 'inset(50% 0% 50% 0%)', opacity: 1, scale: 1.02, duration: 0.4, ease: 'power2.inOut' }
         )
         .to('.ai-terminal',
-          { clipPath: 'inset(0% 0% 0% 0%)', filter: 'blur(0px)', scale: 1, duration: 0.8, ease: 'power4.out' },
+          { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.8, ease: 'power4.out' },
           "+=0.1"
         );
 
@@ -236,7 +236,5 @@
   pre {
     font-family: var(--font-mono);
   }
-  .ai-stat-card {
-    will-change: transform, opacity, clip-path;
-  }
+  /* GSAP handles GPU promotion during animation via force3D */
 </style>

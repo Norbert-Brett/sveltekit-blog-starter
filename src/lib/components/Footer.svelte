@@ -414,15 +414,5 @@
     );
   }
 
-  .cta-char {
-    will-change: transform, opacity;
-  }
-  
-  .footer-col {
-    will-change: transform, opacity;
-  }
-  
-  .footer-border-line {
-    will-change: transform;
-  }
+  /* GSAP handles GPU promotion during animation via force3D */
 </style>

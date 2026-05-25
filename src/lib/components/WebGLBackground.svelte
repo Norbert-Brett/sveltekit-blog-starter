@@ -3,6 +3,7 @@
   import { browser } from '$app/environment';
 
   let containerRef = $state(null);
+  let isMobile = $state(true);
   let animationId;
   let scene, camera, renderer, particles, shaderMaterial;
   let clock;
@@ -10,12 +11,16 @@
   onMount(async () => {
     if (!browser || !containerRef) return;
 
+    const isMobileCheck = window.innerWidth < 768 || matchMedia('(pointer: coarse)').matches;
+    isMobile = isMobileCheck;
+    if (isMobileCheck) return;
+
     // Dynamically import THREE to split it into a separate chunk and improve initial load time
     const THREE = await import('three');
 
     // 1. Setup WebGL Scene
     scene = new THREE.Scene();
-    const PARTICLE_COUNT = 800;
+    const PARTICLE_COUNT = 400;
     // Dynamically retrieve accent color (Premium Gold) from theme variables
     const style = getComputedStyle(document.documentElement);
     const accentHex = style.getPropertyValue('--accent').trim() || '#d4b055';
@@ -23,9 +28,9 @@
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 50;
 
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     containerRef.appendChild(renderer.domElement);
 
     // 2. Create Particles geometry
@@ -104,6 +109,7 @@
 
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('resize', onResize);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     clock = new THREE.Clock();
     animate();
   });
@@ -111,6 +117,9 @@
   const animate = () => {
     if (!renderer || !clock) return;
     animationId = requestAnimationFrame(animate);
+
+    // Pause rendering when tab is hidden
+    if (document.hidden) return;
 
     const elTime = clock.getElapsedTime();
     if (shaderMaterial) shaderMaterial.uniforms.uTime.value = elTime;
@@ -134,11 +143,21 @@
     }
   };
 
+  const handleVisibilityChange = () => {
+    if (document.hidden && animationId) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    } else if (!document.hidden && !animationId) {
+      animate();
+    }
+  };
+
   onDestroy(() => {
     // Cleanup listeners and WebGL resources
     if (typeof window !== 'undefined') {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     }
     if (animationId) cancelAnimationFrame(animationId);
     if (renderer) renderer.dispose();
@@ -166,4 +185,10 @@
   let mouseState = { mouseX: 0, mouseY: 0 };
 </script>
 
-<div bind:this={containerRef} class="fixed inset-0 z-[-1] pointer-events-none bg-background"></div>
+{#if isMobile}
+  <div class="fixed inset-0 z-[-1] pointer-events-none bg-background">
+    <div class="absolute inset-0 opacity-[0.03]" style="background: radial-gradient(ellipse at 30% 20%, var(--color-accent) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, var(--color-accent) 0%, transparent 50%);"></div>
+  </div>
+{:else}
+  <div bind:this={containerRef} class="fixed inset-0 z-[-1] pointer-events-none bg-background"></div>
+{/if}

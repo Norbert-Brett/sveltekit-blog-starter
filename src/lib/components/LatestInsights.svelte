@@ -61,9 +61,9 @@
       // The Cascade: 3D unfold sequence
       gsap.set('.accordion-card', { transformPerspective: 1500, transformOrigin: 'top center' });
       gsap.fromTo('.accordion-card',
-        { rotateX: -90, opacity: 0, y: -50, filter: 'blur(10px)' },
+        { rotateX: -90, opacity: 0, y: -50 },
         {
-          rotateX: 0, opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.2, stagger: 0.15, ease: 'back.out(1.4)',
+          rotateX: 0, opacity: 1, y: 0, duration: 1.2, stagger: 0.15, ease: 'back.out(1.4)',
           scrollTrigger: { trigger: sectionRef, start: 'top 70%', toggleActions: 'play reverse play reverse' }
         }
       );
@@ -124,6 +124,7 @@
               <img
                 src={post.coverImage}
                 alt={post.title}
+                loading="lazy"
                 class="parallax-img w-full h-[130%] md:h-[130%] object-cover transition-all duration-[1.5s] ease-out object-center origin-center
                   {activeIndex === index ? 'scale-100 opacity-100 blur-[0px] animate-ken-burns' : 'scale-105 opacity-40 blur-[2px] grayscale-[0.8]'}"
               />
@@ -207,7 +208,5 @@
 </section>
 
 <style>
-  .accordion-card {
-    will-change: transform, opacity, clip-path;
-  }
+  /* GSAP handles GPU promotion during animation via force3D */
 </style>

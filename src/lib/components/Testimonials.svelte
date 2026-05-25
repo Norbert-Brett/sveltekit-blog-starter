@@ -169,7 +169,5 @@
 </section>
 
 <style>
-  .testimonial-card {
-    will-change: transform, opacity;
-  }
+  /* GSAP handles GPU promotion during animation via force3D */
 </style>

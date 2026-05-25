@@ -31,11 +31,27 @@
     scrollY = window.scrollY;
     windowWidth = window.innerWidth;
 
-    // Listeners
-    const handleScroll = () => (scrollY = window.scrollY);
-    const handleResize = () => (windowWidth = window.innerWidth);
+    // Throttled scroll via rAF for smooth performance
+    let scrollTicking = false;
+    const handleScroll = () => {
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          scrollY = window.scrollY;
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    };
 
-    window.addEventListener('scroll', handleScroll);
+    let resizeTimer;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        windowWidth = window.innerWidth;
+      }, 150);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
 
     // Entrance animation
@@ -49,6 +65,7 @@
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
+      if (resizeTimer) clearTimeout(resizeTimer);
     };
   });
 </script>

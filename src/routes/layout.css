@@ -231,16 +231,6 @@ html[data-theme="light"] {
   }
 }
 
-@keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(41, 151, 255, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(41, 151, 255, 0.25);
-  }
-}
-
 @keyframes gradient-shift {
   0% {
     background-position: 0% 50%;
@@ -250,18 +240,6 @@ html[data-theme="light"] {
   }
   100% {
     background-position: 0% 50%;
-  }
-}
-
-@keyframes glow-breathe {
-  0%,
-  100% {
-    opacity: 0.4;
-    filter: blur(80px);
-  }
-  50% {
-    opacity: 0.7;
-    filter: blur(120px);
   }
 }
 
@@ -364,7 +342,7 @@ html[data-theme="light"] {
 }
 
 @utility gpu-accelerated {
-  will-change: transform, opacity, clip-path;
+  transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
@@ -415,6 +393,7 @@ a.btn,
   transition:
     opacity 0.2s ease,
     transform 0.3s ease;
+  touch-action: manipulation;
 }
 
 button:hover,

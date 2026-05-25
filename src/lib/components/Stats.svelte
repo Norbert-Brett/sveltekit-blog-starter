@@ -24,6 +24,7 @@
   let ctx;
 
   const handleMouseMove = (e) => {
+    if (matchMedia('(pointer: coarse)').matches) return;
     const card = e.target.closest('.metric-card-wrapper');
     if (!card) return;
     const rect = card.getBoundingClientRect();
@@ -71,13 +72,12 @@
       // The Shrapnel: High-velocity spring entrance
       const cards = gsap.utils.toArray('.metric-card-wrapper');
       gsap.fromTo(cards,
-        { y: 150, scale: 0.8, opacity: 0, rotationZ: () => Math.random() * 6 - 3, filter: 'blur(10px)' },
+        { y: 80, scale: 0.85, opacity: 0, rotationZ: () => Math.random() * 4 - 2 },
         { 
           y: 0, 
           scale: 1, 
           opacity: 1, 
           rotationZ: 0,
-          filter: 'blur(0px)',
           duration: 1.2,
           stagger: 0.1,
           ease: 'back.out(1.7)',
@@ -156,8 +156,13 @@
 
 <style>
   .metric-card-wrapper {
-    will-change: transform, opacity, clip-path;
     transform-style: preserve-3d;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @media (pointer: coarse) {
+    .metric-card-wrapper {
+      transform-style: flat;
+    }
   }
 </style>
