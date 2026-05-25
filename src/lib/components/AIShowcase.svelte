@@ -41,6 +41,8 @@
   onMount(() => {
     if (!browser || !sectionRef) return;
 
+    const isMobileDevice = window.innerWidth < 768 || matchMedia('(pointer: coarse)').matches;
+
     ctx = gsap.context(() => {
       // 1. Initial layout measure
       setTimeout(() => {
@@ -65,28 +67,48 @@
         }
       );
 
-      // The Boot-Up: CRT-style terminal power on
-      const terminalTimeline = gsap.timeline({
-        scrollTrigger: { trigger: sectionRef, start: 'top 60%', toggleActions: 'play reverse play reverse' }
-      });
-      terminalTimeline
-        .fromTo('.ai-terminal',
-          { clipPath: 'inset(50% 50% 50% 50%)', opacity: 0, scale: 0.95 },
-          { clipPath: 'inset(50% 0% 50% 0%)', opacity: 1, scale: 1.02, duration: 0.4, ease: 'power2.inOut' }
-        )
-        .to('.ai-terminal',
-          { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.8, ease: 'power4.out' },
-          "+=0.1"
+      if (isMobileDevice) {
+        // MOBILE HIGH-PERFORMANCE ANIMATIONS
+        gsap.fromTo('.ai-terminal',
+          { opacity: 0, y: 30, scale: 0.98 },
+          {
+            opacity: 1, y: 0, scale: 1, duration: 1.0, ease: 'power3.out',
+            scrollTrigger: { trigger: sectionRef, start: 'top 75%' }
+          }
         );
 
-      // 5. Stat cards stagger with clip-path reveal
-      gsap.fromTo('.ai-stat-card', 
-        { clipPath: 'inset(100% 0 0 0)', opacity: 0 }, 
-        {
-          clipPath: 'inset(0% 0 0 0)', opacity: 1, duration: 0.8, stagger: 0.08, ease: 'expo.out',
-          scrollTrigger: { trigger: sectionRef, start: 'top 50%' }
-        }
-      );
+        gsap.fromTo('.ai-stat-card', 
+          { opacity: 0, y: 20 }, 
+          {
+            opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power2.out',
+            scrollTrigger: { trigger: sectionRef, start: 'top 75%' }
+          }
+        );
+      } else {
+        // DESKTOP ADVANCED CINEMATIC EXPERIENCE
+        // The Boot-Up: CRT-style terminal power on
+        const terminalTimeline = gsap.timeline({
+          scrollTrigger: { trigger: sectionRef, start: 'top 60%', toggleActions: 'play reverse play reverse' }
+        });
+        terminalTimeline
+          .fromTo('.ai-terminal',
+            { clipPath: 'inset(50% 50% 50% 50%)', opacity: 0, scale: 0.95 },
+            { clipPath: 'inset(50% 0% 50% 0%)', opacity: 1, scale: 1.02, duration: 0.4, ease: 'power2.inOut' }
+          )
+          .to('.ai-terminal',
+            { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.8, ease: 'power4.out' },
+            "+=0.1"
+          );
+
+        // 5. Stat cards stagger with clip-path reveal
+        gsap.fromTo('.ai-stat-card', 
+          { clipPath: 'inset(100% 0 0 0)', opacity: 0 }, 
+          {
+            clipPath: 'inset(0% 0 0 0)', opacity: 1, duration: 0.8, stagger: 0.08, ease: 'expo.out',
+            scrollTrigger: { trigger: sectionRef, start: 'top 50%' }
+          }
+        );
+      }
 
       // 6. Counter animations with glow burst on completion
       const counters = document.querySelectorAll('.ai-stat-num');
@@ -108,6 +130,7 @@
             el.innerText = Math.floor(obj.val);
           },
           onComplete: () => {
+            if (isMobileDevice) return; // Skip heavy glow pulses on mobile
             // Glow burst effect on counter completion
             gsap.fromTo(el, 
               { scale: 1, textShadow: '0 0 0px rgba(41,151,255,0)' },
@@ -117,7 +140,7 @@
         });
       });
 
-      // 7. Auto-trigger typing demo on scroll-enter (Hick's Law: removes decision to click)
+      // 7. Auto-trigger typing demo on scroll-enter
       ScrollTrigger.create({
         trigger: sectionRef,
         start: 'top 40%',

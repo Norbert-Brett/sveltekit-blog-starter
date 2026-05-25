@@ -32,19 +32,44 @@
     if (ctx) ctx.revert();
 
     // Reset styles so we get accurate bounding rects
-    gsap.set([headlineEl, subtitleEl], { clearProps: 'all' });
+    gsap.set([headlineEl, subtitleEl, '.hero-video-wrapper', '.hero-cta-wrapper', '.scroll-indicator', '.hero-hud-inner', '.hero-badge-inner'], { clearProps: 'all' });
 
+    const isMobileDevice = windowWidth < 768 || matchMedia('(pointer: coarse)').matches;
+
+    if (isMobileDevice) {
+      // MOBILE LIGHTWEIGHT INITIALIZATION (NO PINNING, NO SHRINKING, NO CORNER TRANSITIONS)
+      ctx = gsap.context(() => {
+        // Initial States for mobile (centered, no translate, clean opacity fade)
+        gsap.set('.scroll-indicator', { opacity: 0 });
+        gsap.set('.hero-hud-inner', { opacity: 0 });
+        gsap.set('.hero-badge-inner', { opacity: 0 });
+        gsap.set(headlineEl, { opacity: 0, y: 20 });
+        gsap.set(subtitleEl, { opacity: 0, y: 15 });
+        gsap.set('.hero-cta-wrapper', { opacity: 0, y: 15 });
+
+        // Simple hardware-accelerated entrance animations on load
+        gsap.to('.scroll-indicator', { opacity: 1, duration: 1, delay: 0.6 });
+        gsap.to('.hero-hud-inner', { opacity: 1, duration: 1.2, ease: 'power2.out', delay: 0.1 });
+        gsap.to('.hero-badge-inner', { opacity: 1, duration: 1.5, ease: 'power3.out', delay: 0.2 });
+        gsap.to(headlineEl, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.3 });
+        gsap.to(subtitleEl, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.4 });
+        gsap.to('.hero-cta-wrapper', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.5 });
+      }, heroSection);
+      return;
+    }
+
+    // DESKTOP CINEMATIC PINNED ANIMATION
     const hRect = headlineEl.getBoundingClientRect();
     const sRect = subtitleEl.getBoundingClientRect();
 
-    const hScale = windowWidth < 768 ? 0.22 : 0.18;
-    const sScale = windowWidth < 768 ? 0.8 : 0.85;
+    const hScale = 0.18;
+    const sScale = 0.85;
 
-    const hX = (windowWidth < 768 ? 24 : 48) - hRect.left;
-    const hY = (windowWidth < 768 ? 100 : 40) - hRect.top;
+    const hX = 48 - hRect.left;
+    const hY = 40 - hRect.top;
 
-    const sX = (windowWidth - (windowWidth < 768 ? 24 : 48)) - sRect.right;
-    const sY = (windowWidth < 768 ? 100 : 40) - sRect.top;
+    const sX = (windowWidth - 48) - sRect.right;
+    const sY = 40 - sRect.top;
 
     ctx = gsap.context(() => {
       // 1. Initial State configurations
@@ -88,7 +113,7 @@
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
-          end: windowWidth < 768 ? '+=150%' : '+=250%',
+          end: '+=250%',
           scrub: 1.2,    // Highly fluid inertia scrub damping
           pin: true,
           anticipatePin: 1
@@ -96,7 +121,6 @@
       });
 
       // --- PHASE 1: Scale down video wrapper & reveal content smoothly ---
-      // Video wrapper shrinks to 48% scale, gains rounded borders, drops to 1.0 (remains opaque and solid)
       tl.to('.hero-video-wrapper', {
         scale: 0.48,
         borderRadius: '32px',
@@ -107,7 +131,7 @@
         duration: 2
       }, 0);
 
-      // Center badge and HUD overlay fade out as video shrinks, resetting perfectly to fully visible when scrolling back
+      // Center badge and HUD overlay fade out as video shrinks
       tl.fromTo('.hero-center-badge', {
         opacity: 1,
         scale: 1
@@ -174,7 +198,7 @@
       // --- PHASE 2: Visual Hold ---
       tl.to({}, { duration: 1.5 });
 
-      // --- PHASE 3: Seamless Scroll-Out Exit (Cohesive fade and translate, optimized for GPU performance) ---
+      // --- PHASE 3: Seamless Scroll-Out Exit
       tl.to('.hero-video-wrapper, .hero-headline, .hero-subtitle, .hero-marquee-wrapper, .hero-cta-wrapper', {
         opacity: 0,
         y: -70,
@@ -185,22 +209,19 @@
       });
 
       // 3. Magnetic Tracking on the text group (desktop only)
-      const isMobileDevice = windowWidth < 768 || matchMedia('(pointer: coarse)').matches;
-      if (!isMobileDevice) {
-        const xTo = gsap.quickTo(textRef, 'x', { duration: 0.8, ease: 'power3' });
-        const yTo = gsap.quickTo(textRef, 'y', { duration: 0.8, ease: 'power3' });
+      const xTo = gsap.quickTo(textRef, 'x', { duration: 0.8, ease: 'power3' });
+      const yTo = gsap.quickTo(textRef, 'y', { duration: 0.8, ease: 'power3' });
 
-        const animateMagnet = () => {
-          const cx = windowWidth / 2;
-          const cy = windowHeight / 2;
-          const dx = (mouseX - cx) / cx;
-          const dy = (mouseY - cy) / cy;
-          xTo(dx * 25);
-          yTo(dy * 15);
-          animationFrameId = requestAnimationFrame(animateMagnet);
-        };
-        animateMagnet();
-      }
+      const animateMagnet = () => {
+        const cx = windowWidth / 2;
+        const cy = windowHeight / 2;
+        const dx = (mouseX - cx) / cx;
+        const dy = (mouseY - cy) / cy;
+        xTo(dx * 25);
+        yTo(dy * 15);
+        animationFrameId = requestAnimationFrame(animateMagnet);
+      };
+      animateMagnet();
     }, heroSection);
   }
 
@@ -254,6 +275,7 @@
   bind:this={heroSection}
   class="relative w-full h-screen overflow-hidden flex flex-col items-center justify-center bg-background"
 >
+  {#if !isMobile}
   <!-- 1. Double Marquee running behind the video -->
   <div class="hero-marquee-wrapper absolute inset-0 z-10 flex flex-col justify-center gap-12 md:gap-16 pointer-events-none select-none gpu-accelerated">
     <!-- Row 1: Left to Right (Current message, larger font, halved speed duration 360s, tight gap 0.5rem) -->
@@ -274,6 +296,7 @@
       </Marquee>
     </div>
   </div>
+  {/if}
 
   <!-- 2. Background Video (morphing scaling wrapper, z-index 20) -->
   <div class="hero-video-wrapper absolute inset-0 w-full h-full z-20 overflow-hidden bg-background origin-center border border-transparent gpu-accelerated">

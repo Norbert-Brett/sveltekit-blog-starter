@@ -9,6 +9,7 @@
   }
 
   let sectionRef = $state(null);
+  let isMobile = $state(false);
   let ctx;
 
   const testimonials = [
@@ -38,7 +39,32 @@
   onMount(() => {
     if (!browser || !sectionRef) return;
 
+    isMobile = window.innerWidth < 768 || matchMedia('(pointer: coarse)').matches;
+    const isMobileDevice = isMobile;
+
     ctx = gsap.context(() => {
+      if (isMobileDevice) {
+        // MOBILE LIGHTWEIGHT EXPERIENCE: simple fades, no pinning, no skew-scrolling
+        gsap.utils.toArray('.testimonial-card').forEach((card) => {
+          gsap.fromTo(card,
+            { opacity: 0.2, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 80%',
+                once: true
+              }
+            }
+          );
+        });
+        return;
+      }
+
+      // DESKTOP ADVANCED CINEMATIC EXPERIENCE
       // 1. Parallax background text + scroll-velocity skew
       const bgText = sectionRef.querySelector('.testimonial-bg-text');
       const skewTo = gsap.quickTo(bgText, 'skewY', { duration: 0.8, ease: 'power3.out' });
@@ -98,7 +124,6 @@
         pinSpacing: false
       });
 
-
       ScrollTrigger.refresh();
     }, sectionRef);
 
@@ -128,14 +153,14 @@
     </h2>
   </div>
 
-  <div class="relative w-full max-w-7xl px-6 flex flex-col md:flex-row gap-20 md:gap-32 z-10">
+  <div class="relative w-full max-w-7xl px-6 flex flex-col md:flex-row gap-16 md:gap-32 z-10">
     <!-- Left: Sticky Header -->
     <div class="w-full md:w-5/12">
       <div class="testimonial-sticky-header pt-12 md:pt-0">
         <span class="text-xs font-sans font-semibold tracking-widest uppercase text-primary mb-4 block">
           --- KIND WORDS
         </span>
-        <h2 class="text-5xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight text-white leading-[1.05]">
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight text-white leading-[1.05]">
           What people say<br class="hidden md:block"/> about me.
         </h2>
         <!-- Massive Decorative Quote Mark -->
@@ -143,27 +168,55 @@
       </div>
     </div>
 
-    <!-- Right: Scrolling Quotes List -->
-    <div class="w-full md:w-7/12 flex flex-col gap-32 md:gap-48 pb-32">
-      {#each testimonials as item, index}
-        <div class="testimonial-card relative flex flex-col gap-8 opacity-20 will-change-transform">
-          <!-- Quote Text: Editorial Serif -->
-          <p class="text-2xl md:text-3xl lg:text-4xl font-serif font-light text-white/90 leading-[1.4] tracking-wide">
-            "{ item.quote }"
-          </p>
+    <!-- Right: Quotes List / Carousel -->
+    <div class="w-full md:w-7/12 flex flex-col gap-8 md:gap-48 pb-12 md:pb-32">
+      {#if isMobile}
+        <!-- Mobile Native Scroll-Snap Horizontal track (Opaque & beautifully responsive) -->
+        <div class="w-full overflow-x-auto flex gap-4 snap-x snap-mandatory scrollbar-hide py-4 px-1 select-none">
+          {#each testimonials as item, index}
+            <div class="snap-start shrink-0 w-[85vw] sm:w-[60vw] rounded-3xl border border-white/5 bg-white/2 p-6 flex flex-col justify-between min-h-[240px] relative shadow-lg">
+              <span class="absolute top-4 right-6 text-6xl font-serif text-accent/10 leading-none pointer-events-none select-none">“</span>
+              
+              <!-- Quote text -->
+              <p class="text-base font-serif italic font-light text-white/90 leading-relaxed mb-6">
+                "{ item.quote }"
+              </p>
 
-          <!-- Author Identity -->
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-white/3 flex items-center justify-center border border-white/10 shrink-0">
-              <span class="text-primary font-bold text-lg font-serif">{item.author.name.charAt(0)}</span>
+              <!-- Author -->
+              <div class="flex items-center gap-3 mt-auto pt-4 border-t border-white/5">
+                <div class="w-10 h-10 rounded-full bg-white/3 flex items-center justify-center border border-white/10 shrink-0">
+                  <span class="text-primary font-bold text-base font-serif">{item.author.name.charAt(0)}</span>
+                </div>
+                <div class="flex flex-col">
+                  <h4 class="text-sm font-sans font-bold text-white tracking-wide">{ item.author.name }</h4>
+                  <p class="text-[9px] font-sans tracking-widest text-primary font-semibold uppercase mt-0.5">{ item.author.description }</p>
+                </div>
+              </div>
             </div>
-            <div class="flex flex-col">
-              <h4 class="text-base md:text-lg font-sans font-bold text-white tracking-wide">{ item.author.name }</h4>
-              <p class="text-[10px] md:text-xs font-sans tracking-widest text-primary font-semibold uppercase mt-1">{ item.author.description }</p>
+          {/each}
+        </div>
+      {:else}
+        <!-- Desktop Scrolling Quotes List -->
+        {#each testimonials as item, index}
+          <div class="testimonial-card relative flex flex-col gap-8 opacity-20 will-change-transform">
+            <!-- Quote Text: Editorial Serif -->
+            <p class="text-2xl md:text-3xl lg:text-4xl font-serif font-light text-white/90 leading-[1.4] tracking-wide">
+              "{ item.quote }"
+            </p>
+
+            <!-- Author Identity -->
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-white/3 flex items-center justify-center border border-white/10 shrink-0">
+                <span class="text-primary font-bold text-lg font-serif">{item.author.name.charAt(0)}</span>
+              </div>
+              <div class="flex flex-col">
+                <h4 class="text-base md:text-lg font-sans font-bold text-white tracking-wide">{ item.author.name }</h4>
+                <p class="text-[10px] md:text-xs font-sans tracking-widest text-primary font-semibold uppercase mt-1">{ item.author.description }</p>
+              </div>
             </div>
           </div>
-        </div>
-      {/each}
+        {/each}
+      {/if}
     </div>
   </div>
 </section>

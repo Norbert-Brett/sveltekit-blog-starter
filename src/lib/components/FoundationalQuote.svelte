@@ -19,6 +19,7 @@
   let ctx;
 
   // Cursor interaction states
+  let isMobile = $state(false);
   let mouseX = $state(0);
   let mouseY = $state(0);
   let isHovered = $state(false);
@@ -26,6 +27,7 @@
   let tiltY = $state(0);
 
   function handleMouseMove(event) {
+    if (isMobile) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
@@ -41,6 +43,7 @@
   }
 
   function handleMouseLeave() {
+    if (isMobile) return;
     isHovered = false;
     tiltX = 0;
     tiltY = 0;
@@ -75,7 +78,22 @@
   onMount(() => {
     if (!browser || !sectionRef) return;
 
+    isMobile = window.innerWidth < 768 || matchMedia('(pointer: coarse)').matches;
+
     ctx = gsap.context(() => {
+      if (isMobile) {
+        // MOBILE HIGH-PERFORMANCE EXPERIENCE: simple fade & slide up for the whole card at once
+        gsap.fromTo('.fq-card',
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0, duration: 1.2, ease: 'power3.out',
+            scrollTrigger: { trigger: sectionRef, start: 'top 80%' }
+          }
+        );
+        return;
+      }
+
+      // DESKTOP ADVANCED CINEMATIC EXPERIENCE
       // Dynamic spotlight orbs parallax
       gsap.to('.fq-orb-1', {
         yPercent: -40,

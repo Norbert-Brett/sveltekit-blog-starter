@@ -3,7 +3,7 @@
   import { browser } from '$app/environment';
 
   let containerRef = $state(null);
-  let isMobile = $state(true);
+  let isMobile = $state(false);
   let animationId;
   let scene, camera, renderer, particles, shaderMaterial;
   let clock;
