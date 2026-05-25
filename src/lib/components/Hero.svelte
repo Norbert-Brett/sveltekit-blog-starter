@@ -13,6 +13,8 @@
   let heroSection = $state(null);
   let textRef = $state(null);
   let ctaRef = $state(null);
+  let headlineEl = $state(null);
+  let subtitleEl = $state(null);
   let mouseX = $state(0);
   let mouseY = $state(0);
   let windowWidth = $state(0);
@@ -22,34 +24,62 @@
 
   const headline = ['Building', 'intelligent', 'systems.'];
 
-  onMount(() => {
-    if (!browser || !heroSection || !textRef) return;
+  function setupGSAP() {
+    if (!browser || !heroSection || !textRef || !headlineEl || !subtitleEl) return;
 
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
+    if (ctx) ctx.revert();
 
-    const handleMouseMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    };
+    // Reset styles so we get accurate bounding rects
+    gsap.set([headlineEl, subtitleEl], { clearProps: 'all' });
 
-    const handleResize = () => {
-      windowWidth = window.innerWidth;
-      windowHeight = window.innerHeight;
-    };
+    const hRect = headlineEl.getBoundingClientRect();
+    const sRect = subtitleEl.getBoundingClientRect();
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('resize', handleResize);
+    const hScale = windowWidth < 768 ? 0.22 : 0.18;
+    const sScale = windowWidth < 768 ? 0.8 : 0.85;
+
+    const hX = (windowWidth < 768 ? 24 : 48) - hRect.left;
+    const hY = (windowWidth < 768 ? 100 : 40) - hRect.top;
+
+    const sX = (windowWidth - (windowWidth < 768 ? 24 : 48)) - sRect.right;
+    const sY = (windowWidth < 768 ? 100 : 40) - sRect.top;
 
     ctx = gsap.context(() => {
-      // 1. Initial State configurations for reveal
-      gsap.set('.hero-text-group', { opacity: 0, scale: 0.95, y: -20 });
+      // 1. Initial State configurations
       gsap.set('.hero-marquee-wrapper', { opacity: 0, scale: 0.92 });
       gsap.set('.hero-cta-wrapper', { opacity: 0, y: 50 });
       gsap.set('.scroll-indicator', { opacity: 0 });
 
-      // Subtle entrance for scroll indicator to hint page scrolling
+      // Subtle entrance for scroll indicator
       gsap.to('.scroll-indicator', { opacity: 1, duration: 1, delay: 0.5 });
+
+      // HUD and Center badge inner entrance (independent of scroll)
+      gsap.fromTo('.hero-hud-inner', 
+        { opacity: 0 },
+        { opacity: 1, duration: 1.5, ease: 'power2.out', delay: 0.1 }
+      );
+
+      gsap.fromTo('.hero-badge-inner', 
+        { opacity: 0 },
+        { opacity: 1, duration: 1.8, ease: 'power3.out', delay: 0.3 }
+      );
+
+      // Set corner positions initially with opacity 0 for fade in
+      gsap.set(headlineEl, {
+        x: hX,
+        y: hY,
+        scale: hScale,
+        transformOrigin: 'top left',
+        opacity: 0
+      });
+
+      gsap.set(subtitleEl, {
+        x: sX,
+        y: sY,
+        scale: sScale,
+        transformOrigin: 'top right',
+        opacity: 0
+      });
 
       // 2. Cinematic Morphing & Pinned Exit Animation: Unified in a Single Timeline
       const tl = gsap.timeline({
@@ -75,6 +105,25 @@
         duration: 2
       }, 0);
 
+      // Center badge and HUD overlay fade out as video shrinks, resetting perfectly to fully visible when scrolling back
+      tl.fromTo('.hero-center-badge', {
+        opacity: 1,
+        scale: 1
+      }, {
+        opacity: 0,
+        scale: 0.6,
+        ease: 'power2.inOut',
+        duration: 1.6
+      }, 0);
+
+      tl.fromTo('.hero-hud-overlay', {
+        opacity: 1
+      }, {
+        opacity: 0,
+        ease: 'power2.out',
+        duration: 1.0
+      }, 0);
+
       // Scroll indicator fades out fast
       tl.to('.scroll-indicator', {
         opacity: 0,
@@ -90,14 +139,27 @@
         duration: 1.5
       }, 0.3);
 
-      // Hero text group (headline & subtitle) fades & translates in
-      tl.to('.hero-text-group', {
-        opacity: 1,
-        scale: 1,
+      // Headline grows and centers as video shrinks
+      tl.to(headlineEl, {
+        x: 0,
         y: 0,
-        ease: 'power2.out',
-        duration: 1.8
-      }, 0.4);
+        scale: 1,
+        opacity: 1,
+        transformOrigin: 'center center',
+        ease: 'power2.inOut',
+        duration: 2
+      }, 0);
+
+      // Subtitle grows and centers as video shrinks
+      tl.to(subtitleEl, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        transformOrigin: 'center center',
+        ease: 'power2.inOut',
+        duration: 2
+      }, 0.1);
 
       // CTA button slides in directly below the shrunk video
       tl.to('.hero-cta-wrapper', {
@@ -107,11 +169,11 @@
         duration: 1.5
       }, 0.7);
 
-      // --- PHASE 2: Visual Hold (gives a smooth scroll buffer to read and interact) ---
+      // --- PHASE 2: Visual Hold ---
       tl.to({}, { duration: 1.5 });
 
       // --- PHASE 3: Seamless Scroll-Out Exit (Cohesive fade and translate, optimized for GPU performance) ---
-      tl.to('.hero-video-wrapper, .hero-text-group, .hero-marquee-wrapper, .hero-cta-wrapper', {
+      tl.to('.hero-video-wrapper, .hero-headline, .hero-subtitle, .hero-marquee-wrapper, .hero-cta-wrapper', {
         opacity: 0,
         y: -70,
         scale: 0.94,
@@ -135,6 +197,29 @@
       };
       animateMagnet();
     }, heroSection);
+  }
+
+  onMount(() => {
+    if (!browser || !heroSection || !textRef) return;
+
+    windowWidth = window.innerWidth;
+    windowHeight = window.innerHeight;
+
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    const handleResize = () => {
+      windowWidth = window.innerWidth;
+      windowHeight = window.innerHeight;
+      setupGSAP();
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
+
+    setupGSAP();
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -197,12 +282,59 @@
     <div class="hero-overlay absolute inset-0 bg-background opacity-0 pointer-events-none"></div>
   </div>
 
+  <!-- HUD Viewfinder Overlay (z-index 22, fades on scroll) -->
+  <div class="hero-hud-overlay absolute inset-0 z-22 pointer-events-none select-none">
+    <div class="hero-hud-inner relative w-full h-full opacity-0">
+      <!-- Viewfinder Corners -->
+      <div class="absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-accent/30"></div>
+      <div class="absolute top-8 right-8 w-6 h-6 border-t-2 border-r-2 border-accent/30"></div>
+      <div class="absolute bottom-8 left-8 w-6 h-6 border-b-2 border-l-2 border-accent/30"></div>
+      <div class="absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-accent/30"></div>
+
+      <!-- HUD Stats & Indicators -->
+      <div class="absolute top-8 left-20 text-[9px] font-mono tracking-[0.2em] text-foreground/45 uppercase hidden sm:block">
+        SYS: ACTIVE // LENS: CRT-X
+      </div>
+      <div class="absolute top-8 right-20 text-[9px] font-mono tracking-[0.2em] text-foreground/45 uppercase hidden sm:block">
+        REC [●]
+      </div>
+      <div class="absolute bottom-8 left-20 text-[9px] font-mono tracking-[0.2em] text-foreground/45 uppercase hidden sm:block">
+        FPS: 60 // SHUTTER: 1/120s
+      </div>
+      <div class="absolute bottom-8 right-20 text-[9px] font-mono tracking-[0.2em] text-foreground/45 uppercase hidden sm:block">
+        ANTIGRAVITY PROPULSION
+      </div>
+    </div>
+  </div>
+
+  <!-- Central Rotating Holographic Badge (z-index 25, fades on scroll) -->
+  <div class="hero-center-badge absolute top-1/2 left-1/2 z-25 pointer-events-none select-none">
+    <div class="hero-badge-inner relative flex items-center justify-center opacity-0">
+      <!-- Spinning Circular Text Ring -->
+      <svg class="w-40 h-40 md:w-52 md:h-52 text-accent/50 animate-spin-slow" viewBox="0 0 200 200">
+        <defs>
+          <path id="badgeCircle" d="M 100, 100 m -65, 0 a 65,65 0 1,1 130,0 a 65,65 0 1,1 -130,0" fill="none" />
+        </defs>
+        <text class="text-[9px] font-mono font-bold uppercase tracking-[0.25em] fill-current">
+          <textPath href="#badgeCircle" startOffset="0%">
+            NORBERT BRETT • DESIGN & CODE • AI ENGINEERING • FULL STACK ·
+          </textPath>
+        </text>
+      </svg>
+
+      <!-- Glassmorphic Pulse Center Core -->
+      <div class="absolute w-20 h-20 md:w-24 md:h-24 rounded-full glass-panel border border-accent/25 flex items-center justify-center shadow-[0_8px_32px_0_var(--glass-shadow)] backdrop-blur-md">
+        <span class="w-3.5 h-3.5 rounded-full bg-accent animate-pulse shadow-[0_0_15px_var(--color-accent)]"></span>
+      </div>
+    </div>
+  </div>
+
   <!-- 3. Kinetic Text (Headline & Subtitle, z-index 30) -->
   <div 
     bind:this={textRef} 
     class="hero-text-group absolute inset-x-0 top-[12%] md:top-[14%] z-30 flex flex-col items-center pointer-events-none px-6 gpu-accelerated"
   >
-    <h1 class="relative z-10 text-center flex flex-col leading-[1.05] tracking-tight text-foreground drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+    <h1 bind:this={headlineEl} class="hero-headline relative z-10 text-center flex flex-col leading-[1.05] tracking-tight text-foreground drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
       {#each headline as word, wi (wi)}
         <span class="overflow-hidden py-1">
           <span
@@ -216,7 +348,7 @@
     </h1>
 
     <!-- Subtitle -->
-    <p class="hero-subtitle relative z-10 mt-6 text-xs md:text-sm font-sans tracking-[0.25em] text-foreground/80 text-center font-bold uppercase">
+    <p bind:this={subtitleEl} class="hero-subtitle relative z-10 mt-6 text-xs md:text-sm font-sans tracking-[0.25em] text-foreground/80 text-center font-bold uppercase">
       Full Stack Developer <span class="text-accent/80 mx-1">&bull;</span> AI Specialist
     </p>
   </div>
@@ -254,5 +386,28 @@
   }
   .animate-float {
     animation: float 2s ease-in-out infinite;
+  }
+
+  @keyframes spin-slow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .animate-spin-slow {
+    animation: spin-slow 24s linear infinite;
+  }
+
+  @keyframes badge-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-8px) scale(1.02); }
+  }
+  .hero-badge-inner {
+    animation: badge-float 6s ease-in-out infinite;
+  }
+
+  .hero-center-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>
