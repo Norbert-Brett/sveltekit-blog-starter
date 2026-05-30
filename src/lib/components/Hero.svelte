@@ -113,7 +113,7 @@
         scrollTrigger: {
           trigger: heroSection,
           start: 'top top',
-          end: '+=250%',
+          end: '+=120%',
           scrub: 1.2,    // Highly fluid inertia scrub damping
           pin: true,
           anticipatePin: 1
@@ -142,6 +142,7 @@
         duration: 1.6
       }, 0);
 
+      // HUD overlay fades out
       tl.fromTo('.hero-hud-overlay', {
         opacity: 1
       }, {
@@ -195,18 +196,8 @@
         duration: 1.5
       }, 0.7);
 
-      // --- PHASE 2: Visual Hold ---
-      tl.to({}, { duration: 1.5 });
-
-      // --- PHASE 3: Seamless Scroll-Out Exit
-      tl.to('.hero-video-wrapper, .hero-headline, .hero-subtitle, .hero-marquee-wrapper, .hero-cta-wrapper', {
-        opacity: 0,
-        y: -70,
-        scale: 0.94,
-        stagger: 0.04,
-        ease: 'power2.inOut',
-        duration: 1.0
-      });
+      // --- PHASE 2: Morph Complete (unpins immediately for organic scrolling) ---
+      tl.to({}, { duration: 0.1 });
 
       // 3. Magnetic Tracking on the text group (desktop only)
       const xTo = gsap.quickTo(textRef, 'x', { duration: 0.8, ease: 'power3' });

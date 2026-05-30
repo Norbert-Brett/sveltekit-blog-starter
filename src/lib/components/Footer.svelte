@@ -79,38 +79,38 @@
     ctx = gsap.context(() => {
       // 1. CTA label reveal
       gsap.fromTo('.footer-cta-label',
-        { y: 20, opacity: 0 },
+        { y: 15, opacity: 0 },
         {
-          y: 0, opacity: 1, duration: 0.6, ease: 'expo.out',
-          scrollTrigger: { trigger: '.footer-cta', start: 'top 90%' }
+          y: 0, opacity: 1, duration: 0.4, ease: 'power2.out',
+          scrollTrigger: { trigger: '.footer-cta', start: 'top 100%' }
         }
       );
 
-      // Character entrance: mask-up + settle (initial impact)
+      // Character entrance: mask-up + settle (snappy and instant impact)
       const ctaChars = gsap.utils.toArray('.cta-char');
       if (ctaChars.length > 0) {
         gsap.fromTo(ctaChars,
           { yPercent: 100, opacity: 0 },
           {
             yPercent: 0, opacity: 1,
-            duration: 1.2,
-            stagger: 0.02,
-            ease: 'expo.out',
+            duration: 0.8,
+            stagger: 0.01,
+            ease: 'power3.out',
             scrollTrigger: {
               trigger: '.footer-cta',
-              start: 'top 95%',
+              start: 'top 100%',
             }
           }
         );
       }
 
-      // Arrow circle entrance
+      // Arrow circle entrance (starts almost immediately)
       gsap.fromTo('.footer-arrow-circle',
         { scale: 0, opacity: 0, rotate: -45 },
         {
           scale: 1, opacity: 1, rotate: 0,
-          duration: 0.8, ease: 'back.out(1.7)', delay: 0.3,
-          scrollTrigger: { trigger: '.footer-cta', start: 'top 85%' }
+          duration: 0.6, ease: 'back.out(1.5)', delay: 0.1,
+          scrollTrigger: { trigger: '.footer-cta', start: 'top 100%' }
         }
       );
 
@@ -397,7 +397,7 @@
 
   <!-- Copyright Bar -->
   <div class="border-t border-border/30 relative z-10 bg-background/20 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-sans text-foreground/40 tracking-[0.1em] uppercase font-semibold gap-3">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-sans text-foreground/40 tracking-widest uppercase font-semibold gap-3">
       <p>&copy; {currentYear} {siteTitle}. All rights reserved.</p>
       <p>Designed & Developed in Budapest, HU</p>
     </div>
