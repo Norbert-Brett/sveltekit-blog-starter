@@ -372,6 +372,11 @@ html[data-theme="light"] {
   z-index: 5;
 }
 
+/* ─── Skip to Content Link ─── */
+.skip-to-content {
+	@apply sr-only focus:not-sr-only fixed top-4 left-4 z-[10001] px-6 py-3 rounded-full bg-accent text-background font-sans font-bold text-xs tracking-[0.2em] uppercase shadow-2xl transition-all duration-300;
+}
+
 /* ─── Scroll Progress Bar ─── */
 .scroll-progress {
   position: fixed;
