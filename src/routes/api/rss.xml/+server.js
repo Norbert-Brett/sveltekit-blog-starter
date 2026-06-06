@@ -1,20 +1,14 @@
 // IMPORTANT: update all these property values in src/lib/config.js
 import { siteTitle, siteDescription, siteURL, siteLink } from "$lib/config";
+import fetchPosts from "$lib/assets/js/fetchPosts";
 
 export const prerender = true;
 
 export const GET = async () => {
-  const data = await Promise.all(
-    Object.entries(import.meta.glob("$lib/posts/*.md")).map(async ([path, page]) => {
-      const { metadata } = await page();
-      const slug = path.split("/").pop().split(".").shift();
-      return { ...metadata, slug };
-    }),
-  ).then((posts) => {
-    return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-  });
+  // Use optimized utility instead of duplicate glob-and-sort logic
+  const { posts } = await fetchPosts({ limit: -1 });
 
-  const body = render(data);
+  const body = render(posts);
   const headers = {
     "Cache-Control": `max-age=0, s-max-age=${600}`,
     "Content-Type": "application/xml",
