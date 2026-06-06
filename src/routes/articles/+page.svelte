@@ -78,10 +78,10 @@
   <div class="max-w-6xl mx-auto z-10 relative">
     <div class="mb-24 md:mb-32">
       <span class="inline-block text-xs font-sans font-semibold tracking-widest uppercase text-primary mb-6">--- WRITINGS & INSIGHTS</span>
-      <h1 class="page-header-title text-6xl md:text-8xl lg:text-9xl font-sans font-bold tracking-tight text-white leading-[0.85] mb-8">
+      <h1 class="page-header-title text-6xl md:text-8xl lg:text-9xl font-serif tracking-tight text-foreground leading-[0.85] mb-8">
         Articles<span class="text-primary">.</span>
       </h1>
-      <p class="page-header-desc text-lg md:text-xl text-white/70 font-sans font-light max-w-2xl leading-relaxed">
+      <p class="page-header-desc text-lg md:text-xl text-foreground/70 font-sans font-light max-w-2xl leading-relaxed">
         Deep dives into software architecture, the evolution of AI-driven interfaces, and the philosophy of building resilient, beautiful digital products.
       </p>
     </div>
@@ -93,7 +93,7 @@
           type="text"
           bind:value={searchQuery}
           placeholder="Keyword search (e.g. Svelte, AI, Design)..."
-          class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 pl-16 pr-12 text-white font-sans font-medium tracking-wide focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all duration-500 backdrop-blur-3xl placeholder:text-white/40 shadow-2xl relative z-10"
+          class="w-full glass-panel rounded-2xl py-5 pl-16 pr-12 text-foreground font-sans font-medium tracking-wide focus:outline-none focus:border-primary/50 focus:bg-foreground/[0.03] transition-all duration-500 placeholder:text-foreground/45 relative z-10"
         />
         <div class="absolute inset-y-0 left-6 flex items-center pointer-events-none z-20">
           <Search class="w-5 h-5 text-primary opacity-70 group-focus-within:opacity-100 transition-opacity" />
@@ -101,7 +101,7 @@
         {#if searchQuery}
           <button 
             onclick={clearSearch}
-            class="absolute inset-y-0 right-4 flex items-center px-2 text-white/50 hover:text-primary transition-colors z-20"
+            class="absolute inset-y-0 right-4 flex items-center px-2 text-foreground/50 hover:text-primary transition-colors z-20"
             aria-label="Clear search"
           >
             <X class="w-5 h-5" />
@@ -110,7 +110,7 @@
         <div class="absolute bottom-0 left-6 right-6 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent scale-x-0 group-focus-within:scale-x-100 transition-transform duration-700 z-20"></div>
       </div>
 
-      <div class="flex items-center gap-4 text-xs font-sans font-semibold tracking-widest text-white/60 uppercase">
+      <div class="flex items-center gap-4 text-xs font-sans font-semibold tracking-widest text-foreground/60 uppercase">
         <span class="w-1.5 h-1.5 rounded-full bg-primary/60 animate-pulse"></span>
         <span>{filteredPosts.length} matches discovered</span>
       </div>
@@ -122,12 +122,12 @@
       {#if filteredPosts.length > 0}
         <PostsList posts={visiblePosts} />
       {:else}
-        <div class="py-24 text-center border border-white/5 rounded-3xl bg-white/1 backdrop-blur-md">
-          <h3 class="text-2xl md:text-3xl font-sans font-semibold text-white/70 mb-4 tracking-tight">No articles discovered matching <br class="md:hidden"/> "<span class="text-white/90">{searchQuery}</span>"</h3>
-          <p class="text-white/50 mb-12 max-w-md mx-auto font-sans font-light px-6 text-sm md:text-base leading-relaxed">We couldn't find any documents matching your criteria. Try adjusting your research parameters or clearing the filter.</p>
+        <div class="py-24 text-center rounded-3xl glass-panel">
+          <h3 class="text-2xl md:text-3xl font-sans font-semibold text-foreground/75 mb-4 tracking-tight">No articles discovered matching <br class="md:hidden"/> "<span class="text-foreground/90">{searchQuery}</span>"</h3>
+          <p class="text-foreground/50 mb-12 max-w-md mx-auto font-sans font-light px-6 text-sm md:text-base leading-relaxed">We couldn't find any documents matching your criteria. Try adjusting your research parameters or clearing the filter.</p>
           <button 
             onclick={clearSearch}
-            class="group flex items-center gap-3 mx-auto px-8 py-3 rounded-full border border-primary/20 hover:bg-primary/10 transition-all duration-500"
+            class="group flex items-center gap-3 mx-auto px-8 py-3 rounded-full border border-primary/20 hover:bg-primary/10 active:scale-[0.97] transition-all duration-500"
           >
              <span class="text-xs font-sans font-semibold tracking-widest text-primary uppercase">Reset Search</span>
              <X class="w-3 h-3 text-primary group-hover:rotate-90 transition-transform duration-500" />
@@ -140,21 +140,21 @@
           <button 
             onclick={loadMore}
             disabled={isLoading}
-            class="group flex flex-col items-center gap-6 cursor-pointer disabled:cursor-wait"
+            class="group flex flex-col items-center gap-6 cursor-pointer disabled:cursor-wait active:scale-[0.97]"
           >
-            <div class="w-24 h-24 rounded-full border border-white/5 flex items-center justify-center bg-white/3 group-hover:bg-primary group-hover:border-primary transition-all duration-700 shadow-2xl relative overflow-hidden">
+            <div class="w-24 h-24 rounded-full flex items-center justify-center glass-panel group-hover:bg-primary group-hover:border-primary transition-all duration-700 shadow-2xl relative overflow-hidden">
                {#if isLoading}
                  <div class="absolute inset-0 border-2 border-primary border-t-transparent animate-spin rounded-full opacity-40"></div>
                  <div class="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
                {:else}
-                 <Plus class="w-8 h-8 text-white group-hover:text-black transition-colors duration-500" />
+                 <Plus class="w-8 h-8 text-foreground group-hover:text-[#181715] transition-colors duration-500" />
                {/if}
             </div>
             <div class="flex flex-col items-center gap-1.5">
-              <span class="text-xs font-sans font-semibold tracking-widest text-white group-hover:text-primary transition-colors uppercase">
+              <span class="text-xs font-sans font-semibold tracking-widest text-foreground group-hover:text-primary transition-colors uppercase">
                 {isLoading ? 'Discovering...' : 'Discover More'}
               </span>
-              <span class="text-xs font-sans text-white/50 tracking-wide group-hover:text-primary/40">
+              <span class="text-xs font-sans text-foreground/50 tracking-wide group-hover:text-primary/60">
                 {isLoading ? 'Fetching articles...' : `Showing ${visibleCount} / ${filteredPosts.length}`}
               </span>
             </div>

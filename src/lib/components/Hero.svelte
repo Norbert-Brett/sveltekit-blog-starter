@@ -368,7 +368,7 @@
       {#each headline as word, wi (wi)}
         <span class="overflow-hidden py-1">
           <span
-            class="hero-word inline-block text-[8.5vw] md:text-[6.5vw] lg:text-[5.5vw] font-black uppercase tracking-tighter will-change-transform"
+            class="hero-word inline-block text-[8.5vw] md:text-[6.5vw] lg:text-[5.5vw] font-serif font-normal uppercase tracking-tighter will-change-transform"
             style="{wi === 1 ? 'color: var(--color-accent);' : 'color: var(--color-foreground);'}"
           >
             {word}
@@ -391,7 +391,7 @@
     <a 
       href="/contact" 
       use:magnetic={{ strength: 0.3, textStrength: 0.1 }} 
-      class="hero-cta flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-foreground text-background hover:bg-foreground/90 hover:scale-105 transition-all duration-300 shadow-2xl interactive group"
+      class="hero-cta flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-foreground text-background hover:bg-foreground/90 active:scale-[0.97] hover:scale-105 transition-all duration-300 shadow-2xl interactive group"
     >
       <span class="magnetic-text flex items-center gap-3">
         <span class="text-sm font-sans font-semibold tracking-wide">Start a project</span>

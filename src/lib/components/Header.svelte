@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
   import { afterNavigate } from '$app/navigation';
   import { fade, scale } from 'svelte/transition';
   import { siteTitle, navItems } from '$lib/config.js';
@@ -11,6 +12,7 @@
   let scrollY = $state(0);
   let windowWidth = $state(0);
   let navVisible = $state(false);
+  let theme = $state('dark');
 
   // Computed
   let isMobile = $derived(windowWidth < 768);
@@ -20,18 +22,30 @@
     appState.isMenuOpen = false;
   };
 
+  const toggleTheme = () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    if (browser) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+  };
+
   afterNavigate(() => {
     closeMenu();
   });
-
-
 
   onMount(() => {
     // Initial values
     scrollY = window.scrollY;
     windowWidth = window.innerWidth;
 
-    // Throttled scroll via rAF for smooth performance
+    if (browser) {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      theme = savedTheme;
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // Throttled scroll via rAF
     let scrollTicking = false;
     const handleScroll = () => {
       if (!scrollTicking) {
@@ -79,8 +93,9 @@
       <div class="pointer-events-auto w-full max-w-[1000px] flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] {isScrolled
         ? 'px-6 sm:px-8 py-3 rounded-full glass-panel border border-accent/20 shadow-[0_8px_32px_0_var(--glass-shadow)]'
         : 'px-5 sm:px-6 py-4 rounded-3xl bg-foreground/[0.03] backdrop-blur-xl border border-foreground/[0.08] shadow-[0_4px_24px_0_rgba(0,0,0,0.15)]'}">
+        
         <!-- Morphing Logo Accordion -->
-        <a href="/" class="group flex items-center gap-1 interactive shrink-0 select-none" aria-label="Norbert Br3tt - Home">
+        <a href="/" class="group flex items-center gap-1 interactive shrink-0 select-none font-bold" aria-label="Norbert Br3tt - Home">
           <div class="logo-text text-xl font-black tracking-tight leading-none text-foreground flex items-center">
             <span class="text-foreground">N</span>
             <span class="logo-collapsible text-foreground" class:collapsed={isScrolled}>orbert</span>
@@ -91,47 +106,68 @@
           </div>
         </a>
 
-        <div class="flex items-center gap-8">
+        <div class="flex items-center gap-6">
           <!-- Desktop Nav Links -->
-          <nav class="hidden md:flex items-center gap-8 lg:gap-10">
+          <nav class="hidden md:flex items-center gap-6 lg:gap-8">
             {#each navItems as item, index (index)}
               <a
                 href={item.route}
                 use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
-                class="nav-link-magnetic relative flex items-center justify-center px-4 py-2 interactive group/navlink"
+                class="nav-link-magnetic relative flex items-center justify-center px-4 py-2.5 interactive group/navlink"
                 aria-current={appState.currentPage === item.route ? 'page' : undefined}
               >
                 <span
-                  class="magnetic-text text-[13px] font-sans font-medium tracking-wide text-foreground/70 group-hover/navlink:text-foreground transition-colors duration-300 pointer-events-none whitespace-nowrap"
+                  class="magnetic-text relative z-10 text-[13px] font-sans font-medium tracking-wide text-foreground/70 group-hover/navlink:text-foreground transition-colors duration-300 pointer-events-none whitespace-nowrap"
                 >
                   {item.title}
                 </span>
                 <!-- Apple-style Active Indicator (Premium Gold) -->
                 <span 
-                  class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent transition-transform duration-300 ease-out {appState.currentPage === item.route ? 'scale-100 opacity-100' : 'scale-0 opacity-0 group-hover/navlink:scale-100 group-hover/navlink:opacity-50'}"
+                  class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent transition-transform duration-300 ease-out {appState.currentPage === item.route ? 'scale-100 opacity-100' : 'scale-0 opacity-0 group-hover/navlink:scale-100 group-hover/navlink:opacity-50'}"
                 ></span>
               </a>
             {/each}
           </nav>
 
-          <!-- Menu Button — mobile only -->
-          {#if isMobile}
-            <div in:scale={{ duration: 300, start: 0.6 }}>
-              <button
-                class="nav-link-magnetic shrink-0 bg-foreground/5 text-foreground border border-foreground/10 rounded-full flex flex-col items-center justify-center gap-[4px] transition-all duration-300 interactive w-10 h-10 hover:bg-foreground/10"
-                use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
-                onclick={() => (appState.isMenuOpen = true)}
-                aria-label="Open menu"
-              >
-                <div
-                  class="magnetic-text w-full h-full flex flex-col items-center justify-center gap-[4px] pointer-events-none"
+          <!-- Action Utilities -->
+          <div class="flex items-center gap-3">
+            <!-- Theme Toggle Button -->
+            <button
+              onclick={toggleTheme}
+              class="relative w-9 h-9 flex items-center justify-center rounded-full border border-foreground/[0.08] hover:border-accent/40 bg-foreground/[0.02] hover:bg-foreground/[0.05] active:scale-[0.97] transition-all duration-300 interactive group/theme-btn pointer-events-auto"
+              aria-label="Toggle theme"
+              use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
+            >
+              {#if theme === 'dark'}
+                <span in:scale={{ duration: 300, start: 0.6 }} class="text-accent flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-500 group-hover/theme-btn:rotate-12"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </span>
+              {:else}
+                <span in:scale={{ duration: 300, start: 0.6 }} class="text-accent flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-500 group-hover/theme-btn:rotate-45"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                </span>
+              {/if}
+            </button>
+
+            <!-- Menu Button — mobile only -->
+            {#if isMobile}
+              <div in:scale={{ duration: 300, start: 0.6 }} class="pointer-events-auto">
+                <button
+                  class="nav-link-magnetic shrink-0 bg-foreground/5 text-foreground border border-foreground/10 rounded-full flex flex-col items-center justify-center gap-[4px] active:scale-[0.97] transition-all duration-300 interactive w-9 h-9 hover:bg-foreground/10"
+                  use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
+                  onclick={() => (appState.isMenuOpen = true)}
+                  aria-label="Open menu"
                 >
-                  <span class="w-4 h-[2px] bg-current rounded-full"></span>
-                  <span class="w-4 h-[2px] bg-current rounded-full"></span>
-                </div>
-              </button>
-            </div>
-          {/if}
+                  <div
+                    class="magnetic-text w-full h-full flex flex-col items-center justify-center gap-[4px] pointer-events-none"
+                  >
+                    <span class="w-4 h-[2px] bg-current rounded-full"></span>
+                    <span class="w-4 h-[2px] bg-current rounded-full"></span>
+                  </div>
+                </button>
+              </div>
+            {/if}
+          </div>
         </div>
       </div>
     </header>
@@ -142,7 +178,7 @@
     <button
       in:fade={{ duration: 300 }}
       out:fade={{ duration: 300 }}
-      class="fixed top-6 right-6 sm:right-12 w-12 h-12 bg-foreground/10 backdrop-blur-xl border border-foreground/20 text-foreground rounded-full flex items-center justify-center z-120 shadow-2xl interactive hover:bg-foreground hover:text-background transition-all duration-500"
+      class="fixed top-6 right-6 sm:right-12 w-12 h-12 bg-foreground/10 backdrop-blur-xl border border-foreground/20 text-foreground rounded-full flex items-center justify-center z-120 shadow-2xl interactive hover:bg-foreground hover:text-background active:scale-[0.97] transition-all duration-500"
       onclick={() => (appState.isMenuOpen = false)}
       aria-label="Close menu"
     >
@@ -170,11 +206,11 @@
       ? 'translate-x-0'
       : 'translate-x-full'}"
   >
-    <nav class="flex flex-col items-start px-12 sm:px-16 gap-4 flex-1 overflow-y-auto mt-10">
+    <nav class="flex flex-col items-start px-12 sm:px-16 gap-4 flex-1 overflow-y-auto mt-10" data-lenis-prevent>
       {#each navItems as item, index (index)}
         <a
           href={item.route}
-          class="nav-link group flex items-baseline gap-5 text-4xl sm:text-5xl font-sans font-bold tracking-tight hover:text-foreground/70 transition-all duration-500 ease-out interactive {appState.isMenuOpen ? 'animate-slide-in' : ''}"
+          class="nav-link group flex items-baseline gap-5 text-4xl sm:text-5xl font-serif hover:text-foreground/70 transition-all duration-500 ease-out interactive {appState.isMenuOpen ? 'animate-slide-in' : ''}"
           style="animation-delay: {0.05 + index * 0.05}s"
           onclick={closeMenu}
           aria-current={appState.currentPage === item.route ? 'page' : undefined}
@@ -225,6 +261,31 @@
 
   .nav-link:hover .link-text {
     transform: translateX(10px);
+  }
+
+  /* ── Apple-Style Hover Capsule Highlight ── */
+  .nav-link-magnetic::before {
+    content: '';
+    position: absolute;
+    inset: 4px 0;
+    background: var(--color-foreground);
+    opacity: 0;
+    transform: scale(0.94);
+    border-radius: 9999px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.4s ease;
+    z-index: 0;
+  }
+  :global(html[data-theme="dark"]) .nav-link-magnetic::before {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  :global(html[data-theme="light"]) .nav-link-magnetic::before {
+    background: rgba(0, 0, 0, 0.03);
+  }
+  .nav-link-magnetic:hover::before {
+    opacity: 1;
+    transform: scale(1);
   }
 
   /* ── Smooth Morphing Logo Accordion ── */

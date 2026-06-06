@@ -211,7 +211,7 @@
 
       <a href="mailto:norbertbrett@outlook.com" class="group/cta relative block w-full interactive">
         <h3
-          class="footer-cta-text text-[10vw] md:text-[8vw] leading-none font-bold tracking-tight pb-4 group-[.group]/cta:text-foreground"
+          class="footer-cta-text text-[10vw] md:text-[8vw] leading-none font-serif font-normal tracking-tight pb-4 group-[.group]/cta:text-foreground"
         >
           <!-- Character mask reveal + wave stagger hover delay -->
           <span class="block pt-2">
@@ -241,7 +241,7 @@
         <!-- Magnetic Premium Gold Arrow Circle -->
         <div
           use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
-          class="footer-arrow-circle absolute top-1/2 right-[5%] -translate-y-1/2 hidden md:flex w-24 h-24 bg-accent text-background rounded-full items-center justify-center group-hover/cta:scale-110 group-hover/cta:rotate-45 transition-all duration-500 shadow-[0_0_40px_rgba(212,176,85,0.35)] interactive border border-accent/20 overflow-hidden"
+          class="footer-arrow-circle absolute top-1/2 right-[5%] -translate-y-1/2 hidden md:flex w-24 h-24 bg-accent text-[#181715] rounded-full items-center justify-center group-hover/cta:scale-110 group-hover/cta:rotate-45 transition-all duration-500 shadow-[0_0_40px_rgba(212,176,85,0.35)] interactive border border-accent/20 overflow-hidden"
         >
           <!-- Internal Hover Ripple -->
           <div class="absolute inset-0 bg-background scale-0 group-hover/cta:scale-100 transition-transform duration-700 rounded-full ease-out opacity-15"></div>
@@ -286,9 +286,9 @@
       <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 divide-border/40 relative">
 
         <!-- Col 1: Brand, Time & Map Wireframe -->
-        <div class="footer-col md:col-span-4 py-16 md:pr-8 flex flex-col justify-between min-h-[300px] relative overflow-hidden">
-          <!-- Abstract Budapest River Map Bend -->
-          <div class="absolute -right-4 bottom-4 w-40 h-28 opacity-10 dark:opacity-[0.06] pointer-events-none select-none">
+        <div class="footer-col md:col-span-4 py-16 md:pr-8 flex flex-col justify-between min-h-[300px] relative overflow-hidden group/map-col">
+          <!-- Abstract Budapest River Map Bend (interactive hover states) -->
+          <div class="absolute -right-4 bottom-4 w-40 h-28 opacity-10 dark:opacity-[0.06] group-hover/map-col:opacity-30 transition-all duration-700 pointer-events-none select-none">
             <svg width="160" height="110" viewBox="0 0 160 110" fill="none" class="text-accent">
               <line x1="0" y1="20" x2="160" y2="20" stroke="currentColor" stroke-width="0.5" stroke-dasharray="1 3"/>
               <line x1="0" y1="55" x2="160" y2="55" stroke="currentColor" stroke-width="0.5" stroke-dasharray="1 3"/>
@@ -296,11 +296,11 @@
               <line x1="40" y1="0" x2="40" y2="110" stroke="currentColor" stroke-width="0.5" stroke-dasharray="1 3"/>
               <line x1="80" y1="0" x2="80" y2="110" stroke="currentColor" stroke-width="0.5" stroke-dasharray="1 3"/>
               <line x1="120" y1="0" x2="120" y2="110" stroke="currentColor" stroke-width="0.5" stroke-dasharray="1 3"/>
-              <path d="M 80,0 Q 82,30 90,55 T 100,110" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M 80,0 Q 82,30 90,55 T 100,110" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" class="group-hover/map-col:stroke-accent transition-all duration-500"/>
               <path d="M 82,0 Q 84,30 92,55 T 102,110" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" opacity="0.5"/>
-              <circle cx="90" cy="55" r="3" fill="currentColor" class="animate-ping"/>
+              <circle cx="90" cy="55" r="4" fill="currentColor" class="animate-ping"/>
               <circle cx="90" cy="55" r="1.5" fill="currentColor"/>
-              <text x="96" y="58" font-family="JetBrains Mono" font-size="6.5" fill="currentColor" letter-spacing="0.5" font-weight="bold">47.4979° N</text>
+              <text x="96" y="58" font-family="JetBrains Mono" font-size="6.5" fill="currentColor" letter-spacing="0.5" class="font-bold group-hover/map-col:fill-accent transition-all duration-500">47.4979° N</text>
             </svg>
           </div>
 
@@ -385,7 +385,7 @@
               <div
                 class="w-9 h-9 rounded-full border border-border/50 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all duration-500 group-hover:-translate-y-1 shadow-lg"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 group-hover:text-background transition-colors"><path d="m18 15-6-6-6 6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 group-hover:text-[#181715] transition-colors"><path d="m18 15-6-6-6 6"/></svg>
               </div>
             </button>
           </div>

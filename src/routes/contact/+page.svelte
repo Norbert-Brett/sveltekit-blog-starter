@@ -195,7 +195,7 @@
       </div>
 
       <!-- Giant title — cinematic oversized typography -->
-      <h1 class="text-[13vw] sm:text-[11vw] md:text-[9vw] lg:text-[7.5rem] font-black font-sans tracking-tighter leading-[0.88] mb-0" style="perspective: 800px;">
+      <h1 class="text-[13vw] sm:text-[11vw] md:text-[9vw] lg:text-[7.5rem] font-serif font-normal tracking-tight leading-[0.88] mb-0" style="perspective: 800px;">
         <span class="block overflow-hidden py-1">
           <span class="ct-word block will-change-transform" style="transform-origin: bottom left;">Get in</span>
         </span>
@@ -317,7 +317,7 @@
                   type="submit"
                   disabled={isSubmitting}
                   use:magnetic={{ strength: 0.15, textStrength: 0.05 }}
-                  class="w-full h-14 relative flex items-center justify-center gap-3 rounded-full border border-accent/40 bg-accent/[0.04] text-accent font-sans font-bold text-xs tracking-[0.2em] uppercase overflow-hidden group interactive transition-all duration-500 hover:bg-accent hover:text-background hover:shadow-[0_0_40px_rgba(212,176,85,0.2)] hover:border-accent disabled:opacity-40 disabled:pointer-events-none"
+                  class="w-full h-14 relative flex items-center justify-center gap-3 rounded-full border border-accent/40 bg-accent/[0.04] text-accent font-sans font-bold text-xs tracking-[0.2em] uppercase overflow-hidden group interactive transition-all duration-500 hover:bg-accent hover:text-[#181715] hover:shadow-[0_0_40px_rgba(212,176,85,0.2)] hover:border-accent disabled:opacity-40 disabled:pointer-events-none"
                 >
                   <span class="magnetic-text flex items-center gap-3 relative z-10">
                     {#if !isSubmitting}

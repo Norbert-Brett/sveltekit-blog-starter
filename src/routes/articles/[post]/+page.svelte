@@ -107,12 +107,12 @@
 </script>
 
 <svelte:head>
-  <title>{title} | Norbert Potapov</title>
+  <title>{title} | Norbert Br3tt</title>
   <meta name="description" content={excerpt} />
 </svelte:head>
 
 <!-- Cinematic Progress Bar -->
-<div class="fixed top-0 left-0 w-full h-[3px] z-100 bg-white/5">
+<div class="fixed top-0 left-0 w-full h-[3px] z-100 bg-foreground/5 dark:bg-white/5">
   <div bind:this={progressRef} class="h-full bg-primary shadow-[0_0_15px_rgba(41,151,255,0.8)]"></div>
 </div>
 
@@ -120,7 +120,7 @@
   
   <!-- Back Navigation (Desktop) -->
   <div class="fixed top-32 left-8 z-50 hidden xl:block">
-    <a href="/articles" class="flex items-center gap-4 text-xs font-sans font-semibold uppercase tracking-widest text-white/40 hover:text-primary transition-all group px-4 py-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/10 hover:shadow-[0_0_20px_rgba(41,151,255,0.15)] shadow-2xl">
+    <a href="/articles" class="flex items-center gap-4 text-xs font-sans font-semibold uppercase tracking-widest text-foreground/50 hover:text-primary active:scale-[0.97] transition-all group px-4 py-2 glass-panel rounded-full hover:shadow-[0_0_20px_rgba(212,176,85,0.15)] shadow-2xl">
       <ArrowLeft class="w-4 h-4 transform group-hover:-translate-x-2 transition-transform" />
       Library
     </a>
@@ -130,7 +130,7 @@
   <header class="article-header pt-32 pb-24 px-6 max-w-5xl mx-auto text-center relative">
     <!-- Back Navigation (Mobile/Tablet) -->
     <div class="xl:hidden mb-12 flex justify-center">
-      <a href="/articles" class="flex items-center gap-3 text-xs font-sans font-semibold tracking-widest text-primary bg-primary/10 px-6 py-2.5 rounded-full border border-primary/20 uppercase">
+      <a href="/articles" class="flex items-center gap-3 text-xs font-sans font-semibold tracking-widest text-primary bg-primary/10 px-6 py-2.5 rounded-full border border-primary/20 active:scale-[0.97] uppercase">
         <ArrowLeft class="w-4 h-4" /> Go Back
       </a>
     </div>
@@ -144,11 +144,11 @@
       {/if}
     </div>
 
-    <h1 class="text-5xl md:text-7xl lg:text-8xl font-sans font-bold tracking-tight text-white leading-[0.95] mb-12">
+    <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif tracking-tight text-foreground leading-[0.95] mb-12">
       {title}
     </h1>
 
-    <div class="flex items-center justify-center gap-8 text-xs font-sans font-medium tracking-widest text-white/30 uppercase">
+    <div class="flex items-center justify-center gap-8 text-xs font-sans font-medium tracking-widest text-foreground/40 uppercase">
       <div class="flex items-center gap-2">
         <Calendar class="w-3.5 h-3.5" />
         {date}
@@ -162,7 +162,7 @@
 
   <!-- Cover Image Parallax -->
   {#if data.meta.coverImage}
-    <div class="article-cover relative w-full max-w-7xl mx-auto px-6 mb-24 aspect-21/9 rounded-4xl overflow-hidden border border-white/5 shadow-2xl">
+    <div class="article-cover relative w-full max-w-7xl mx-auto px-6 mb-24 aspect-21/9 rounded-4xl overflow-hidden border border-foreground/5 dark:border-white/5 shadow-2xl">
       <div class="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/60 z-10"></div>
       <img
         src={data.meta.coverImage}
@@ -175,12 +175,12 @@
 
   <!-- Prose Content -->
   <div class="article-content relative z-10 px-6 max-w-3xl mx-auto pb-32">
-    <div class="prose prose-invert 
-      prose-p:text-white/70 prose-p:leading-[1.8] prose-p:text-lg prose-p:font-sans prose-p:font-light 
-      prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-white prose-headings:mt-16 prose-headings:mb-8
-      prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-white/2 prose-blockquote:py-6 prose-blockquote:px-10 prose-blockquote:rounded-r-3xl prose-blockquote:not-italic prose-blockquote:text-white/80
+    <div class="prose dark:prose-invert 
+      prose-p:text-foreground/70 prose-p:leading-[1.8] prose-p:text-lg prose-p:font-sans prose-p:font-light 
+      prose-headings:font-serif prose-headings:tracking-tight prose-headings:text-foreground prose-headings:mt-16 prose-headings:mb-8
+      prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-foreground/[0.02] prose-blockquote:py-6 prose-blockquote:px-10 prose-blockquote:rounded-r-3xl prose-blockquote:not-italic prose-blockquote:text-foreground/80
       prose-a:text-primary prose-a:font-medium prose-a:underline-offset-8 prose-a:decoration-primary/30 hover:prose-a:decoration-primary transition-all
-      prose-img:rounded-4xl prose-img:border prose-img:border-white/5 prose-img:shadow-2xl
+      prose-img:rounded-4xl prose-img:border prose-img:border-foreground/5 dark:prose-img:border-white/5 prose-img:shadow-2xl
       prose-code:text-primary prose-code:bg-primary/10 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:font-mono prose-code:text-sm
       max-w-none">
       <PostContent />
@@ -188,13 +188,13 @@
 
     <!-- Tags Footer -->
     {#if categories}
-      <footer class="mt-24 pt-12 border-t border-white/5 flex flex-wrap gap-4">
-        <div class="flex items-center gap-3 mr-4 text-white/30">
+      <footer class="mt-24 pt-12 border-t border-foreground/5 dark:border-white/5 flex flex-wrap gap-4">
+        <div class="flex items-center gap-3 mr-4 text-foreground/35">
           <Tag class="w-4 h-4" />
           <span class="text-xs font-sans font-medium tracking-widest uppercase">Indexed Under:</span>
         </div>
         {#each categories as category}
-          <span class="text-xs font-sans font-medium tracking-wide text-white/50 border border-white/10 px-4 py-2 rounded-full hover:border-primary/40 hover:text-primary transition-all cursor-default">
+          <span class="text-xs font-sans font-medium tracking-wide text-foreground/60 border border-foreground/10 dark:border-white/10 px-4 py-2 rounded-full hover:border-primary/40 hover:text-primary transition-all cursor-default">
             {category}
           </span>
         {/each}
@@ -202,24 +202,24 @@
     {/if}
 
     <!-- Bottom Navigation (Prev/Next) -->
-    <nav class="mt-32 pt-20 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <nav class="mt-32 pt-20 border-t border-foreground/5 dark:border-white/5 grid grid-cols-1 md:grid-cols-2 gap-8">
       {#if data.prev}
-        <a href="/articles/{data.prev.slug}" class="flex flex-col gap-4 group p-8 rounded-3xl bg-white/2 border border-white/5 hover:border-primary/20 transition-all shadow-xl">
-          <span class="flex items-center gap-2 text-xs font-sans font-medium tracking-widest text-white/30 group-hover:text-primary transition-colors uppercase">
+        <a href="/articles/{data.prev.slug}" class="flex flex-col gap-4 group p-8 rounded-3xl glass-panel hover:border-primary/20 active:scale-[0.97] transition-all shadow-xl">
+          <span class="flex items-center gap-2 text-xs font-sans font-medium tracking-widest text-foreground/35 group-hover:text-primary transition-colors uppercase">
             <ArrowLeft class="w-3.5 h-3.5" /> Previous
           </span>
-          <h4 class="text-2xl font-sans font-bold text-white group-hover:text-primary transition-colors line-clamp-2">{data.prev.title}</h4>
+          <h4 class="text-2xl font-serif text-foreground group-hover:text-primary transition-colors line-clamp-2">{data.prev.title}</h4>
         </a>
       {:else}
         <div class="placeholder invisible"></div>
       {/if}
 
       {#if data.next}
-        <a href="/articles/{data.next.slug}" class="flex flex-col gap-4 group p-8 rounded-3xl bg-white/2 border border-white/5 hover:border-primary/20 transition-all text-right items-end shadow-xl">
-          <span class="flex items-center gap-2 text-xs font-sans font-medium tracking-widest text-white/30 group-hover:text-primary transition-colors uppercase">
+        <a href="/articles/{data.next.slug}" class="flex flex-col gap-4 group p-8 rounded-3xl glass-panel hover:border-primary/20 active:scale-[0.97] transition-all text-right items-end shadow-xl">
+          <span class="flex items-center gap-2 text-xs font-sans font-medium tracking-widest text-foreground/35 group-hover:text-primary transition-colors uppercase">
             Next <ArrowRight class="w-3.5 h-3.5" />
           </span>
-          <h4 class="text-2xl font-sans font-bold text-white group-hover:text-primary transition-colors line-clamp-2">{data.next.title}</h4>
+          <h4 class="text-2xl font-serif text-foreground group-hover:text-primary transition-colors line-clamp-2">{data.next.title}</h4>
         </a>
       {/if}
     </nav>

@@ -33,7 +33,7 @@
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
 
-    // 3D tilt effect (Proximity Law: physical depth creates visual grouping)
+    // 3D tilt effect
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     const rotateX = ((y - centerY) / centerY) * -8;
@@ -71,7 +71,7 @@
     ctx = gsap.context(() => {
       const cards = gsap.utils.toArray('.metric-card-wrapper');
       
-      // Clean, hardware-accelerated entrance animation: slides up and staggers in
+      // Hardware-accelerated entrance animation
       gsap.fromTo(cards,
         { y: 50, opacity: 0 },
         {
@@ -114,33 +114,29 @@
   </div>
 
   <div class="max-w-7xl mx-auto px-6 relative z-10">
-    <!-- Miller's Law: exactly 4 stats — within 7±2 sweet spot -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       
       {#each stats as stat, index (index)}
         <div 
-          class="metric-card-wrapper relative group rounded-xl bg-[#0A0D0B] border border-white/10 transition-all duration-500 hover:shadow-[15px_15px_0px_rgba(201,168,76,0.1)] hover:-translate-y-1 hover:-translate-x-1"
+          class="metric-card-wrapper relative group rounded-xl glass-panel transition-all duration-500 hover:shadow-[15px_15px_0px_rgba(212,176,85,0.08)] hover:-translate-y-1 hover:-translate-x-1"
           onmouseleave={handleMouseLeave}
           role="presentation"
         >
           <!-- Subtle Inner Atmosphere -->
           <div class="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-
-
           <div class="relative z-20 flex flex-col justify-between h-full min-h-[180px] p-8 md:p-10">
             <div class="flex items-center justify-between mb-12">
-              <span class="text-xs font-sans font-semibold tracking-widest text-white/60 transition-colors group-hover:text-white/70">0{index + 1}</span>
-              <div class="w-1.5 h-1.5 rounded-full bg-white/20 transition-all duration-500 group-hover:bg-white group-hover:shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+              <span class="text-xs font-sans font-semibold tracking-widest text-foreground/50 transition-colors group-hover:text-foreground/75 font-mono">0{index + 1}</span>
+              <div class="w-1.5 h-1.5 rounded-full bg-foreground/25 transition-all duration-500 group-hover:bg-accent group-hover:shadow-[0_0_8px_var(--color-accent)]"></div>
             </div>
             
-            <!-- Proximity Law: Number + suffix + label are one tight group -->
             <div class="mt-auto space-y-1">
               <div class="flex items-baseline gap-1">
-                <span class="stat-num-{index} text-6xl lg:text-7xl font-sans font-light text-white tracking-tighter tabular-nums leading-none">
+                <span class="stat-num-{index} text-6xl lg:text-7xl font-sans font-light text-foreground tracking-tighter tabular-nums leading-none">
                   {displayedValues[index]}
                 </span>
-                <span class="text-2xl lg:text-3xl font-light text-white/60">{stat.suffix}</span>
+                <span class="text-2xl lg:text-3xl font-light text-foreground/50">{stat.suffix}</span>
               </div>
               <div class="text-xs font-sans font-semibold uppercase tracking-widest text-primary/80 group-hover:text-primary transition-colors duration-500">
                 {stat.label}

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-06T20:36:00Z",
+  "title": "Design System: Norbert Br3tt Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Brushed Gold",
+        "canonical": "oklch(76% 0.14 85)",
+        "tonalRamp": [
+          "#b89230",
+          "#cbb040",
+          "#d4b055",
+          "#dfc275",
+          "#edd695",
+          "#f7ebb6",
+          "#fffcd8",
+          "#ffffe6"
+        ]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Warm Obsidian",
+        "canonical": "oklch(15% 0.01 70)",
+        "tonalRamp": [
+          "#080807",
+          "#100f0e",
+          "#181715",
+          "#201f1c",
+          "#2e2b27",
+          "#3c3933",
+          "#4a463f",
+          "#58534c"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Serif",
+        "purpose": "Hero headlines and section names."
+      },
+      "body": {
+        "displayName": "Modern Sans UI",
+        "purpose": "General body text and information reading."
+      }
+    },
+    "shadows": [
+      {
+        "name": "whisper-glow",
+        "value": "0 8px 32px 0 rgba(0, 0, 0, 0.4)",
+        "purpose": "Soft dark separation layer on cards."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Fast-initial responsive exit/transition easing."
+      },
+      {
+        "name": "ease-spring",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "purpose": "Tactile bouncing transition for interactive widgets."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Tactile pill-shaped action button with scale feedback.",
+      "html": "<button class=\"ds-btn-primary\">GET IN TOUCH</button>",
+      "css": ".ds-btn-primary { background: #d4b055; color: #181715; font-family: 'Geist', sans-serif; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 12px 28px; border-radius: 9999px; border: none; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background-color 200ms ease; cursor: pointer; } .ds-btn-primary:hover { background-color: #f4efe6; } .ds-btn-primary:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Glass Panel Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Premium glassmorphism background tile for features or posts.",
+      "html": "<div class=\"ds-card\"><h3>Creative Direction</h3><p>We craft interfaces that feel right and respect details.</p></div>",
+      "css": ".ds-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px); border-radius: 12px; padding: 24px; color: #f4efe6; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); } .ds-card h3 { font-family: 'Prata', serif; font-size: 1.5rem; margin-bottom: 8px; color: #d4b055; } .ds-card p { font-family: 'Geist', sans-serif; font-size: 0.875rem; color: rgba(244, 239, 230, 0.8); line-height: 1.5; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Obsidian Goldsmith",
+    "overview": "This system represents a high-agency developer and AI specialist portfolio. The visual atmosphere is one of creative technicality, merging highly structured monospaced layout elements (terminal, statistics) with the elegance of classical editorial layouts. It is characterized by generous whitespace, dynamic custom page transitions, and subtle spring-driven micro-interactions.",
+    "keyCharacteristics": [
+      "High-contrast luxurious pairing of warm obsidian and antique gold.",
+      "Fluid layout rhythm with a mixture of monospace metadata lines and large serif typography.",
+      "Consistent rounded geometries (buttons are always full-pills, interactive cards are rounded to 12px)."
+    ],
+    "rules": [
+      {
+        "name": "The Color Contrast Lock",
+        "body": "Any text or icon elements overlaid directly on a gold background MUST be rendered in near-black Warm Obsidian (#181715) to ensure readability and WCAG AA compliance.",
+        "section": "colors"
+      },
+      {
+        "name": "The Emphasis Lock",
+        "body": "When emphasizing a word within a headline, use italicized or bold styles of the same font family. Never inject a sans-serif word into a serif headline.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do respect the :active scale state (scale(0.97)) on all clickable elements to provide physical tactile feedback.",
+      "Do wrap code elements, command logs, and timestamps strictly in JetBrains Mono."
+    ],
+    "donts": [
+      "Don't use standard template layouts or symmetric grids.",
+      "Don't use neon purple or blue gradients as text highlights or button backdrops.",
+      "Don't use the Inter font for headings or visual display elements; use Prata and Geist instead."
+    ]
+  }
+}

@@ -192,7 +192,7 @@
         <span class="text-accent font-sans text-xs font-semibold tracking-widest uppercase">Developer Profile</span>
       </div>
       
-      <h1 class="text-[14vw] md:text-[10vw] lg:text-[9rem] leading-[0.85] font-sans font-bold tracking-tight mb-12 overflow-hidden drop-shadow-2xl">
+      <h1 class="text-[14vw] md:text-[10vw] lg:text-[9rem] leading-[0.85] font-serif tracking-tight mb-12 overflow-hidden drop-shadow-2xl">
         {#each nameChars as char, i}
           <span
             class="hero-char inline-block will-change-transform {char === ' ' ? 'w-[0.25em]' : char === '.' ? 'text-accent' : 'text-foreground'}"
@@ -281,11 +281,11 @@
             <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:border-accent transition-all duration-500 shadow-xl">
                <!-- SVG Icons for Purpose, Shield, Sparkles -->
                {#if val.icon === 'target'}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-background transition-colors"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-[#181715] transition-colors"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
                {:else if val.icon === 'shield-check'}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-background transition-colors"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-[#181715] transition-colors"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
                {:else if val.icon === 'sparkles'}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-background transition-colors"><path d="m12 3 1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent group-hover:text-[#181715] transition-colors"><path d="m12 3 1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                {/if}
             </div>
             <h3 class="text-xl font-sans font-semibold text-foreground mb-3 group-hover:text-accent transition-colors duration-300 tracking-tight">{val.title}</h3>
@@ -310,7 +310,7 @@
             <div class="h-px w-12 bg-accent/40"></div>
             <span class="text-xs font-sans font-bold text-accent/70 tracking-[0.25em] uppercase">Capabilities</span>
           </div>
-          <h2 class="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight leading-[0.9]">System <span class="text-accent">Specs</span></h2>
+          <h2 class="text-4xl md:text-6xl lg:text-7xl font-serif tracking-tight leading-[0.9]">System <span class="text-accent">Specs</span></h2>
         </div>
         <p class="text-foreground/50 text-xs font-mono tracking-widest max-w-xs md:text-right uppercase">
           [ MODULES LOADED: 4 / STACK ENGINE ACTIVE ]
@@ -327,7 +327,7 @@
             <div class="relative z-10 mb-8 flex items-start justify-between">
               <div class="flex items-center gap-5">
                 <!-- Rotating gold dynamic icon frame -->
-                <div class="w-12 h-12 bg-background/50 flex items-center justify-center rounded-2xl border border-border/40 text-accent group-hover:bg-accent group-hover:text-background transition-all duration-500 shadow-lg group-hover:rotate-[360deg]">
+                <div class="w-12 h-12 bg-background/50 flex items-center justify-center rounded-2xl border border-border/40 text-accent group-hover:bg-accent group-hover:text-[#181715] transition-all duration-500 shadow-lg group-hover:rotate-[360deg]">
                   {#if cat.icon === 'layout'}
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m9 21 0-12"/></svg>
                   {:else if cat.icon === 'server'}
@@ -389,7 +389,7 @@
           <span class="text-xs font-sans font-medium text-primary tracking-widest uppercase">Career</span>
           <div class="h-px w-12 bg-primary/40"></div>
         </div>
-        <h2 class="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight">Track <span class="text-primary">Record</span></h2>
+        <h2 class="text-4xl md:text-6xl lg:text-7xl font-serif tracking-tight">Track <span class="text-primary">Record</span></h2>
       </div>
       
       <div class="relative timeline-container max-w-4xl mx-auto">

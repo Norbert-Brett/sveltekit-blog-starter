@@ -44,7 +44,7 @@
       );
 
       if (isMobileDevice) {
-        // MOBILE HIGH-PERFORMANCE ANIMATIONS: simple fade & slide up, no 3D or parallax
+        // MOBILE HIGH-PERFORMANCE EXPERIENCE
         gsap.fromTo('.accordion-card',
           { opacity: 0, y: 30 },
           {
@@ -54,14 +54,13 @@
         );
       } else {
         // DESKTOP ADVANCED CINEMATIC EXPERIENCE
-        // Deep Parallax + Scale Zoom on images (Ken Burns reverse)
-        const images = gsap.utils.toArray('.parallax-img');
-        images.forEach((img) => {
-          gsap.fromTo(img,
-            { yPercent: -10, scale: 1.2 },
+        // Deep Parallax on image wrappers
+        const wraps = gsap.utils.toArray('.parallax-wrap');
+        wraps.forEach((wrap) => {
+          gsap.fromTo(wrap,
+            { yPercent: -8 },
             {
-              yPercent: 15,
-              scale: 1.0,
+              yPercent: 8,
               ease: 'none',
               scrollTrigger: {
                 trigger: sectionRef,
@@ -79,7 +78,7 @@
           { rotateX: -90, opacity: 0, y: -50 },
           {
             rotateX: 0, opacity: 1, y: 0, duration: 1.2, stagger: 0.15, ease: 'back.out(1.4)',
-            scrollTrigger: { trigger: sectionRef, start: 'top 70%', toggleActions: 'play reverse play reverse' }
+            scrollTrigger: { trigger: sectionRef, start: 'top 70%', once: true }
           }
         );
       }
@@ -107,7 +106,7 @@
         <span class="blog-label text-xs font-sans tracking-widest uppercase text-primary font-medium mb-4 flex items-center gap-3">
           <span class="w-8 h-px bg-primary/60"></span> Writing
         </span>
-        <h2 use:splitReveal={{ type: 'chars', delay: 0.2 }} class="blog-title text-5xl md:text-7xl lg:text-8xl font-sans font-bold tracking-tight leading-[0.9] text-white">
+        <h2 use:splitReveal={{ type: 'chars', delay: 0.2 }} class="blog-title text-5xl md:text-7xl lg:text-8xl font-serif tracking-tight leading-[0.9] text-foreground">
           Latest Insights
         </h2>
       </div>
@@ -115,19 +114,19 @@
       <a
         href="/articles"
         use:magnetic={{ strength: 0.5, textStrength: 0.2 }}
-        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:border-primary hover:shadow-[0_0_20px_rgba(201,168,76,0.4)] transition-all duration-300 interactive"
+        class="blog-action shrink-0 flex items-center justify-center w-20 h-20 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:border-primary hover:shadow-[0_0_20px_rgba(212,176,85,0.4)] active:scale-[0.97] transition-all duration-300 interactive"
       >
-        <span class="magnetic-text">All</span>
+        <span class="magnetic-text font-bold">All</span>
       </a>
     </div>
     
     {#if isMobile}
-      <!-- Mobile Native Scroll-Snap Horizontal Carousel (Highly fluid, touch-friendly swipe layout) -->
+      <!-- Mobile Native Scroll-Snap Horizontal Carousel -->
       <div class="w-full overflow-x-auto flex gap-4 snap-x snap-mandatory scrollbar-hide py-4 px-1 select-none">
         {#each posts.slice(0, 4) as post, index}
           <a
             href="/articles/{post.slug}/"
-            class="snap-start shrink-0 w-[85vw] sm:w-[60vw] rounded-3xl overflow-hidden border border-white/5 bg-white/2 flex flex-col h-[400px] relative group"
+            class="snap-start shrink-0 w-[85vw] sm:w-[60vw] rounded-3xl overflow-hidden glass-panel flex flex-col h-[400px] relative group"
           >
             <!-- Cover Image / Aspect Wrapper -->
             <div class="h-44 w-full overflow-hidden relative">
@@ -140,11 +139,11 @@
                 />
                 <div class="absolute inset-0 bg-linear-to-t from-black via-black/30 to-transparent"></div>
               {:else}
-                <div class="w-full h-full bg-primary/5 flex items-center justify-center border-b border-white/5">
-                  <span class="text-[9px] text-white/30 font-mono tracking-widest uppercase">IMAGE HOLDER</span>
+                <div class="w-full h-full bg-primary/5 flex items-center justify-center border-b border-foreground/10">
+                  <span class="text-[9px] text-foreground/30 font-mono tracking-widest uppercase">IMAGE HOLDER</span>
                 </div>
               {/if}
-              <span class="absolute top-4 left-4 px-3 py-1.5 bg-white/10 backdrop-blur-md text-[9px] font-sans font-semibold tracking-widest text-white uppercase rounded-full border border-white/10">
+              <span class="absolute top-4 left-4 px-3 py-1.5 bg-background/40 backdrop-blur-md text-[9px] font-sans font-semibold tracking-widest text-foreground uppercase rounded-full border border-foreground/10">
                 Article 0{ index + 1 }
               </span>
             </div>
@@ -155,18 +154,18 @@
                 <span class="text-[9px] font-sans font-bold tracking-widest uppercase text-primary">
                   { formatDate(post.date) }
                 </span>
-                <h3 class="text-xl font-sans font-bold tracking-tight text-white line-clamp-2 leading-tight">
+                <h3 class="text-xl font-serif tracking-tight text-foreground line-clamp-2 leading-tight">
                   { post.title }
                 </h3>
-                <p class="text-xs text-white/60 font-sans font-light leading-relaxed line-clamp-2">
+                <p class="text-xs text-foreground/70 font-sans font-light leading-relaxed line-clamp-2">
                   { post.excerpt || post.description }
                 </p>
               </div>
 
               <!-- Foot Details -->
-              <div class="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
-                <span class="text-[9px] font-sans font-medium tracking-widest text-white/40 uppercase">Est. 5 Min Read</span>
-                <span class="inline-flex items-center gap-1.5 text-[9px] font-sans font-bold tracking-widest uppercase text-primary">
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-foreground/10">
+                <span class="text-[9px] font-sans font-medium tracking-widest text-foreground/50 uppercase font-mono">5 Min Read</span>
+                <span class="inline-flex items-center gap-1.5 text-[9px] font-sans font-bold tracking-widest uppercase text-primary font-mono">
                   Read Article <ArrowRight class="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -185,33 +184,39 @@
           <a
             href="/articles/{post.slug}/"
             class="accordion-card relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex border bg-white/2 group/card
-              {activeIndex === index ? 'flex-[1_1_75%] md:flex-[1_1_70%] border-primary/40 shadow-[0_0_50px_rgba(41,151,255,0.15)]' : 'flex-[1_1_10%] md:flex-[1_1_10%] border-white/5 hover:border-white/20'}"
+              {activeIndex === index 
+                ? 'flex-[1_1_75%] md:flex-[1_1_70%] border-primary/45 shadow-[0_0_50px_rgba(212,176,85,0.12)]' 
+                : 'flex-[1_1_10%] md:flex-[1_1_10%] border-white/5 hover:border-white/20'}"
             onmouseenter={() => activeIndex = index}
           >
             <!-- Background Image & Overlays -->
-            <div class="absolute inset-0 w-full h-full bg-[#0A0D0B]">
+            <div class="absolute inset-0 w-full h-full bg-[#0A0D0B] overflow-hidden">
               {#if post.coverImage}
-                <img
-                  src={post.coverImage}
-                  alt={post.title}
-                  loading="lazy"
-                  class="parallax-img w-full h-[130%] md:h-[130%] object-cover transition-all duration-[1.5s] ease-out object-center origin-center
-                    {activeIndex === index ? 'scale-100 opacity-100 blur-[0px] animate-ken-burns' : 'scale-105 opacity-40 blur-[2px] grayscale-[0.8]'}"
-                />
-                <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-black/10 transition-opacity duration-700 {activeIndex === index ? 'opacity-100' : 'opacity-80 md:opacity-40'}"></div>
+                <!-- Parallax Wrapper (translated by GSAP) -->
+                <div class="parallax-wrap absolute inset-0 w-full h-[120%] -top-[10%]">
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-[opacity,filter] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] object-center
+                      {activeIndex === index ? 'opacity-100 blur-[0px]' : 'opacity-40 blur-[2.5px] grayscale-[0.8]'}"
+                  />
+                </div>
+                <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/35 to-black/10 transition-opacity duration-700 {activeIndex === index ? 'opacity-100' : 'opacity-80 md:opacity-40'}"></div>
               {:else}
                 <div class="w-full h-full bg-primary/5 backdrop-blur-3xl"></div>
               {/if}
             </div>
 
-            <!-- Von Restorff: First (default active) article has primary border glow -->
+            <!-- Inset glow overlay on default active element -->
             {#if index === 0 && activeIndex === 0}
-              <div class="absolute inset-0 rounded-3xl shadow-[inset_0_0_30px_rgba(41,151,255,0.05)] pointer-events-none z-10"></div>
+              <div class="absolute inset-0 rounded-3xl shadow-[inset_0_0_30px_rgba(212,176,85,0.05)] pointer-events-none z-10"></div>
             {/if}
 
-            <!-- Active Content Card -->
+            <!-- Active Content Card (Floating Frosted Glass Panel for High-Contrast Accessibility) -->
             <div 
-               class="absolute inset-0 p-6 md:p-12 flex flex-col justify-end transition-all duration-500 delay-100
+               class="absolute bottom-6 left-6 right-6 p-6 md:p-8 flex flex-col justify-end transition-all duration-500 delay-100
+                 rounded-2xl border border-white/10 bg-black/45 backdrop-blur-xl shadow-2xl z-20
                  {activeIndex === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 md:translate-y-0 pointer-events-none'}"
             >
               <!-- Story Header -->
@@ -219,30 +224,35 @@
                 <span class="px-3 py-1.5 bg-white/10 backdrop-blur-md text-[10px] font-sans font-semibold tracking-widest text-white uppercase rounded-full border border-white/10">
                   Article 0{ index + 1 }
                 </span>
-                <span class="text-[10px] font-sans font-bold tracking-widest uppercase text-primary">
+                {#if post.categories && post.categories.length > 0}
+                  <span class="text-[10px] font-sans font-bold tracking-widest uppercase text-primary">
+                    // { post.categories[0] }
+                  </span>
+                {/if}
+                <span class="text-[10px] font-mono text-white/50 tracking-wider">
                   { formatDate(post.date) }
                 </span>
               </div>
 
               <!-- Focus Title -->
-              <h3 class="text-3xl sm:text-4xl lg:text-5xl font-sans font-bold tracking-tight text-white leading-[1.05] mb-4 lg:whitespace-nowrap truncate max-w-full drop-shadow-2xl">
+              <h3 class="text-2xl sm:text-3xl lg:text-4xl font-serif tracking-tight text-white leading-[1.15] mb-4 truncate max-w-full drop-shadow-2xl">
                 { post.title }
               </h3>
               
-              <!-- Miller's Law: Chunking Information into digestible blocks -->
+              <!-- Content Description Block -->
               <div class="flex flex-col gap-6 overflow-hidden transition-all duration-700 {activeIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}">
                 <div class="space-y-4">
-                  <p class="text-sm md:text-base text-white/80 font-sans font-light leading-relaxed max-w-xl line-clamp-2 md:line-clamp-3">
+                  <p class="text-sm text-white/80 font-sans font-light leading-relaxed max-w-xl line-clamp-2 md:line-clamp-3">
                     { post.excerpt || post.description }
                   </p>
                   
                   <div class="flex items-center gap-6">
                     <div class="h-px w-12 bg-white/10"></div>
-                    <span class="text-[10px] font-sans font-medium tracking-widest text-white/40 uppercase">Est. 5 min read</span>
+                    <span class="text-[10px] font-sans font-medium tracking-widest text-white/40 uppercase font-mono">5 min read</span>
                   </div>
                 </div>
 
-                <div class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:shadow-[0_0_20px_rgba(201,168,76,0.4)] transition-all transform hover:scale-105 w-fit shadow-xl">
+                <div class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:shadow-[0_0_20px_rgba(212,176,85,0.4)] transition-all transform hover:scale-105 w-fit shadow-xl">
                   Read Article
                   <ArrowRight class="w-4 h-4" />
                 </div>
@@ -251,15 +261,29 @@
 
             <!-- Vertical Label (Visible when collapsed) -->
             <div 
-              class="absolute inset-0 hidden md:flex items-center justify-center p-4 transition-opacity duration-500
+              class="absolute inset-0 hidden md:flex flex-col items-center justify-between py-12 px-4 transition-opacity duration-500
                 {activeIndex === index ? 'opacity-0 pointer-events-none' : 'opacity-100'}"
             >
-              <h3 class="text-xl font-sans font-bold text-white/70 -rotate-90 origin-center whitespace-nowrap tracking-wide drop-shadow-md">
-                { post.title.length > 25 ? post.title.slice(0, 25) + '...' : post.title }
-              </h3>
-              <span class="absolute bottom-8 text-[10px] font-sans font-semibold tracking-widest text-primary">
+              <!-- Index number at top -->
+              <span class="text-2xl font-serif font-black text-foreground/20 tracking-tight select-none">
                 0{ index + 1 }
               </span>
+              
+              <!-- Clean vertical text alignment using CSS writing-mode -->
+              <h3 class="vertical-text text-sm font-sans font-bold text-foreground/60 tracking-widest uppercase whitespace-nowrap select-none">
+                { post.title.length > 25 ? post.title.slice(0, 25) + '...' : post.title }
+              </h3>
+
+              <!-- Category Code at bottom -->
+              {#if post.categories && post.categories.length > 0}
+                <span class="text-[8px] font-mono font-bold tracking-widest text-primary/75 uppercase select-none">
+                  // { post.categories[0] }
+                </span>
+              {:else}
+                <span class="text-[8px] font-mono font-bold tracking-widest text-primary/75 uppercase select-none">
+                  // ARTICLE
+                </span>
+              {/if}
             </div>
           </a>
         {/each}
@@ -270,7 +294,7 @@
     <div class="mt-16 md:hidden">
       <a
         href="/articles"
-        class="flex items-center justify-center gap-3 h-14 w-full rounded-2xl border border-white/10 bg-white/5 text-white font-sans font-medium text-xs tracking-widest uppercase hover:bg-white/10 transition-all"
+        class="flex items-center justify-center gap-3 h-14 w-full rounded-2xl border border-foreground/10 bg-foreground/5 text-foreground font-sans font-medium text-xs tracking-widest uppercase hover:bg-foreground/10 active:scale-[0.97] transition-all font-mono"
       >
         View All <span class="text-primary font-bold">Articles</span>
       </a>
@@ -279,5 +303,9 @@
 </section>
 
 <style>
-  /* GSAP handles GPU promotion during animation via force3D */
+  /* Clean vertical writing mode layout for sidebar labels */
+  .vertical-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
 </style>

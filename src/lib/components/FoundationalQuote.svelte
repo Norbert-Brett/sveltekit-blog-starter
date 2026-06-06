@@ -35,7 +35,7 @@
     mouseY = y;
     isHovered = true;
 
-    // 3D Tilt calculation (max 6 degrees tilt)
+    // 3D Tilt calculation (max 7 degrees tilt)
     const relativeX = (x / rect.width) - 0.5;
     const relativeY = (y / rect.height) - 0.5;
     tiltX = -relativeY * 7;
@@ -82,7 +82,7 @@
 
     ctx = gsap.context(() => {
       if (isMobile) {
-        // MOBILE HIGH-PERFORMANCE EXPERIENCE: simple fade & slide up for the whole card at once
+        // MOBILE HIGH-PERFORMANCE EXPERIENCE
         gsap.fromTo('.fq-card',
           { opacity: 0, y: 40 },
           {
@@ -108,16 +108,16 @@
         scrollTrigger: { trigger: sectionRef, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
       });
 
-      // Monogram rotates elegantly on scroll
+      // Star of Bethlehem spins elegantly on scroll
       gsap.to('.fq-monogram', {
-        rotation: 360,
+        rotation: 240,
         ease: 'none',
         scrollTrigger: { trigger: sectionRef, start: 'top bottom', end: 'bottom top', scrub: 1.8 }
       });
 
       // Architectural border corner brackets fade and snap in
-      gsap.fromTo('.fq-corner', { scale: 0.85, opacity: 0 }, {
-        scale: 1, opacity: 1, duration: 1.6, ease: 'power4.out', stagger: 0.08,
+      gsap.fromTo('.fq-corner', { scale: 0.8, opacity: 0 }, {
+        scale: 1, opacity: 1, duration: 1.4, ease: 'power4.out', stagger: 0.08,
         scrollTrigger: { trigger: sectionRef, start: 'top 85%' }
       });
 
@@ -140,9 +140,9 @@
         );
       }
 
-      // Custom light-ray divider line wipe
-      gsap.fromTo('.fq-divider', { scaleX: 0 }, {
-        scaleX: 1, duration: 1.4, delay: 0.3, ease: 'power4.inOut',
+      // Scriptural divider line wipe
+      gsap.fromTo('.fq-divider', { scaleX: 0, opacity: 0 }, {
+        scaleX: 1, opacity: 1, duration: 1.4, delay: 0.3, ease: 'power4.inOut',
         scrollTrigger: { trigger: sectionRef, start: 'top 80%' }
       });
 
@@ -169,11 +169,7 @@
   });
 </script>
 
-<svelte:head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
-</svelte:head>
+
 
 <!-- Interactive Spotlight Container -->
 <section
@@ -208,20 +204,26 @@
       <!-- Active Card Highlight Reflection -->
       <div class="absolute inset-0 pointer-events-none transition-opacity duration-500 card-reflection opacity-[var(--spotlight-opacity)]"></div>
 
-      <!-- Corner Brackets -->
-      <div class="fq-corner absolute top-5 left-5 w-5 h-5 border-t border-l border-accent/30 rounded-tl-sm pointer-events-none"></div>
-      <div class="fq-corner absolute top-5 right-5 w-5 h-5 border-t border-r border-accent/30 rounded-tr-sm pointer-events-none"></div>
-      <div class="fq-corner absolute bottom-5 left-5 w-5 h-5 border-b border-l border-accent/30 rounded-bl-sm pointer-events-none"></div>
-      <div class="fq-corner absolute bottom-5 right-5 w-5 h-5 border-b border-r border-accent/30 rounded-br-sm pointer-events-none"></div>
+      <!-- Slow Ambient Gold Leaf Shimmer Sweep -->
+      <div class="glass-shimmer absolute inset-0 pointer-events-none"></div>
+
+      <!-- Inset Gold Leaf Border (Classic Book Binding Frame) -->
+      <div class="absolute inset-3 border border-accent/15 rounded-2xl pointer-events-none">
+        <!-- Corner brackets positioned precisely on the inset gold frame -->
+        <div class="fq-corner absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-accent/40 rounded-tl-xs pointer-events-none"></div>
+        <div class="fq-corner absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-accent/40 rounded-tr-xs pointer-events-none"></div>
+        <div class="fq-corner absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-accent/40 rounded-bl-xs pointer-events-none"></div>
+        <div class="fq-corner absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-accent/40 rounded-br-xs pointer-events-none"></div>
+      </div>
 
       <!-- Card Content Inner Depth -->
       <div class="inner-depth relative z-10 flex flex-col items-center">
-        <!-- Monogram Eyebrow Spinner -->
-        <div class="fq-monogram mb-8 md:mb-10 w-10 h-10 flex items-center justify-center rounded-full border border-accent/20 bg-background/40 backdrop-blur-md">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-accent">
-            <path d="M12 2V22" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            <path d="M2 12H22" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 2"/>
+        <!-- Monogram Eyebrow Star of Bethlehem (Rotates on scroll, pulses with gold glow) -->
+        <div class="fq-monogram star-pulse mb-8 md:mb-10 w-10 h-10 flex items-center justify-center rounded-full border border-accent/20 bg-background/40 backdrop-blur-md">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-accent">
+            <!-- 8-pointed Star of Bethlehem symbol -->
+            <path d="M12 2V22M2 12H22M5.17 5.17L18.83 18.83M5.17 18.83L18.83 5.17" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="2.5" fill="currentColor"/>
           </svg>
         </div>
 
@@ -236,7 +238,7 @@
               {#each wordSegments as segment, segIdx}
                 {#each segment.text.split('') as char, charIdx}
                   <span
-                    class="fq-char inline-block transition-all duration-300 {segment.isHighlighted ? 'text-accent font-medium text-glow' : 'font-light text-foreground/80'}"
+                    class="fq-char inline-block transition-all duration-300 {segment.isHighlighted ? 'text-accent font-medium text-glow uppercase tracking-wider text-[0.9em] animate-glow-pulse' : 'font-light text-foreground/80'}"
                   >
                     {char === ' ' ? '\u00A0' : char}
                   </span>
@@ -246,8 +248,12 @@
           {/each}
         </h2>
 
-        <!-- Custom Gold-Ray Divider -->
-        <div class="fq-divider w-24 md:w-36 h-[2px] my-10 md:my-12 origin-center bg-gradient-to-r from-transparent via-accent/50 to-transparent"></div>
+        <!-- Scriptural Diamond Divider -->
+        <div class="fq-divider flex items-center gap-4 my-10 md:my-12 w-48 md:w-64">
+          <div class="h-px flex-1 bg-gradient-to-r from-transparent to-accent/40"></div>
+          <span class="text-accent text-[10px] tracking-widest select-none">✦</span>
+          <div class="h-px flex-1 bg-gradient-to-l from-transparent to-accent/40"></div>
+        </div>
 
         <!-- Elegant Sub-Quote -->
         {#if subQuote}
@@ -255,7 +261,7 @@
             {#each processedSubQuote as wordSegments, wordIdx (wordIdx)}
               <span class="inline-block">
                 {#each wordSegments as segment}
-                  <span class={segment.isHighlighted ? 'text-accent/90 font-medium not-italic text-glow-sub' : ''}>
+                  <span class={segment.isHighlighted ? 'text-accent/90 font-medium not-italic text-glow-sub uppercase tracking-wider text-[0.9em] animate-glow-pulse' : ''}>
                     {segment.text}
                   </span>
                 {/each}
@@ -282,7 +288,7 @@
 
 <style>
   .font-serif {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Prata', serif;
   }
 
   .fq-char {
@@ -309,21 +315,73 @@
 
   /* Glow effects for highlighted text */
   .text-glow {
-    text-shadow: 0 0 25px rgba(212, 176, 85, 0.25), 
-                 0 0 50px rgba(212, 176, 85, 0.15);
+    text-shadow: 0 0 20px rgba(212, 176, 85, 0.25), 
+                 0 0 40px rgba(212, 176, 85, 0.15);
   }
   
   :global(html[data-theme="light"]) .text-glow {
-    text-shadow: 0 0 25px rgba(184, 146, 48, 0.2), 
-                 0 0 50px rgba(184, 146, 48, 0.1);
+    text-shadow: 0 0 20px rgba(184, 146, 48, 0.2), 
+                 0 0 40px rgba(184, 146, 48, 0.1);
   }
   
   .text-glow-sub {
-    text-shadow: 0 0 15px rgba(212, 176, 85, 0.15);
+    text-shadow: 0 0 12px rgba(212, 176, 85, 0.15);
   }
 
   :global(html[data-theme="light"]) .text-glow-sub {
-    text-shadow: 0 0 15px rgba(184, 146, 48, 0.1);
+    text-shadow: 0 0 12px rgba(184, 146, 48, 0.1);
+  }
+
+  /* Breathing Star Glow */
+  @keyframes star-glow {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(212, 176, 85, 0.15), inset 0 0 5px rgba(212, 176, 85, 0.05);
+      border-color: rgba(212, 176, 85, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 18px rgba(212, 176, 85, 0.55), inset 0 0 8px rgba(212, 176, 85, 0.25);
+      border-color: rgba(212, 176, 85, 0.6);
+    }
+  }
+  .star-pulse {
+    animation: star-glow 4s ease-in-out infinite;
+  }
+
+  /* Breathing Text Glow Pulse */
+  @keyframes text-glow-pulse {
+    0%, 100% {
+      text-shadow: 0 0 20px rgba(212, 176, 85, 0.25), 
+                   0 0 40px rgba(212, 176, 85, 0.15);
+    }
+    50% {
+      text-shadow: 0 0 35px rgba(212, 176, 85, 0.65), 
+                   0 0 70px rgba(212, 176, 85, 0.4);
+    }
+  }
+  .animate-glow-pulse {
+    animation: text-glow-pulse 3s ease-in-out infinite;
+  }
+
+  /* Card Gold Leaf Shimmer Sweep */
+  .glass-shimmer {
+    background: linear-gradient(
+      125deg,
+      transparent 35%,
+      rgba(212, 176, 85, 0.03) 45%,
+      rgba(212, 176, 85, 0.08) 50%,
+      rgba(212, 176, 85, 0.03) 55%,
+      transparent 65%
+    );
+    background-size: 200% 100%;
+    animation: card-shimmer 8s infinite linear;
+  }
+  @keyframes card-shimmer {
+    0% {
+      background-position: 150% 0;
+    }
+    100% {
+      background-position: -50% 0;
+    }
   }
 
   /* Interactive Background Orbs */
