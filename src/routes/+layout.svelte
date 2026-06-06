@@ -158,6 +158,8 @@
 />
 
 <div class="layout min-h-screen flex flex-col transition-colors duration-1000 text-foreground" class:open={appState.isMenuOpen}>
+	<a href="#main" class="skip-to-content">Skip to content</a>
+
 	{#if showPreloader}
 		<Preloader onComplete={() => showPreloader = false} />
 	{/if}

@@ -80,7 +80,7 @@
         ? 'px-6 sm:px-8 py-3 rounded-full glass-panel border border-accent/20 shadow-[0_8px_32px_0_var(--glass-shadow)]'
         : 'px-5 sm:px-6 py-4 rounded-3xl bg-foreground/[0.03] backdrop-blur-xl border border-foreground/[0.08] shadow-[0_4px_24px_0_rgba(0,0,0,0.15)]'}">
         <!-- Morphing Logo Accordion -->
-        <a href="/" class="group flex items-center gap-1 interactive shrink-0 select-none">
+        <a href="/" class="group flex items-center gap-1 interactive shrink-0 select-none" aria-label="Norbert Br3tt - Home">
           <div class="logo-text text-xl font-black tracking-tight leading-none text-foreground flex items-center">
             <span class="text-foreground">N</span>
             <span class="logo-collapsible text-foreground" class:collapsed={isScrolled}>orbert</span>
@@ -99,6 +99,7 @@
                 href={item.route}
                 use:magnetic={{ strength: 0.6, textStrength: 0.2 }}
                 class="nav-link-magnetic relative flex items-center justify-center px-4 py-2 interactive group/navlink"
+                aria-current={appState.currentPage === item.route ? 'page' : undefined}
               >
                 <span
                   class="magnetic-text text-[13px] font-sans font-medium tracking-wide text-foreground/70 group-hover/navlink:text-foreground transition-colors duration-300 pointer-events-none whitespace-nowrap"
@@ -176,6 +177,7 @@
           class="nav-link group flex items-baseline gap-5 text-4xl sm:text-5xl font-sans font-bold tracking-tight hover:text-foreground/70 transition-all duration-500 ease-out interactive {appState.isMenuOpen ? 'animate-slide-in' : ''}"
           style="animation-delay: {0.05 + index * 0.05}s"
           onclick={closeMenu}
+          aria-current={appState.currentPage === item.route ? 'page' : undefined}
         >
           <span class="text-sm font-sans tracking-wide text-foreground/50 font-medium group-hover:text-foreground/30"
             >0{index + 1}</span
