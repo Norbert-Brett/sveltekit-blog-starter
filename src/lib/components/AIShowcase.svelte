@@ -86,26 +86,37 @@
         );
       } else {
         // DESKTOP ADVANCED CINEMATIC EXPERIENCE
-        // The Boot-Up: CRT-style terminal power on
-        const terminalTimeline = gsap.timeline({
-          scrollTrigger: { trigger: sectionRef, start: 'top 60%', toggleActions: 'play reverse play reverse' }
-        });
-        terminalTimeline
-          .fromTo('.ai-terminal',
-            { clipPath: 'inset(50% 50% 50% 50%)', opacity: 0, scale: 0.95 },
-            { clipPath: 'inset(50% 0% 50% 0%)', opacity: 1, scale: 1.02, duration: 0.4, ease: 'power2.inOut' }
-          )
-          .to('.ai-terminal',
-            { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.8, ease: 'power4.out' },
-            "+=0.1"
-          );
-
-        // 5. Stat cards stagger with clip-path reveal
-        gsap.fromTo('.ai-stat-card', 
-          { clipPath: 'inset(100% 0 0 0)', opacity: 0 }, 
+        // Smooth hardware-accelerated fade-in, translate, and scale-up entrance
+        gsap.fromTo('.ai-terminal',
+          { opacity: 0, scale: 0.96, y: 35 },
           {
-            clipPath: 'inset(0% 0 0 0)', opacity: 1, duration: 0.8, stagger: 0.08, ease: 'expo.out',
-            scrollTrigger: { trigger: sectionRef, start: 'top 50%' }
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: sectionRef,
+              start: 'top 65%',
+              once: true
+            }
+          }
+        );
+
+        // 5. Stat cards stagger reveal using smooth fade and translate
+        gsap.fromTo('.ai-stat-card', 
+          { opacity: 0, y: 40 }, 
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.0,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: sectionRef,
+              start: 'top 60%',
+              once: true
+            }
           }
         );
       }
@@ -133,8 +144,8 @@
             if (isMobileDevice) return; // Skip heavy glow pulses on mobile
             // Glow burst effect on counter completion
             gsap.fromTo(el, 
-              { scale: 1, textShadow: '0 0 0px rgba(41,151,255,0)' },
-              { scale: 1.08, textShadow: '0 0 20px rgba(41,151,255,0.5)', duration: 0.3, ease: 'power2.out', yoyo: true, repeat: 1 }
+              { textShadow: '0 0 0px rgba(41,151,255,0)' },
+              { textShadow: '0 0 25px rgba(41,151,255,0.7)', duration: 0.4, ease: 'power2.out', yoyo: true, repeat: 1 }
             );
           }
         });

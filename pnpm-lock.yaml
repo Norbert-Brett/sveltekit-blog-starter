@@ -113,7 +113,7 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
       vite:
-        specifier: npm:@voidzero-dev/vite-plus-core@^0.1.23
+        specifier: npm:@voidzero-dev/vite-plus-core@^0.1.16
         version: '@voidzero-dev/vite-plus-core@0.1.23(@types/node@22.19.19)(jiti@2.7.0)'
       vite-plus:
         specifier: 'catalog:'

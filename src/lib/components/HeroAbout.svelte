@@ -60,6 +60,12 @@
         return;
       }
 
+      // Initialize panel states for desktop
+      gsap.set('.about-panel-0', { opacity: 1, yPercent: 0 });
+      panels.forEach((_, i) => {
+        gsap.set(`.about-heading-${i}`, { clipPath: 'inset(0 100% 0 0)' });
+      });
+
       // DESKTOP MULTI-PANEL PINNED SCRUB TIMELINE
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -74,18 +80,33 @@
         }
       });
 
-      // 2. Animate each panel in and out (desktop only)
+      // 2. Animate panels and headings in the timeline
       panels.forEach((_, i) => {
+        if (i === 0) {
+          // Set first panel heading active
+          tl.set('.about-heading-0', { clipPath: 'inset(0 0% 0 0)' });
+        }
+
         if (i > 0) {
+          // Slide next panel in and reveal its heading
           tl.fromTo(`.about-panel-${i}`, 
             { yPercent: 100, opacity: 0 }, 
             { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power2.inOut' }
           );
+          tl.to(`.about-heading-${i}`, 
+            { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.out' },
+            '<'
+          );
         }
         if (i < panels.length - 1) {
+          // Slide current panel out and hide its heading
           tl.to(`.about-panel-${i}`, 
             { yPercent: -50, opacity: 0, duration: 0.6, ease: 'power2.inOut' }, 
             '+=0.3'
+          );
+          tl.to(`.about-heading-${i}`,
+            { clipPath: 'inset(0 100% 0 0)', duration: 0.4, ease: 'power2.inOut' },
+            '<'
           );
         }
       });
@@ -108,13 +129,9 @@
         });
       }
 
-      // 5. Panel headings — clip-path mask reveal
-      panels.forEach((_, i) => {
-        gsap.set(`.about-heading-${i}`, { clipPath: 'inset(0 100% 0 0)' });
-      });
-      // First panel heading reveals immediately
+      // First panel heading reveals immediately when entering viewport
       gsap.to('.about-heading-0', { clipPath: 'inset(0 0% 0 0)', duration: 1, ease: 'expo.out', delay: 0.3,
-        scrollTrigger: { trigger: sectionRef, start: 'top 70%' }
+        scrollTrigger: { trigger: sectionRef, start: 'top 70%', once: true }
       });
 
       // The Impact: Container catches the momentum
@@ -123,7 +140,7 @@
         { 
           scale: 1, opacity: 1, 
           duration: 1.5, ease: 'power4.out',
-          scrollTrigger: { trigger: sectionRef, start: 'top 80%' }
+          scrollTrigger: { trigger: sectionRef, start: 'top 80%', once: true }
         }
       );
     }, sectionRef);
@@ -131,15 +148,6 @@
     return () => {
       if (ctx) ctx.revert();
     };
-  });
-
-  // Trigger heading reveal when panel changes (desktop only)
-  $effect(() => {
-    if (!browser || !sectionRef || isMobile) return;
-    const heading = sectionRef.querySelector(`.about-heading-${activePanel}`);
-    if (heading) {
-      gsap.to(heading, { clipPath: 'inset(0 0% 0 0)', duration: 0.8, ease: 'expo.out' });
-    }
   });
 
   onDestroy(() => {
@@ -206,8 +214,7 @@
         <div class="relative h-[50vh] flex items-center">
           {#each panels as panel, i}
             <div
-              class="about-panel-{i} absolute inset-0 flex flex-col justify-center"
-              style="opacity: {i === 0 ? 1 : 0}"
+              class="about-panel-{i} absolute inset-0 flex flex-col justify-center opacity-0"
             >
               <div class="flex items-center gap-4 mb-6">
                 <span class="text-[10px] md:text-xs font-sans tracking-widest uppercase text-primary font-bold">{ panel.label }</span>

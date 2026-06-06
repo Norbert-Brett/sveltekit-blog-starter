@@ -68,70 +68,26 @@
   onMount(() => {
     if (!browser || !statsRef) return;
 
-    const isMobileDevice = window.innerWidth < 768 || matchMedia('(pointer: coarse)').matches;
-
     ctx = gsap.context(() => {
       const cards = gsap.utils.toArray('.metric-card-wrapper');
       
-      if (isMobileDevice) {
-        // Snappy lightweight mobile animation: plays instantly on entry
-        gsap.fromTo(cards,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: statsRef,
-              start: 'top 95%',
-              once: true,
-              onEnter: startCounters
-            }
-          }
-        );
-        return;
-      }
-
-      // Premium scrub-linked timeline for interactive, responsive in & out animations on desktop
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: statsRef,
-          start: 'top 95%',
-          end: 'bottom 15%',
-          scrub: 1.2,
-          onEnter: startCounters
-        }
-      });
-
-      // 1. Entrance Animation: Slide up, scale up, fade in, and stand up with 3D tilt
-      tl.fromTo(cards,
-        { y: 120, scale: 0.8, opacity: 0, rotationX: 25 },
-        { 
-          y: 0, 
-          scale: 1, 
-          opacity: 1, 
-          rotationX: 0,
-          duration: 1.5,
+      // Clean, hardware-accelerated entrance animation: slides up and staggers in
+      gsap.fromTo(cards,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.0,
           stagger: 0.15,
-          ease: 'power3.out'
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: statsRef,
+            start: 'top 85%',
+            once: true,
+            onEnter: startCounters
+          }
         }
       );
-
-      // 2. Active Viewport Hold
-      tl.to({}, { duration: 2.0 });
-
-      // 3. Exit Animation: Slide up, scale down, fade out, and tilt forward
-      tl.to(cards, {
-        y: -100,
-        scale: 0.85,
-        opacity: 0,
-        rotationX: -20,
-        duration: 1.2,
-        stagger: 0.1,
-        ease: 'power3.in'
-      });
     }, statsRef);
 
     return () => {
