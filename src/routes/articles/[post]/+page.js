@@ -17,6 +17,7 @@ export const load = async ({ params }) => {
       next,
     };
   } catch (err) {
-    error(404, err);
+    console.error("Post page load error:", err);
+    error(404, "Post not found");
   }
 };
