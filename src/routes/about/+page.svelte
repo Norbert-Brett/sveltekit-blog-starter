@@ -192,7 +192,7 @@
         <span class="text-accent font-sans text-xs font-semibold tracking-widest uppercase">Developer Profile</span>
       </div>
       
-      <h1 class="text-[14vw] md:text-[10vw] lg:text-[9rem] leading-[0.85] font-serif tracking-tight mb-12 overflow-hidden drop-shadow-2xl">
+      <h1 class="text-[14vw] md:text-[10vw] lg:text-[9rem] leading-[0.95] font-serif tracking-tight mb-12 overflow-hidden py-[0.1em] px-[0.05em] -my-[0.1em] -mx-[0.05em] drop-shadow-2xl">
         {#each nameChars as char, i}
           <span
             class="hero-char inline-block will-change-transform {char === ' ' ? 'w-[0.25em]' : char === '.' ? 'text-accent' : 'text-foreground'}"

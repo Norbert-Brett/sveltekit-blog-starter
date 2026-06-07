@@ -63,7 +63,7 @@
       // Initialize panel states for desktop
       gsap.set('.about-panel-0', { opacity: 1, yPercent: 0 });
       panels.forEach((_, i) => {
-        gsap.set(`.about-heading-${i}`, { clipPath: 'inset(0 100% 0 0)' });
+        gsap.set(`.about-heading-${i}`, { clipPath: 'inset(-10% 100% -10% 0)' });
       });
 
       // DESKTOP MULTI-PANEL PINNED SCRUB TIMELINE
@@ -84,7 +84,7 @@
       panels.forEach((_, i) => {
         if (i === 0) {
           // Set first panel heading active
-          tl.set('.about-heading-0', { clipPath: 'inset(0 0% 0 0)' });
+          tl.set('.about-heading-0', { clipPath: 'inset(-10% 0% -10% 0)' });
         }
 
         if (i > 0) {
@@ -94,7 +94,7 @@
             { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power2.inOut' }
           );
           tl.to(`.about-heading-${i}`, 
-            { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.out' },
+            { clipPath: 'inset(-10% 0% -10% 0)', duration: 0.6, ease: 'power2.out' },
             '<'
           );
         }
@@ -105,7 +105,7 @@
             '+=0.3'
           );
           tl.to(`.about-heading-${i}`,
-            { clipPath: 'inset(0 100% 0 0)', duration: 0.4, ease: 'power2.inOut' },
+            { clipPath: 'inset(-10% 100% -10% 0)', duration: 0.4, ease: 'power2.inOut' },
             '<'
           );
         }
@@ -130,7 +130,7 @@
       }
 
       // First panel heading reveals immediately when entering viewport
-      gsap.to('.about-heading-0', { clipPath: 'inset(0 0% 0 0)', duration: 1, ease: 'expo.out', delay: 0.3,
+      gsap.to('.about-heading-0', { clipPath: 'inset(-10% 0% -10% 0)', duration: 1, ease: 'expo.out', delay: 0.3,
         scrollTrigger: { trigger: sectionRef, start: 'top 70%', once: true }
       });
 
@@ -168,7 +168,7 @@
     <div class="relative z-10 px-6 max-w-5xl mx-auto flex flex-col gap-14">
       <!-- Floating years counter (static on mobile) -->
       <div class="flex items-end gap-3 pb-6 border-b border-foreground/10">
-        <span bind:this={counterRef} class="text-7xl font-sans font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-primary via-primary/80 to-primary/40 leading-none drop-shadow-lg font-mono">0</span>
+        <span bind:this={counterRef} class="text-7xl font-sans font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-primary via-primary/80 to-primary/40 leading-none drop-shadow-lg">0</span>
         <span class="text-[10px] font-sans font-semibold tracking-widest uppercase text-foreground/50 pb-2 border-l border-foreground/10 pl-3">Years<br/>Exp.</span>
       </div>
 
@@ -177,10 +177,10 @@
         {#each panels as panel, i}
           <div class="flex flex-col">
             <div class="flex items-center gap-4 mb-4">
-              <span class="text-[10px] md:text-xs font-sans tracking-widest uppercase text-primary font-bold font-mono">{ panel.label }</span>
+              <span class="text-[10px] md:text-xs font-sans tracking-widest uppercase text-primary font-bold">{ panel.label }</span>
               <div class="w-12 h-px bg-linear-to-r from-primary/50 to-transparent"></div>
             </div>
-            <h2 class="text-3xl font-serif tracking-tight leading-[0.95] text-foreground mb-4">
+            <h2 class="text-3xl font-serif tracking-tight leading-[1.05] text-foreground mb-4 py-1">
               { panel.title }
             </h2>
             <p class="text-sm font-sans font-light text-foreground/75 leading-relaxed">
@@ -206,7 +206,7 @@
       <div class="max-w-5xl w-full relative">
         <!-- Floating years counter -->
         <div class="absolute -top-20 right-0 md:right-12 flex items-end gap-3 z-30">
-          <span bind:this={counterRef} class="text-7xl md:text-9xl font-sans font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-primary via-primary/80 to-primary/40 leading-none drop-shadow-lg font-mono">0</span>
+          <span bind:this={counterRef} class="text-7xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-primary via-primary/80 to-primary/40 leading-none drop-shadow-lg font-mono">0</span>
           <span class="text-[10px] md:text-xs font-sans font-semibold tracking-widest uppercase text-foreground/50 pb-3 md:pb-4 border-l border-foreground/10 pl-3">Years<br/>Exp.</span>
         </div>
 
@@ -217,11 +217,11 @@
               class="about-panel-{i} absolute inset-0 flex flex-col justify-center opacity-0"
             >
               <div class="flex items-center gap-4 mb-6">
-                <span class="text-[10px] md:text-xs font-sans tracking-widest uppercase text-primary font-bold font-mono">{ panel.label }</span>
+                <span class="text-[10px] md:text-xs font-sans tracking-widest uppercase text-primary font-bold">{ panel.label }</span>
                 <div class="w-16 h-px bg-linear-to-r from-primary/50 to-transparent"></div>
               </div>
               <!-- Heading with clip-path mask reveal -->
-              <h2 class="about-heading-{i} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif tracking-tight leading-[0.9] text-foreground mb-8 drop-shadow-2xl text-balance gpu-accelerated">
+              <h2 class="about-heading-{i} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif tracking-tight leading-[0.95] text-foreground mb-8 py-2 drop-shadow-2xl text-balance gpu-accelerated">
                 { panel.title }
               </h2>
               <p class="text-base sm:text-lg md:text-xl font-sans font-light text-foreground/75 max-w-2xl leading-relaxed tracking-wide">
