@@ -12,6 +12,7 @@ export const load = async ({ url }) => {
       path: url.pathname,
     };
   } catch (err) {
-    error(500, err);
+    console.error("Layout load error:", err);
+    error(500, "Internal Server Error");
   }
 };
