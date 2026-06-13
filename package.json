@@ -6,8 +6,8 @@
     "dev": "vp dev",
     "build": "vp build",
     "preview": "vp preview",
-    "lint": "eslint --ignore-path .gitignore .",
-    "format": "eslint --ignore-path .gitignore --fix .",
+    "lint": "eslint .",
+    "format": "eslint --fix .",
     "prepare": "vp config"
   },
   "dependencies": {

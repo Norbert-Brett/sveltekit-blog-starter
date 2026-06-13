@@ -218,8 +218,8 @@
 
       <!-- Card Content Inner Depth -->
       <div class="inner-depth relative z-10 flex flex-col items-center">
-        <!-- Monogram Eyebrow Star of Bethlehem (Rotates on scroll, pulses with gold glow) -->
-        <div class="fq-monogram star-pulse mb-8 md:mb-10 w-10 h-10 flex items-center justify-center rounded-full border border-accent/20 bg-background/40 backdrop-blur-md">
+        <!-- Monogram Eyebrow Star of Bethlehem (Rotates on scroll, pulses on hover via JS/opacity) -->
+        <div class="fq-monogram mb-8 md:mb-10 w-10 h-10 flex items-center justify-center rounded-full border border-accent/20 bg-background/40 backdrop-blur-md transition-shadow duration-500 hover:shadow-[0_0_15px_rgba(212,176,85,0.4)]">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-accent">
             <!-- 8-pointed Star of Bethlehem symbol -->
             <path d="M12 2V22M2 12H22M5.17 5.17L18.83 18.83M5.17 18.83L18.83 5.17" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -238,7 +238,7 @@
               {#each wordSegments as segment, segIdx}
                 {#each segment.text.split('') as char, charIdx}
                   <span
-                    class="fq-char inline-block transition-all duration-300 {segment.isHighlighted ? 'text-accent font-medium text-glow uppercase tracking-wider text-[0.9em] animate-glow-pulse' : 'font-light text-foreground/80'}"
+                    class="fq-char inline-block transition-all duration-300 {segment.isHighlighted ? 'text-accent font-medium text-glow uppercase tracking-wider text-[0.9em] hover:text-shadow-[0_0_35px_rgba(212,176,85,0.65)]' : 'font-light text-foreground/80'}"
                   >
                     {char === ' ' ? '\u00A0' : char}
                   </span>
@@ -261,7 +261,7 @@
             {#each processedSubQuote as wordSegments, wordIdx (wordIdx)}
               <span class="inline-block">
                 {#each wordSegments as segment}
-                  <span class={segment.isHighlighted ? 'text-accent/90 font-medium not-italic text-glow-sub uppercase tracking-wider text-[0.9em] animate-glow-pulse' : ''}>
+                  <span class={segment.isHighlighted ? 'text-accent/90 font-medium not-italic text-glow-sub uppercase tracking-wider text-[0.9em] hover:text-shadow-[0_0_12px_rgba(212,176,85,0.4)]' : ''}>
                     {segment.text}
                   </span>
                 {/each}
@@ -287,10 +287,6 @@
 </section>
 
 <style>
-  .font-serif {
-    font-family: 'Prata', serif;
-  }
-
   .fq-char {
     display: inline-block;
   }
@@ -332,37 +328,18 @@
     text-shadow: 0 0 12px rgba(184, 146, 48, 0.1);
   }
 
-  /* Breathing Star Glow */
-  @keyframes star-glow {
-    0%, 100% {
-      box-shadow: 0 0 5px rgba(212, 176, 85, 0.15), inset 0 0 5px rgba(212, 176, 85, 0.05);
-      border-color: rgba(212, 176, 85, 0.2);
-    }
-    50% {
-      box-shadow: 0 0 18px rgba(212, 176, 85, 0.55), inset 0 0 8px rgba(212, 176, 85, 0.25);
-      border-color: rgba(212, 176, 85, 0.6);
-    }
-  }
-  .star-pulse {
-    animation: star-glow 4s ease-in-out infinite;
+  /* Hover state for highlighting text - replaced continuous pulse */
+  .hover\:text-shadow-\[0_0_35px_rgba\(212\,176\,85\,0\.65\)\]:hover {
+    text-shadow: 0 0 35px rgba(212, 176, 85, 0.65), 
+                 0 0 70px rgba(212, 176, 85, 0.4);
   }
 
-  /* Breathing Text Glow Pulse */
-  @keyframes text-glow-pulse {
-    0%, 100% {
-      text-shadow: 0 0 20px rgba(212, 176, 85, 0.25), 
-                   0 0 40px rgba(212, 176, 85, 0.15);
-    }
-    50% {
-      text-shadow: 0 0 35px rgba(212, 176, 85, 0.65), 
-                   0 0 70px rgba(212, 176, 85, 0.4);
-    }
-  }
-  .animate-glow-pulse {
-    animation: text-glow-pulse 3s ease-in-out infinite;
+  .hover\:text-shadow-\[0_0_12px_rgba\(212\,176\,85\,0\.4\)\]:hover {
+    text-shadow: 0 0 12px rgba(212, 176, 85, 0.4),
+                 0 0 24px rgba(212, 176, 85, 0.2);
   }
 
-  /* Card Gold Leaf Shimmer Sweep */
+  /* Card Gold Leaf Base (Shimmer sweep removed per interaction rules) */
   .glass-shimmer {
     background: linear-gradient(
       125deg,
@@ -373,15 +350,6 @@
       transparent 65%
     );
     background-size: 200% 100%;
-    animation: card-shimmer 8s infinite linear;
-  }
-  @keyframes card-shimmer {
-    0% {
-      background-position: 150% 0;
-    }
-    100% {
-      background-position: -50% 0;
-    }
   }
 
   /* Interactive Background Orbs */

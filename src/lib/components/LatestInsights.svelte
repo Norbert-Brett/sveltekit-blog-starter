@@ -53,14 +53,14 @@
           }
         );
       } else {
-        // DESKTOP ADVANCED CINEMATIC EXPERIENCE
+        // DESKTOP HORIZONTAL SCROLL EXPERIENCE
         // Deep Parallax on image wrappers
         const wraps = gsap.utils.toArray('.parallax-wrap');
         wraps.forEach((wrap) => {
           gsap.fromTo(wrap,
-            { yPercent: -8 },
+            { xPercent: -10 },
             {
-              yPercent: 8,
+              xPercent: 10,
               ease: 'none',
               scrollTrigger: {
                 trigger: sectionRef,
@@ -72,15 +72,37 @@
           );
         });
 
-        // The Cascade: 3D unfold sequence
-        gsap.set('.accordion-card', { transformPerspective: 1500, transformOrigin: 'top center' });
-        gsap.fromTo('.accordion-card',
-          { rotateX: -90, opacity: 0, y: -50 },
-          {
-            rotateX: 0, opacity: 1, y: 0, duration: 1.2, stagger: 0.15, ease: 'back.out(1.4)',
-            scrollTrigger: { trigger: sectionRef, start: 'top 70%', once: true }
-          }
-        );
+        // Horizontal scroll sequence
+        const container = sectionRef.querySelector('.horizontal-scroll-container');
+        if (container) {
+          gsap.to(container, {
+            x: () => {
+              const parent = container.parentElement;
+              return -(container.scrollWidth - parent.offsetWidth);
+            },
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef,
+              start: 'top top',
+              end: () => {
+                const parent = container.parentElement;
+                return `+=${container.scrollWidth - parent.offsetWidth}`;
+              },
+              pin: true,
+              scrub: 1.2,
+              invalidateOnRefresh: true,
+            }
+          });
+          
+          // Animate cards on enter
+          gsap.fromTo('.horizontal-item',
+            { opacity: 0, scale: 0.95 },
+            {
+              opacity: 1, scale: 1, duration: 1.2, stagger: 0.15, ease: 'power4.out',
+              scrollTrigger: { trigger: sectionRef, start: 'top 70%', once: true }
+            }
+          );
+        }
       }
     }, sectionRef);
 
@@ -98,10 +120,10 @@
   };
 </script>
 
-<section bind:this={sectionRef} class="relative py-32 md:py-48 px-6 md:px-12 lg:px-24 overflow-hidden bg-background">
-  <div class="max-w-6xl mx-auto">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-20">
+<section bind:this={sectionRef} class="relative py-32 md:py-0 md:h-screen md:flex md:flex-col md:justify-center overflow-hidden bg-background">
+  <!-- Header -->
+  <div class="w-full max-w-6xl mx-auto px-6 md:px-12 lg:px-24 mb-12 md:mb-16 shrink-0">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
       <div>
         <span class="blog-label text-xs font-sans tracking-widest uppercase text-primary font-medium mb-4 flex items-center gap-3">
           <span class="w-8 h-px bg-primary/60"></span> Writing
@@ -119,9 +141,11 @@
         <span class="magnetic-text font-bold">All</span>
       </a>
     </div>
-    
-    {#if isMobile}
-      <!-- Mobile Native Scroll-Snap Horizontal Carousel -->
+  </div>
+  
+  {#if isMobile}
+    <!-- Mobile Native Scroll-Snap Horizontal Carousel -->
+    <div class="w-full max-w-6xl mx-auto px-6 md:px-12 lg:px-24">
       <div class="w-full overflow-x-auto flex gap-4 snap-x snap-mandatory scrollbar-hide py-4 px-1 select-none">
         {#each posts.slice(0, 4) as post, index}
           <a
@@ -173,132 +197,80 @@
           </a>
         {/each}
       </div>
-    {:else}
-      <!-- Desktop Accordion Layout -->
-      <div 
-        class="w-full h-[600px] md:h-[700px] flex flex-col md:flex-row gap-3 md:gap-4 group/accordion" 
-        onmouseleave={() => activeIndex = 0}
-        role="presentation"
-      >
+    </div>
+  {:else}
+    <!-- Desktop Horizontal Scroll Layout -->
+    <div class="hidden md:block w-full overflow-hidden relative" style="height: 60vh;">
+      <div class="horizontal-scroll-container flex h-full items-center gap-8 md:gap-12 w-max px-6 md:px-12 lg:px-24 min-[1200px]:pl-[calc((100vw-72rem)/2+6rem)] min-[1200px]:pr-[calc((100vw-72rem)/2+6rem)]">
         {#each posts.slice(0, 4) as post, index}
           <a
             href="/articles/{post.slug}/"
-            class="accordion-card relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex border bg-white/2 group/card
-              {activeIndex === index 
-                ? 'flex-[1_1_75%] md:flex-[1_1_70%] border-primary/45 shadow-[0_0_50px_rgba(212,176,85,0.12)]' 
-                : 'flex-[1_1_10%] md:flex-[1_1_10%] border-white/5 hover:border-white/20'}"
-            onmouseenter={() => activeIndex = index}
+            class="horizontal-item relative w-[60vw] max-w-[800px] h-[85%] rounded-[2.5rem] overflow-hidden glass-panel shrink-0 group/card border border-white/5 hover:border-primary/45 transition-colors duration-500 hover:shadow-[0_0_50px_rgba(212,176,85,0.12)] flex flex-col justify-end"
           >
             <!-- Background Image & Overlays -->
             <div class="absolute inset-0 w-full h-full bg-[#0A0D0B] overflow-hidden">
               {#if post.coverImage}
-                <!-- Parallax Wrapper (translated by GSAP) -->
-                <div class="parallax-wrap absolute inset-0 w-full h-[120%] -top-[10%]">
+                <div class="absolute inset-0 w-full h-[120%] -top-[10%] parallax-wrap">
                   <img
                     src={post.coverImage}
                     alt={post.title}
                     loading="lazy"
-                    class="w-full h-full object-cover transition-[opacity,filter] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] object-center
-                      {activeIndex === index ? 'opacity-100 blur-[0px]' : 'opacity-40 blur-[2.5px] grayscale-[0.8]'}"
+                    class="w-full h-full object-cover transition-[transform,filter] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-105 group-hover/card:blur-0 blur-[1px] grayscale-[0.4] group-hover/card:grayscale-0"
                   />
                 </div>
-                <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/35 to-black/10 transition-opacity duration-700 {activeIndex === index ? 'opacity-100' : 'opacity-80 md:opacity-40'}"></div>
+                <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-700"></div>
               {:else}
                 <div class="w-full h-full bg-primary/5 backdrop-blur-3xl"></div>
               {/if}
             </div>
 
-            <!-- Inset glow overlay on default active element -->
-            {#if index === 0 && activeIndex === 0}
-              <div class="absolute inset-0 rounded-3xl shadow-[inset_0_0_30px_rgba(212,176,85,0.05)] pointer-events-none z-10"></div>
-            {/if}
-
-            <!-- Active Content Card (Floating Frosted Glass Panel for High-Contrast Accessibility) -->
-            <div 
-               class="absolute bottom-6 left-6 right-6 p-6 md:p-8 flex flex-col justify-end transition-all duration-500 delay-100
-                 rounded-2xl border border-white/10 bg-black/45 backdrop-blur-xl shadow-2xl z-20
-                 {activeIndex === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 md:translate-y-0 pointer-events-none'}"
-            >
-              <!-- Story Header -->
-              <div class="flex flex-wrap items-center gap-4 mb-4">
-                <span class="px-3 py-1.5 bg-white/10 backdrop-blur-md text-[10px] font-sans font-semibold tracking-widest text-white uppercase rounded-full border border-white/10">
+            <!-- Content Panel -->
+            <div class="relative p-8 md:p-12 z-20 flex flex-col justify-end pointer-events-none">
+              <div class="flex items-center gap-4 mb-6">
+                <span class="px-4 py-2 bg-white/10 backdrop-blur-md text-xs font-sans font-semibold tracking-widest text-white uppercase rounded-full border border-white/10">
                   Article 0{ index + 1 }
                 </span>
                 {#if post.categories && post.categories.length > 0}
-                  <span class="text-[10px] font-sans font-bold tracking-widest uppercase text-primary">
+                  <span class="text-xs font-sans font-bold tracking-widest uppercase text-primary">
                     // { post.categories[0] }
                   </span>
                 {/if}
-                <span class="text-[10px] font-mono text-white/50 tracking-wider">
+                <span class="text-xs font-mono text-white/50 tracking-wider">
                   { formatDate(post.date) }
                 </span>
               </div>
 
-              <!-- Focus Title -->
-              <h3 class="text-2xl sm:text-3xl lg:text-4xl font-serif tracking-tight text-white leading-[1.15] mb-4 truncate max-w-full drop-shadow-2xl">
+              <h3 class="text-3xl lg:text-5xl font-serif tracking-tight text-white leading-[1.1] mb-6 drop-shadow-2xl max-w-2xl">
                 { post.title }
               </h3>
-              
-              <!-- Content Description Block -->
-              <div class="flex flex-col gap-6 overflow-hidden transition-all duration-700 {activeIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}">
-                <div class="space-y-4">
-                  <p class="text-sm text-white/80 font-sans font-light leading-relaxed max-w-xl line-clamp-2 md:line-clamp-3">
-                    { post.excerpt || post.description }
-                  </p>
-                  
-                  <div class="flex items-center gap-6">
-                    <div class="h-px w-12 bg-white/10"></div>
-                    <span class="text-[10px] font-sans font-medium tracking-widest text-white/40 uppercase font-mono">5 min read</span>
-                  </div>
-                </div>
 
-                <div class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full border border-primary text-primary text-xs font-sans font-bold tracking-widest uppercase hover:bg-primary hover:text-[#0d0c0c] hover:shadow-[0_0_20px_rgba(212,176,85,0.4)] transition-all transform hover:scale-105 w-fit shadow-xl">
+              <p class="text-base text-white/80 font-sans font-light leading-relaxed max-w-2xl line-clamp-2 mb-8">
+                { post.excerpt || post.description }
+              </p>
+
+              <div class="flex items-center gap-6">
+                <div class="inline-flex pointer-events-auto items-center gap-3 px-8 py-4 rounded-full border border-primary text-primary text-sm font-sans font-bold tracking-widest uppercase group-hover/card:bg-primary group-hover/card:text-[#0d0c0c] transition-all transform w-fit shadow-xl">
                   Read Article
                   <ArrowRight class="w-4 h-4" />
                 </div>
+                <div class="h-px w-12 bg-white/10"></div>
+                <span class="text-xs font-sans font-medium tracking-widest text-white/40 uppercase font-mono">5 min read</span>
               </div>
-            </div>
-
-            <!-- Vertical Label (Visible when collapsed) -->
-            <div 
-              class="absolute inset-0 hidden md:flex flex-col items-center justify-between py-12 px-4 transition-opacity duration-500
-                {activeIndex === index ? 'opacity-0 pointer-events-none' : 'opacity-100'}"
-            >
-              <!-- Index number at top -->
-              <span class="text-2xl font-serif font-black text-foreground/20 tracking-tight select-none">
-                0{ index + 1 }
-              </span>
-              
-              <!-- Clean vertical text alignment using CSS writing-mode -->
-              <h3 class="vertical-text text-sm font-sans font-bold text-foreground/60 tracking-widest uppercase whitespace-nowrap select-none">
-                { post.title.length > 25 ? post.title.slice(0, 25) + '...' : post.title }
-              </h3>
-
-              <!-- Category Code at bottom -->
-              {#if post.categories && post.categories.length > 0}
-                <span class="text-[8px] font-mono font-bold tracking-widest text-primary/75 uppercase select-none">
-                  // { post.categories[0] }
-                </span>
-              {:else}
-                <span class="text-[8px] font-mono font-bold tracking-widest text-primary/75 uppercase select-none">
-                  // ARTICLE
-                </span>
-              {/if}
             </div>
           </a>
         {/each}
       </div>
-    {/if}
-
-    <!-- Mobile Navigation -->
-    <div class="mt-16 md:hidden">
-      <a
-        href="/articles"
-        class="flex items-center justify-center gap-3 h-14 w-full rounded-2xl border border-foreground/10 bg-foreground/5 text-foreground font-sans font-medium text-xs tracking-widest uppercase hover:bg-foreground/10 active:scale-[0.97] transition-all font-mono"
-      >
-        View All <span class="text-primary font-bold">Articles</span>
-      </a>
     </div>
+  {/if}
+
+  <!-- Mobile Navigation -->
+  <div class="mt-16 md:hidden w-full max-w-6xl mx-auto px-6">
+    <a
+      href="/articles"
+      class="flex items-center justify-center gap-3 h-14 w-full rounded-2xl border border-foreground/10 bg-foreground/5 text-foreground font-sans font-medium text-xs tracking-widest uppercase hover:bg-foreground/10 active:scale-[0.97] transition-all font-mono"
+    >
+      View All <span class="text-primary font-bold">Articles</span>
+    </a>
   </div>
 </section>
 

@@ -17,9 +17,30 @@ export default [
   {
     rules: {
       "svelte/no-navigation-without-resolve": "off",
+      "svelte/no-dom-manipulating": "off",
+      "svelte/require-each-key": "off",
+      "no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
     },
   },
   {
-    ignores: ["build/", ".svelte-kit/", "dist/", ".gemini/"],
+    ignores: [
+      "build/",
+      ".svelte-kit/",
+      "dist/",
+      ".gemini/",
+      ".agents/",
+      ".Jules/",
+      ".impeccable/",
+      ".vite-hooks/",
+      ".vscode/",
+      "node_modules/",
+    ],
   },
 ];

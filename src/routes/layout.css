@@ -346,6 +346,34 @@ html[data-theme="light"] {
   -webkit-backface-visibility: hidden;
 }
 
+/* ─── Modern Scroll-Driven Animations ─── */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: scroll-fade-in linear forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 30%;
+}
+
+@keyframes scroll-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Native Entry Animations ─── */
+.starting-style-enter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: all 0.5s var(--ease-out-expo);
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+}
+
 /* ─── Section Fade Edges ─── */
 .section-fade-top::before {
   content: "";

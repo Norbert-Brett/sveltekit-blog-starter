@@ -3,9 +3,10 @@
   import { browser } from '$app/environment';
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { SplitText } from 'gsap/SplitText';
 
   if (browser) {
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger, SplitText);
   }
 
   let sectionRef = $state(null);
@@ -62,8 +63,11 @@
 
       // Initialize panel states for desktop
       gsap.set('.about-panel-0', { opacity: 1, yPercent: 0 });
-      panels.forEach((_, i) => {
-        gsap.set(`.about-heading-${i}`, { clipPath: 'inset(-10% 100% -10% 0)' });
+      
+      const titleSplits = panels.map((_, i) => {
+        const split = new SplitText(`.about-heading-${i}`, { type: 'chars, words', wordsClass: 'inline-flex overflow-hidden' });
+        gsap.set(split.chars, { yPercent: 120 });
+        return split;
       });
 
       // DESKTOP MULTI-PANEL PINNED SCRUB TIMELINE
@@ -83,8 +87,7 @@
       // 2. Animate panels and headings in the timeline
       panels.forEach((_, i) => {
         if (i === 0) {
-          // Set first panel heading active
-          tl.set('.about-heading-0', { clipPath: 'inset(-10% 0% -10% 0)' });
+          // First panel heading is already handled below to reveal on enter
         }
 
         if (i > 0) {
@@ -93,8 +96,8 @@
             { yPercent: 100, opacity: 0 }, 
             { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power2.inOut' }
           );
-          tl.to(`.about-heading-${i}`, 
-            { clipPath: 'inset(-10% 0% -10% 0)', duration: 0.6, ease: 'power2.out' },
+          tl.to(titleSplits[i].chars, 
+            { yPercent: 0, duration: 0.6, stagger: 0.02, ease: 'power3.out' },
             '<'
           );
         }
@@ -104,8 +107,8 @@
             { yPercent: -50, opacity: 0, duration: 0.6, ease: 'power2.inOut' }, 
             '+=0.3'
           );
-          tl.to(`.about-heading-${i}`,
-            { clipPath: 'inset(-10% 100% -10% 0)', duration: 0.4, ease: 'power2.inOut' },
+          tl.to(titleSplits[i].chars,
+            { yPercent: -120, duration: 0.4, stagger: 0.01, ease: 'power2.inOut' },
             '<'
           );
         }
@@ -130,7 +133,7 @@
       }
 
       // First panel heading reveals immediately when entering viewport
-      gsap.to('.about-heading-0', { clipPath: 'inset(-10% 0% -10% 0)', duration: 1, ease: 'expo.out', delay: 0.3,
+      gsap.to(titleSplits[0].chars, { yPercent: 0, duration: 0.8, stagger: 0.03, ease: 'expo.out', delay: 0.3,
         scrollTrigger: { trigger: sectionRef, start: 'top 70%', once: true }
       });
 

@@ -106,24 +106,17 @@
   role="presentation"
   class="relative z-30 py-32 bg-transparent overflow-hidden"
 >
-  <!-- Unified Architectural Dot Grid (Subtle Edge-to-Edge) -->
-  <div class="absolute inset-0 z-0 pointer-events-none opacity-[0.05]">
-    <div class="w-full h-full" 
-         style="background-image: radial-gradient(var(--color-primary) 1px, transparent 1px); background-size: 2rem 2rem;">
-    </div>
-  </div>
-
   <div class="max-w-7xl mx-auto px-6 relative z-10">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       
       {#each stats as stat, index (index)}
         <div 
-          class="metric-card-wrapper relative group rounded-xl glass-panel transition-all duration-500 hover:shadow-[15px_15px_0px_rgba(212,176,85,0.08)] hover:-translate-y-1 hover:-translate-x-1"
+          class="metric-card-wrapper relative group rounded-2xl glass-panel transition-transform duration-500 ease-spring hover:border-primary/40 hover:-translate-y-1"
           onmouseleave={handleMouseLeave}
           role="presentation"
         >
           <!-- Subtle Inner Atmosphere -->
-          <div class="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <div class="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"></div>
 
           <div class="relative z-20 flex flex-col justify-between h-full min-h-[180px] p-8 md:p-10">
             <div class="flex items-center justify-between mb-12">

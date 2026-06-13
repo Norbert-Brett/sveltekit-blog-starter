@@ -2,7 +2,7 @@
 .gemini
 .agent
 .antigravityignore
-
+.agents
 # Common files that should be ignored in all projects
 
 # Logs

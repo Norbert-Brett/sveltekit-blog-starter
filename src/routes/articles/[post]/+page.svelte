@@ -113,7 +113,7 @@
 
 <!-- Cinematic Progress Bar -->
 <div class="fixed top-0 left-0 w-full h-[3px] z-100 bg-foreground/5 dark:bg-white/5">
-  <div bind:this={progressRef} class="h-full bg-primary shadow-[0_0_15px_rgba(41,151,255,0.8)]"></div>
+  <div bind:this={progressRef} class="h-full bg-primary shadow-[0_0_15px_rgba(212,176,85,0.8)]"></div>
 </div>
 
 <article bind:this={articleRef} class="relative bg-background overflow-hidden min-h-screen">

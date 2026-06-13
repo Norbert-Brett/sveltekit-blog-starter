@@ -120,12 +120,12 @@
       <div class="absolute -left-12 top-0 bottom-0 w-px bg-linear-to-b from-primary/20 via-transparent to-transparent hidden lg:block"></div>
       
       {#if filteredPosts.length > 0}
-        <PostsList posts={visiblePosts} />
+        <PostsList posts={visiblePosts} loading={isLoading} />
       {:else}
         <div class="py-24 text-center rounded-3xl glass-panel">
           <h3 class="text-2xl md:text-3xl font-sans font-semibold text-foreground/75 mb-4 tracking-tight">No articles discovered matching <br class="md:hidden"/> "<span class="text-foreground/90">{searchQuery}</span>"</h3>
           <p class="text-foreground/50 mb-12 max-w-md mx-auto font-sans font-light px-6 text-sm md:text-base leading-relaxed">We couldn't find any documents matching your criteria. Try adjusting your research parameters or clearing the filter.</p>
-          <button 
+          <button
             onclick={clearSearch}
             class="group flex items-center gap-3 mx-auto px-8 py-3 rounded-full border border-primary/20 hover:bg-primary/10 active:scale-[0.97] transition-all duration-500"
           >

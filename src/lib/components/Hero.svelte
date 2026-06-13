@@ -514,33 +514,12 @@
           1.0
         );
 
-        // ── PHASE 3: TEXT MATERIALIZATION (1.5s → 2.8s) ──
-        // Headline and subtitle drift in from their small corner positions.
-        // Decryption effect fires AFTER the text containers are visible.
-
-        introTL.fromTo(headlineEl,
-          { x: hX - 40, y: hY + 10, scale: hScale, opacity: 0 },
-          { x: hX, y: hY, scale: hScale, opacity: 1, duration: 1.0, ease: 'power3.out' },
-          1.5
-        );
-
-        introTL.fromTo(subtitleEl,
-          { x: sX + 40, y: sY + 10, scale: sScale, opacity: 0 },
-          { x: sX, y: sY, scale: sScale, opacity: 1, duration: 1.0, ease: 'power3.out' },
-          1.6
-        );
-
         // Scroll indicator — last element, the final gentle cue
         introTL.fromTo('.scroll-indicator',
           { opacity: 0, y: 10 },
           { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
-          1.9
+          1.4
         );
-
-        // Fire decryption when text becomes visible (Phase 3 start + small buffer)
-        introTL.call(() => {
-          startDecryption(0);
-        }, null, 1.55);
 
       } else {
         // Fallback states for scrolled viewports (skip intro entirely)
@@ -553,13 +532,14 @@
         gsap.set('.hud-corner-br', { x: 0, y: 0, opacity: 1 });
         gsap.set('.hud-readout', { opacity: 1, letterSpacing: '0.2em' });
         gsap.set('.hero-badge-inner', { scale: 1, opacity: 1 });
-        gsap.set(headlineEl, { x: hX, y: hY, scale: hScale, opacity: 1 });
-        gsap.set(subtitleEl, { x: sX, y: sY, scale: sScale, opacity: 1 });
+        gsap.set(headlineEl, { x: hX, y: hY, scale: hScale, opacity: 0 });
+        gsap.set(subtitleEl, { x: sX, y: sY, scale: sScale, opacity: 0 });
         gsap.set('.scroll-indicator', { opacity: 1 });
         gsap.set(particleCanvas, { opacity: 0.6 });
       }
 
       // 2. Cinematic Morphing & Pinned Exit Animation: Unified in a Single Timeline
+      let decryptionTriggered = false;
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: heroSection,
@@ -570,6 +550,12 @@
           anticipatePin: 1,
           onUpdate: (self) => {
             scrollProgress = Math.round(self.progress * 100);
+            if (self.progress > 0.15 && !decryptionTriggered) {
+              decryptionTriggered = true;
+              startDecryption(0);
+            } else if (self.progress < 0.05 && decryptionTriggered) {
+              decryptionTriggered = false;
+            }
           }
         }
       });
@@ -791,16 +777,16 @@
       playsinline
       preload={isMobile ? 'none' : 'metadata'}
       poster="https://res.cloudinary.com/nbrett/image/upload/f_auto,q_auto/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg"
-      class="hero-bg-video w-full h-full object-cover grayscale opacity-80 scale-105 gpu-accelerated"
+      class="hero-bg-video w-full h-full object-cover grayscale opacity-40 dark:opacity-80 scale-105 gpu-accelerated"
     >
       <source src="https://res.cloudinary.com/nbrett/video/upload/f_auto:video,q_auto/v1768848615/video_un63ox.mov" type="video/mp4" />
     </video>
     
     <!-- Cinematic Dark Vignette Overlay for Ultimate Contrast -->
-    <div class="absolute inset-0 bg-black/30 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-black/10 dark:bg-black/30 pointer-events-none"></div>
     
     <!-- Radial Aperture Vignette — starts fully opaque black, fades to reveal -->
-    <div class="hero-aperture-vignette absolute inset-0 pointer-events-none z-[1]"></div>
+    <div class="hero-aperture-vignette absolute inset-0 pointer-events-none z-1"></div>
     
     <!-- Mobile/Global Fade Overlay -->
     <div class="absolute inset-0 bg-linear-to-b from-transparent via-background/20 to-background"></div>
@@ -821,10 +807,10 @@
 
     <div class="hero-hud-inner relative w-full h-full opacity-0">
       <!-- Viewfinder Corners -->
-      <div class="hud-corner hud-corner-tl absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-accent/30"></div>
-      <div class="hud-corner hud-corner-tr absolute top-8 right-8 w-6 h-6 border-t-2 border-r-2 border-accent/30"></div>
-      <div class="hud-corner hud-corner-bl absolute bottom-8 left-8 w-6 h-6 border-b-2 border-l-2 border-accent/30"></div>
-      <div class="hud-corner hud-corner-br absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-accent/30"></div>
+      <div class="hud-corner hud-corner-tl absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-accent/60 dark:border-accent/30"></div>
+      <div class="hud-corner hud-corner-tr absolute top-8 right-8 w-6 h-6 border-t-2 border-r-2 border-accent/60 dark:border-accent/30"></div>
+      <div class="hud-corner hud-corner-bl absolute bottom-8 left-8 w-6 h-6 border-b-2 border-l-2 border-accent/60 dark:border-accent/30"></div>
+      <div class="hud-corner hud-corner-br absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-accent/60 dark:border-accent/30"></div>
 
       <!-- HUD Stats & Indicators -->
       <div class="hud-readout absolute top-8 left-20 text-[9px] font-mono tracking-[0.2em] text-foreground/45 uppercase hidden sm:block">
@@ -895,15 +881,15 @@
 
   <!-- Central Rotating Holographic Badge (z-index 25, fades on scroll) -->
   <div class="hero-center-badge absolute top-1/2 left-1/2 z-25 pointer-events-none select-none">
-    <div class="hero-badge-inner relative flex items-center justify-center opacity-0">
+    <div class="hero-badge-inner relative flex items-center justify-center opacity-0 drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
       <!-- Outer Ring (Dotted) -->
-      <svg class="absolute w-64 h-64 md:w-80 md:h-80 text-accent/20 animate-spin-slow-clockwise" viewBox="0 0 220 220">
+      <svg class="absolute w-64 h-64 md:w-80 md:h-80 text-accent dark:text-accent/20 animate-spin-slow-clockwise" viewBox="0 0 220 220">
         <circle cx="110" cy="110" r="95" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4, 8" />
       </svg>
 
       <!-- Spinning Circular Text Ring (Middle Ring, Counter-Clockwise) -->
       <svg 
-        class="w-56 h-56 md:w-72 md:h-72 text-accent/50 animate-spin-slow-counter" 
+        class="w-56 h-56 md:w-72 md:h-72 text-accent dark:text-accent/50 animate-spin-slow-counter" 
         style="animation-duration: {badgeSpeed};"
         viewBox="0 0 200 200"
       >
@@ -918,22 +904,22 @@
       </svg>
 
       <!-- Inner Ring (Calibration Ticks) -->
-      <svg class="absolute w-44 h-44 md:w-60 md:h-60 text-accent/30 animate-spin-slow-clockwise" style="animation-duration: 8s;" viewBox="0 0 160 160">
+      <svg class="absolute w-44 h-44 md:w-60 md:h-60 text-accent dark:text-accent/30 animate-spin-slow-clockwise" style="animation-duration: 8s;" viewBox="0 0 160 160">
         <circle cx="80" cy="80" r="70" fill="none" stroke="currentColor" stroke-width="0.75" stroke-dasharray="1, 5" />
         <path d="M 80, 5 L 80, 10 M 80, 150 L 80, 155 M 5, 80 L 10, 80 M 150, 80 L 155, 80" stroke="currentColor" stroke-width="1.5" />
       </svg>
 
       <!-- Glassmorphic 3D Gyroscope Core -->
-      <div class="absolute w-28 h-28 md:w-36 md:h-36 rounded-full glass-panel border border-accent/25 flex items-center justify-center shadow-[0_8px_32px_0_var(--glass-shadow)] backdrop-blur-md overflow-hidden">
+      <div class="absolute w-28 h-28 md:w-36 md:h-36 rounded-full glass-panel bg-white/20 dark:bg-transparent border border-white/30 dark:border-accent/25 flex items-center justify-center shadow-[0_8px_32px_0_var(--glass-shadow)] backdrop-blur-md overflow-hidden">
         <div class="absolute inset-0 bg-accent/5 blur-md animate-pulse"></div>
         
-        <div class="relative w-16 h-16 md:w-20 md:h-20 perspective-tilt flex items-center justify-center scale-95">
+        <div class="relative w-16 h-16 md:w-20 md:h-20 perspective-tilt scale-95">
           <!-- Outer Gyro Ring -->
-          <div class="absolute w-full h-full border border-accent/40 rounded-full animate-gyro-1"></div>
+          <div class="absolute inset-0 w-full h-full border border-accent/70 dark:border-accent/40 rounded-full animate-gyro-1"></div>
           <!-- Mid Gyro Ring -->
-          <div class="absolute w-[75%] h-[75%] border border-accent/60 border-dashed rounded-full animate-gyro-2"></div>
+          <div class="absolute inset-0 w-[75%] h-[75%] border border-accent/85 border-dashed rounded-full animate-gyro-2"></div>
           <!-- Inner Gyro Ring -->
-          <div class="absolute w-[50%] h-[50%] border border-accent/80 rounded-full animate-gyro-3 flex items-center justify-center">
+          <div class="absolute inset-0 w-[50%] h-[50%] border border-accent/90 dark:border-accent/80 rounded-full animate-gyro-3 flex items-center justify-center">
             <span class="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_15px_var(--color-accent)] animate-ping absolute"></span>
             <span class="w-3.5 h-3.5 rounded-full bg-accent shadow-[0_0_15px_var(--color-accent)] z-10"></span>
           </div>
@@ -947,7 +933,7 @@
     bind:this={textRef} 
     class="hero-text-group absolute inset-x-0 top-[12%] md:top-[14%] z-30 flex flex-col items-center pointer-events-none px-6 gpu-accelerated"
   >
-    <h1 bind:this={headlineEl} class="hero-headline relative z-10 text-center flex flex-col leading-[1.05] tracking-tight text-foreground drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+    <h1 bind:this={headlineEl} class="hero-headline relative z-10 text-center flex flex-col leading-[1.05] tracking-tight text-foreground drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] opacity-0">
       {#each displayedHeadline as word, wi (wi)}
         <span class="overflow-hidden py-1">
           <span
@@ -961,7 +947,7 @@
     </h1>
 
     <!-- Subtitle -->
-    <p bind:this={subtitleEl} class="hero-subtitle relative z-10 mt-6 text-xs md:text-sm font-sans tracking-[0.25em] text-foreground/80 text-center font-bold uppercase">
+    <p bind:this={subtitleEl} class="hero-subtitle relative z-10 mt-6 text-xs md:text-sm font-sans tracking-[0.25em] text-foreground/80 text-center font-bold uppercase opacity-0">
       Full Stack Developer <span class="text-accent/80 mx-1">&bull;</span> AI Specialist
     </p>
   </div>
@@ -1001,13 +987,6 @@
     animation: float 2s ease-in-out infinite;
   }
 
-  @keyframes spin-slow {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  .animate-spin-slow {
-    animation: spin-slow 24s linear infinite;
-  }
 
   @keyframes spin-clockwise {
     0% { transform: rotate(0deg); }
@@ -1069,14 +1048,21 @@
     transform: translate(-50%, -50%);
   }
 
+  :global(html) {
+    --hero-vignette-color: 24, 23, 21;
+  }
+  :global(html[data-theme="light"]) {
+    --hero-vignette-color: 246, 243, 235;
+  }
+
   /* Cinematic Aperture Vignette — heavy radial gradient from edges to center */
   .hero-aperture-vignette {
     background: radial-gradient(
       ellipse 60% 60% at 50% 50%,
       transparent 0%,
-      rgba(24, 23, 21, 0.4) 40%,
-      rgba(24, 23, 21, 0.85) 65%,
-      rgba(24, 23, 21, 1) 100%
+      rgba(var(--hero-vignette-color), 0.4) 40%,
+      rgba(var(--hero-vignette-color), 0.85) 65%,
+      rgb(var(--hero-vignette-color)) 100%
     );
   }
 
