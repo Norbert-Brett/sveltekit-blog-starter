@@ -188,7 +188,7 @@
 
               <!-- Foot Details -->
               <div class="flex items-center justify-between mt-4 pt-4 border-t border-foreground/10">
-                <span class="text-[9px] font-sans font-medium tracking-widest text-foreground/50 uppercase font-mono">5 Min Read</span>
+                <span class="text-[9px] font-sans font-medium tracking-widest text-foreground/50 uppercase font-mono">{post.readingTime || 5} Min Read</span>
                 <span class="inline-flex items-center gap-1.5 text-[9px] font-sans font-bold tracking-widest uppercase text-primary font-mono">
                   Read Article <ArrowRight class="w-3.5 h-3.5" />
                 </span>
@@ -254,7 +254,7 @@
                   <ArrowRight class="w-4 h-4" />
                 </div>
                 <div class="h-px w-12 bg-white/10"></div>
-                <span class="text-xs font-sans font-medium tracking-widest text-white/40 uppercase font-mono">5 min read</span>
+                <span class="text-xs font-sans font-medium tracking-widest text-white/40 uppercase font-mono">{post.readingTime || 5} min read</span>
               </div>
             </div>
           </a>

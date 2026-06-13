@@ -46,9 +46,10 @@ const config = {
                   "yaml",
                   "go",
                   "text",
-                  "python",
                   "java",
                   "docker",
+                  "jsx",
+                  "tsx",
                 ],
               }),
             );

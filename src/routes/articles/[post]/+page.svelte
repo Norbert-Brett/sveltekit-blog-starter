@@ -155,7 +155,7 @@
       </div>
       <div class="flex items-center gap-2">
         <Clock class="w-3.5 h-3.5" />
-        5 Min Read
+        {data.meta.readingTime || 5} Min Read
       </div>
     </div>
   </header>

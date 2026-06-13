@@ -7,10 +7,31 @@ const getAllPosts = async () => {
   if (postsCache) return postsCache;
 
   postsCache = (async () => {
+    const postsMetadata = import.meta.glob("/src/lib/posts/*.md");
+    const postsRaw = import.meta.glob("/src/lib/posts/*.md", { query: "?raw", import: "default" });
+
     const posts = await Promise.all(
-      Object.entries(import.meta.glob("/src/lib/posts/*.md")).map(async ([path, resolver]) => {
+      Object.entries(postsMetadata).map(async ([path, resolver]) => {
         const { metadata } = await resolver();
         const slug = path.split("/").pop().slice(0, -3);
+
+        let readingTime = 5; // Default fallback
+        const rawResolver = postsRaw[path];
+        if (rawResolver) {
+          try {
+            const rawContent = await rawResolver();
+            // Remove frontmatter
+            const body = rawContent.replace(/^---[\s\S]+?---/, "");
+            // Strip HTML elements if present
+            const cleanText = body.replace(/<[^>]*>/g, "");
+            const words = cleanText.trim().split(/\s+/).filter(Boolean).length;
+            // Assume 200 words per minute reading speed
+            readingTime = Math.max(1, Math.ceil(words / 200));
+          } catch (e) {
+            console.error(`Failed to calculate reading time for ${path}:`, e);
+          }
+        }
+
         return {
           title: metadata.title,
           slug,
@@ -20,6 +41,7 @@ const getAllPosts = async () => {
           coverHeight: metadata.coverHeight,
           date: metadata.date,
           categories: metadata.categories || [],
+          readingTime,
         };
       }),
     );
