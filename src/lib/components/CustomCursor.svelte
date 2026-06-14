@@ -105,7 +105,7 @@
       glowPos.x += (mouse.x - glowPos.x) * 0.08;
       glowPos.y += (mouse.y - glowPos.y) * 0.08;
 
-      // Velocity-based organic morphing — stretches in direction of movement
+      // Velocity-based organic morphing: stretches in direction of movement
       const angle = Math.atan2(velocity.y, velocity.x);
       const stretch = Math.min(speed * 0.015, 0.35);
       const skewX = velocity.x * 0.12;
@@ -259,7 +259,7 @@
     class:visible={isVisible}
   ></canvas>
 
-  <!-- Ambient glow — heavy lag, diffuse gold aura -->
+  <!-- Ambient glow: heavy lag, diffuse gold aura -->
   <div
     bind:this={cursorGlow}
     class="cursor-glow"
@@ -267,7 +267,7 @@
     class:visible={isVisible}
   ></div>
 
-  <!-- Primary orb — the gravitational lens -->
+  <!-- Primary orb: the gravitational lens -->
   <div
     bind:this={cursorOrb}
     class="cursor-orb"
@@ -348,7 +348,7 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    /* A unique crescent / eclipse gradient — not a simple solid dot */
+    /* A unique crescent / eclipse gradient, not a simple solid dot */
     background:
       radial-gradient(
         circle at 35% 35%,

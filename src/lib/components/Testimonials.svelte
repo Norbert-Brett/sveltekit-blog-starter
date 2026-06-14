@@ -16,21 +16,21 @@
 
   const testimonials = [
     {
-      quote: "Working with Norbert was a game-changer. His leadership background shows - he understands both the technical requirements and business needs. Delivered exactly what we needed, on time.",
+      quote: "Working with Norbert was fantastic. Because of his leadership background, he understands both technical constraints and business goals. He delivered exactly what we needed, right on time.",
       author: {
         name: 'Nikolay Potapov',
         description: 'CS Student'
       }
     },
     {
-      quote: "His combination of leadership experience and technical skills is rare. Norbert doesn't just code - he thinks strategically about user experience and business impact.",
+      quote: "Norbert has a rare combination of leadership experience and technical depth. He doesn't just write code; he thinks strategically about how a system affects the product and the users.",
       author: {
         name: 'Evelyn Dezsi',
         description: 'CS Student / Controller'
       }
     },
     {
-      quote: "From concept to deployment, Norbert handled our project with professionalism. His leadership skills and technical expertise were instrumental in our success.",
+      quote: "Norbert handled our project professionally from start to finish. His technical expertise and clear communication were key to our success.",
       author: {
         name: 'Thomas Weber',
         description: 'Small Business Owner'

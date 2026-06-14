@@ -12,63 +12,56 @@ updated: "2026-06-12"
 
 # Vibe Coding: The Future or a Security Nightmare?
 
-"Vibe Coding" is the latest trend taking the development world by storm. It's the practice of writing software entirely through natural language prompts, often without deeply reviewing or understanding the underlying code generated. While it enables incredible speed for prototyping, it introduces significant, sometimes catastrophic, risks.
+"Vibe Coding" is the trend of writing software entirely through natural language prompts, often without reviewing or understanding the generated code. While it speeds up prototyping, it introduces security risks.
 
-Let's break down what vibe coding actually looks like in practice, where it goes wrong, and how to use it responsibly.
+Understanding how vibe coding operates in practice, where it fails, and how to use it responsibly is essential.
 
-## What is Vibe Coding?
+## What is vibe coding?
 
-At its core, it is coding based on "vibes." You tell the AI what you want, it writes the files, runs the terminal commands, and you check the browser to see if it works. If it looks like it works, you ship it and move on.
+Vibe coding relies on letting the AI write the code. You describe what you want, the AI writes the files and runs the commands, and you check the browser to see if the interface works. If the preview looks correct, you ship it.
 
-It's fantastic for personal software, throwaway scripts, or learning new concepts quickly. You can build a functioning app in an afternoon without writing a single line of syntax yourself.
+This is a useful workflow for personal utilities, scripts, or exploring new libraries. You can build a prototype in an afternoon without writing syntax.
 
-### A Vibe Coding Workflow in Practice
+### A vibe coding workflow in practice
 
-Here's what building a to-do app through vibe coding actually looks like, step by step:
+Here is what building a basic application through vibe coding looks like step by step:
 
-1. **The prompt:** "Build me a to-do app with Next.js, Prisma, and Tailwind. Users should be able to sign up, create lists, and share them."
-2. **The AI scaffolds:** It runs `npx create-next-app`, installs a dozen dependencies, sets up a Prisma schema, creates API routes, and generates a full set of React components.
-3. **You glance at the browser:** The app loads. You can add a to-do item. The styling looks clean. It _feels_ done.
-4. **You prompt again:** "Add authentication with NextAuth." The AI installs more packages, wires up session providers, and adds login/logout buttons.
-5. **You ship it:** Maybe to Vercel with a single `git push`. The whole process took two hours.
+1. **The prompt**: You ask the AI to build a to-do list with a specific framework, styling library, and database connection.
+2. **The AI scaffolds**: It initializes the project, installs dependencies, sets up the database schema, and generates the UI components.
+3. **The preview**: The application loads in the browser, allowing you to add items and view the styled interface.
+4. **The update**: You prompt the AI to add authentication, and it installs the necessary packages and adds login controls.
+5. **The deployment**: You push the code to a hosting provider.
 
-The problem? At no point did anyone audit the Prisma schema for proper cascade deletes. Nobody checked if the sharing feature leaks data between users. Nobody reviewed the 47 transitive dependencies that got pulled in. The app works — but "works" and "is safe" are two very different things.
+While the application works, you have not audited the database schema for proper cascade deletes, verified if the sharing feature exposes data between users, or reviewed the dependencies that were installed.
 
-## The Dependency Problem
+## The dependency problem
 
-One of the most overlooked risks of vibe coding is what happens in your `node_modules` folder. When you ask an AI to "add image uploads" or "set up email notifications," it doesn't hand-pick dependencies the way a seasoned developer would. It reaches for whatever package appeared most often in its training data — which may be outdated, abandoned, or even compromised.
+One of the risks of vibe coding is package management. When you ask an AI to add a feature like image uploading or email notifications, it does not evaluate dependencies the way an experienced developer would. It installs the packages that appeared most frequently in its training data, which may be unmaintained or contain security vulnerabilities.
 
-**This is not theoretical.** The JavaScript ecosystem has seen real supply-chain attacks: `event-stream` in 2018 had malicious code injected by a new maintainer. `ua-parser-js` was hijacked in 2021 to install cryptominers. `colors` and `faker` were intentionally sabotaged by their own author in 2022.
+This is a practical concern. The JavaScript ecosystem has had real supply-chain attacks, where popular packages were compromised or sabotaged by their maintainers.
 
-An AI agent will happily run `npm install` on packages it suggests without checking:
+An AI agent will run installation commands on suggested packages without checking when they were last updated, how many active maintainers they have, or whether they contain known vulnerabilities.
 
-- When the package was last updated
-- How many maintainers it has (single-maintainer packages are higher risk)
-- Whether it has known vulnerabilities listed in `npm audit`
-- Whether a lighter, more maintained alternative exists
+To address this, run security audits on your dependencies and review your package configurations manually after AI-assisted sessions.
 
-**The fix:** After any AI-assisted session, run `npm audit` and review your `package.json` manually. Tools like [Socket.dev](https://socket.dev) can flag risky dependencies before they become a problem.
+## The security gap: why vibes aren't enough
 
-## The Security Gap: Why Vibes Aren't Enough
+AI models are optimized to fulfill prompts in the most direct way, which does not always prioritize security. There are three common security issues that appear frequently in AI-generated code:
 
-The danger lies in the lack of scrutiny. AI models are trained to fulfill user requests in the most direct way possible, which doesn't always align with secure architectural patterns. Let's walk through three real-world scenarios that show up constantly in vibe-coded applications.
+### Scenario 1: client-side auth checks
 
-### Scenario 1: Client-Side Auth Checks
+AI tools often implement security checks in client-side code rather than validating them on the server:
 
-In a recent experiment during a hack week, developers found a recurring pattern: AI agents frequently implement security checks client-side rather than server-side.
+- **The prompt**: "Protect the admin route so only logged-in users can see it."
+- **The AI's solution**: It checks for an authentication cookie in the client-side router, redirecting users if it is missing.
+- **The vulnerability**: A user can disable client-side JavaScript or request the API endpoints directly, bypassing the client redirect entirely. Secure authorization must occur on the server.
 
-**The prompt:** "Protect the admin route so only logged-in users can see it."
+### Scenario 2: SQL injection via raw queries
 
-**The AI's solution:** It created a check in the frontend JavaScript code. If the authentication cookie wasn't present, the React router simply redirected the user to the login page.
-
-**Why it's broken:** A malicious user can simply disable JavaScript, or use `curl` to call the API directly, bypassing the client entirely. They could then access the admin dashboard and make API calls because the backend server wasn't actually validating the session. Real security must happen on the server. You cannot trust the client.
-
-### Scenario 2: SQL Injection via Raw Queries
-
-Ask an AI to "get the user's profile by their username" and there's a good chance it'll write something like this:
+When writing database queries, AI models frequently use string interpolation:
 
 ```js
-// ❌ BAD — vulnerable to SQL injection
+// ❌ Vulnerable to SQL injection
 app.get("/user/:username", async (req, res) => {
   const query = `SELECT * FROM users WHERE username = '${req.params.username}'`;
   const result = await db.query(query);
@@ -76,12 +69,10 @@ app.get("/user/:username", async (req, res) => {
 });
 ```
 
-An attacker can pass `' OR '1'='1` as the username and dump your entire users table. This is one of the oldest vulnerabilities in web development, and AI still generates it routinely because string interpolation is the "most direct" solution.
-
-The fix is parameterized queries:
+This code allows an attacker to pass malicious strings and extract database records. Use parameterized queries instead:
 
 ```js
-// ✅ GOOD — parameterized query prevents injection
+// ✅ Parameterized query prevents injection
 app.get("/user/:username", async (req, res) => {
   const query = "SELECT * FROM users WHERE username = $1";
   const result = await db.query(query, [req.params.username]);
@@ -89,14 +80,12 @@ app.get("/user/:username", async (req, res) => {
 });
 ```
 
-The difference is one line of code, but it's the difference between a secure app and a front-page data breach.
+### Scenario 3: hardcoded API keys in frontend code
 
-### Scenario 3: Hardcoded API Keys in Frontend Code
-
-This one is painfully common. You ask the AI to "connect to the Stripe API" or "add a weather widget," and it drops your secret key right into a client-side file:
+AI tools often place secret keys directly into client-side files:
 
 ```js
-// ❌ BAD — API key exposed to every visitor
+// ❌ API key exposed to client
 const stripe = new Stripe("sk_live_abc123realkey456");
 
 export async function createPayment(amount) {
@@ -104,13 +93,10 @@ export async function createPayment(amount) {
 }
 ```
 
-Anyone who opens browser DevTools can see that key, and now they can make charges on your Stripe account. The key gets committed to Git, pushed to GitHub, and scraped by bots within minutes.
-
-The correct approach keeps secrets on the server:
+This key is visible to anyone inspecting the frontend code, allowing them to access your account. Keep these secrets on the server using environment variables:
 
 ```js
-// ✅ GOOD — secret stays server-side via environment variable
-// This code runs ONLY on the server (e.g., an API route)
+// ✅ Secret key kept on the server
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(request) {
@@ -120,55 +106,53 @@ export async function POST(request) {
 }
 ```
 
-The client only ever receives the `client_secret` — a temporary, scoped token that can't be used to access your account.
+The client only receives a temporary, scoped token that does not expose the main account key.
 
-## The Hidden Cost of Technical Debt
+## The hidden cost of technical debt
 
-Even if you dodge every security bullet, vibe-coded applications carry a subtler cost: **nobody understands the code.**
+Even when security is managed, AI-generated applications can be difficult to maintain if you do not understand the underlying codebase.
 
-When an AI generates 2,000 lines across 30 files in a single session, you end up with a codebase that has no clear architectural intent. Variable names are inconsistent. Some files use one pattern, others use a completely different one. There are utility functions that duplicate built-in methods. There are entire files that are imported but never actually used.
+When an AI generates thousands of lines of code across multiple files, you can end up with a codebase that lacks a clear architecture. Variable names can be inconsistent, duplicate utilities can be created, and unused files can remain in the project.
 
-This creates three painful realities:
+This creates several issues:
 
-- **Debugging is a nightmare.** When something breaks (and it will), you can't reason about the code because you didn't write it and the AI made choices you don't understand. You end up asking the AI to fix the bug, and it introduces two more.
-- **Onboarding is impossible.** If you need another developer to contribute, they'll stare at the codebase and have no mental model for how it fits together. There's no README explaining the architecture, no clear module boundaries, no consistent conventions.
-- **Refactoring becomes a rewrite.** The cost of changing a vibe-coded app often exceeds the cost of building it from scratch with intention. Technical debt compounds fast when the original "author" was a language model optimizing for your immediate request, not long-term maintainability.
+- **Difficult debugging**: When errors occur, finding the cause is harder because you did not write the code and may not understand the choices made by the AI.
+- **Difficult onboarding**: Other developers will struggle to understand how the application is structured without clear documentation or consistent patterns.
+- **Costly refactoring**: Changing features can be more expensive than rebuilding them with clear intent, as technical debt accumulates when code is optimized only for immediate requests.
 
-This doesn't mean AI-generated code is inherently bad. It means **unreviewed** AI-generated code is a liability.
+AI-generated code is not inherently problematic, but unreviewed code can become a liability.
 
-## A Practical Checklist for Safe Vibe Coding
+## A practical checklist for safe vibe coding
 
-You don't have to choose between speed and safety. Here's a checklist you can use after every AI-assisted coding session:
+You can combine development speed with safety by following a basic checklist after AI sessions:
 
-1. **Run `npm audit` (or equivalent)** after any new dependencies are installed. Fix critical and high-severity issues before merging.
-2. **Check for hardcoded secrets.** Search your codebase for API keys, tokens, and passwords. Use tools like `gitleaks` or `trufflehog` to automate this.
-3. **Verify auth checks are server-side.** Any route that requires authentication should validate the session on the server before returning data — never rely on client-side redirects alone.
-4. **Review all database queries.** Look for string interpolation in SQL. Ensure every query uses parameterized inputs or an ORM that handles escaping.
-5. **Audit your `package.json`.** Do you actually need every dependency the AI installed? Remove unused packages. Fewer dependencies mean a smaller attack surface.
-6. **Add rate limiting to public endpoints.** AI rarely adds rate limiting on its own, but without it, your sign-up or login endpoints are wide open to brute-force attacks.
-7. **Set up environment variables properly.** Use `.env` files (and add them to `.gitignore`). Never commit secrets. Use your hosting platform's secret management for production.
-8. **Test the unhappy paths.** AI-generated code almost always handles the success case. What happens when the user submits an empty form? Sends a 10MB payload? Passes a malicious string? Test those cases.
-9. **Read the code you're shipping.** You don't have to understand every line, but you should understand every _file's purpose_ and how data flows between the client and server.
-10. **Use a linter and type checker.** Tools like ESLint and TypeScript catch entire categories of bugs automatically. If the AI didn't set them up, add them yourself.
+1. **Verify dependencies**: Run security audits after installing new packages, and resolve critical warnings before merging.
+2. **Scan for secrets**: Ensure API keys and passwords are not hardcoded.
+3. **Verify server-side checks**: Confirm that user authentication is validated on the server for all protected endpoints.
+4. **Audit database queries**: Ensure all queries use parameterized inputs or an ORM that escapes parameters.
+5. **Clean up dependencies**: Remove unused packages to reduce the application footprint.
+6. **Limit API requests**: Add rate limiting to public endpoints to protect against automated requests.
+7. **Manage environment variables**: Keep secrets in git-ignored configuration files.
+8. **Test error states**: Verify how the application behaves when inputs are missing, invalid, or malicious.
+9. **Review code structure**: Understand the purpose of the files and how data flows through the application.
+10. **Use code quality tools**: Set up linters and type checkers to catch common syntax and logic errors.
 
-## When Vibe Coding Actually Shines
+## When vibe coding actually shines
 
-It would be unfair to paint vibe coding as purely dangerous. Used in the right contexts, it's genuinely transformative:
+Vibe coding is highly effective when used in appropriate contexts:
 
-- **Personal tools and scripts.** Building a script to rename 500 files, a local dashboard for your finances, or a CLI that automates your workflow? Vibe code away. The only user is you, and the risk surface is tiny.
-- **Prototypes and proof-of-concepts.** When you need to validate an idea with stakeholders before committing engineering resources, a vibe-coded prototype is perfect. Just don't ship the prototype to production.
-- **Learning and exploration.** Vibe coding is one of the best ways to learn a new framework or language. You get a working example instantly, then you can study it, break it, and rebuild it with understanding.
-- **Hackathons and jam projects.** Time-constrained events where polish and security aren't the point? This is vibe coding's natural habitat.
-- **Internal admin panels.** Low-risk tools behind a VPN, used by 3 people on your team? The threat model is completely different from a public-facing app, and speed matters more than hardening.
+- **Personal scripts**: Writing utilities for local tasks where the security risks are low.
+- **Prototypes**: Creating proof-of-concept builds to validate ideas before dedicating development time.
+- **Learning**: Exploring new frameworks by generating working code examples to study.
+- **Hackathons**: Building temporary projects where development speed is the main priority.
+- **Internal dashboards**: Building tools used internally behind secure firewalls.
 
-The common thread: **low stakes, limited users, and no sensitive data.**
+These cases generally involve low stakes, few users, and no sensitive data.
 
-## The Verdict
+## The verdict
 
-Vibe coding is not going away, and it shouldn't. It represents a genuine shift in how software gets built — lowering the barrier to entry, democratizing development, and compressing timelines that used to take weeks into hours.
+Vibe coding is a permanent shift in software development, reducing barrier entries and accelerating build times.
 
-But there's a critical distinction that the hype tends to blur: **building software** and **shipping software** are not the same thing. Vibe coding excels at the first. For the second, you need review, understanding, and intentional architecture.
+However, writing code and shipping production-ready software are different tasks. While AI is useful for generating code, shipping it safely requires manual review, code understanding, and deliberate planning.
 
-The developers who will thrive in this new landscape aren't the ones who reject AI tools, nor the ones who accept their output blindly. They're the ones who use AI to move fast and then slow down at the boundaries — where the client meets the server, where user input meets the database, and where secrets meet version control.
-
-AI is a powerful assistant. But you are still the engineer responsible for what ships. Vibe responsibly.
+The developers who will benefit most are those who use AI to move quickly but slow down to check boundaries, specifically where user inputs hit the database, where client code meets the server, and where secrets are managed.

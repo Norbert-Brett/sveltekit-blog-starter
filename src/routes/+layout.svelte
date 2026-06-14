@@ -36,7 +36,7 @@
 		gsap.registerPlugin(ScrollTrigger);
 		appState.isMenuOpen = false;
 
-		// Detect mobile devices — Lenis fights native momentum scroll on iOS/Android
+		// Detect mobile devices: Lenis fights native momentum scroll on iOS/Android
 		const isMobileDevice = window.innerWidth < 768 || matchMedia('(pointer: coarse)').matches;
 
 		let lenis;

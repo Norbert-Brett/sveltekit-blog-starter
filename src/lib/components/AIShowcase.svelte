@@ -42,7 +42,7 @@
         { text: 'Applying Cohere-Rerank-v3 (re-score > 0.75)...', type: 'success' },
         { text: 'Synthesizing response with grounded context...', type: 'info' }
       ],
-      response: `I'd design a multi-stage pipeline:\n\n1. **Ingestion** — Parse PDFs/docs with LlamaParse, chunk with semantic splitting\n2. **Embedding** — Use text-embedding-3-large with 3072 dimensions\n3. **Storage** — Pinecone with metadata filtering for access control\n4. **Retrieval** — Hybrid search (dense + BM25) with re-ranking via Cohere\n5. **Generation** — Gemini 3.5 Flash with structured output and grounding`,
+      response: `A typical pipeline follows these stages:\n\n1. **Ingestion**: Parse documents with LlamaParse and chunk them using semantic splitting\n2. **Embedding**: Use text-embedding-3-large at 3072 dimensions\n3. **Storage**: Store in Pinecone, using metadata filters for access controls\n4. **Retrieval**: Combine dense and BM25 search, then rerank with Cohere\n5. **Generation**: Pass to Gemini 3.5 Flash for structured, grounded outputs`,
       latency: '180ms',
       tokens: '242'
     },
@@ -74,7 +74,7 @@
         { text: 'Running task routing and evaluator loops... OK', type: 'success' },
         { text: 'Consolidating agent consensus...', type: 'info' }
       ],
-      response: `Multi-agent system architecture:\n\n1. **Routing** — A supervisor agent directs tasks to specialized worker nodes.\n2. **Specialization** — Independent nodes focus on specific skills (e.g. searching, coding).\n3. **State Management** — Use a graph-based state (like LangGraph) for flexible cycles.\n4. **Human-in-the-loop** (HITL) — Place gatekeepers for critical write/execute actions.\n5. **Self-Correction** — Evaluator agents check outputs against constraints and retry.`,
+      response: `A multi-agent setup generally includes:\n\n1. **Routing**: A supervisor agent routes tasks to specialized worker nodes.\n2. **Specialization**: Separate workers handle specific tasks like search or coding.\n3. **State Management**: Track progress via graph-based states (like LangGraph).\n4. **Human checks**: Add gatekeepers for critical write and execution steps.\n5. **Self Correction**: Evaluator agents verify outputs against constraints and retry if needed.`,
       latency: '220ms',
       tokens: '315'
     }

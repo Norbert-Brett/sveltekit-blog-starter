@@ -20,17 +20,17 @@
     {
       label: '01',
       title: 'Who I Am',
-      text: 'A full-stack developer and AI specialist with 5+ years of experience turning complex ideas into elegant, production-grade software. Rooted in computer science fundamentals, driven by curiosity.'
+      text: 'A full-stack developer and AI engineer with five years of experience building software that works. I focus on clean systems and responsive interfaces, combining computer science basics with practical, day-to-day coding.'
     },
     {
       label: '02',
       title: 'What I Build',
-      text: 'AI-integrated web applications, LLM pipelines, real-time dashboards, and developer tools. From fine-tuning models to shipping pixel-perfect frontends — I own the entire stack.'
+      text: 'I build web applications with integrated AI, data pipelines, and developer tools. I handle both sides of the stack, from training models and configuring databases to designing and styling the front end.'
     },
     {
       label: '03',
       title: 'How I Think',
-      text: 'Design with empathy, engineer with precision, ship with urgency. Every line of code should serve the user. Every system should scale gracefully. Every interface should feel inevitable.'
+      text: 'Design for the user, write clean code, and ship early. Software is only useful if people can actually use it. I aim for simple architectures that are easy to maintain and scale.'
     }
   ];
 

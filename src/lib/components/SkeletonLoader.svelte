@@ -8,10 +8,12 @@
 	let isLoaded = false;
 
 	onMount(() => {
-		// Simulate content loading - in real app, this would be replaced by actual content
-		setTimeout(() => {
-			isLoaded = true;
-		}, Math.random() * 800 + 400); // Random delay between 400ms-1200ms for natural feel
+		// Only simulate loading if we have default slot content to show eventually
+		if (typeof $$slots !== 'undefined' && $$slots.default) {
+			setTimeout(() => {
+				isLoaded = true;
+			}, Math.random() * 800 + 400); // Random delay between 400ms-1200ms for natural feel
+		}
 	});
 
 	// Generate skeleton shapes based on type

@@ -12,100 +12,100 @@ updated: "2026-05-25"
 
 # JavaScript Performance: TypeScript in Go and Faster Builds
 
-For years, the JavaScript ecosystem relied on tools written _in_ JavaScript to build JavaScript apps—Webpack, Babel, ESLint, Prettier. But the tooling landscape is undergoing a massive shift. We are abandoning Node.js for native binaries written in Rust and Go to achieve unprecedented performance gains. This isn't a niche experiment anymore. It's the new mainstream.
+For years, the JavaScript ecosystem relied on tools written in JavaScript to build JavaScript apps, including Webpack, Babel, ESLint, and Prettier. But the tooling landscape is undergoing a massive shift. We are moving away from Node.js toward native binaries written in Rust and Go to achieve substantial performance gains. This is no longer a niche experiment; it is the new mainstream.
 
-## The Performance Problem
+## The performance problem
 
-Let's be honest about _why_ this shift is happening. JavaScript was never designed to be a systems-level language, and the cracks show when you push it hard:
+Let's look at why this shift is happening. JavaScript was not designed for writing systems-level tooling, and the limitations become clear under heavy workloads:
 
-- **Single-threaded execution.** Node.js runs on a single thread by default. Your 16-core machine? Mostly idle during a Webpack build. Worker threads exist, but bolting parallelism onto a fundamentally single-threaded runtime is clunky at best.
-- **Interpreted overhead.** Even with V8's JIT compiler, JavaScript carries the weight of dynamic typing, prototype chains, and runtime type checks. A native binary compiled ahead of time simply starts faster and runs tighter.
-- **Garbage collection pauses.** Large builds allocate millions of short-lived AST nodes. The GC has to pause execution to sweep them up. On a big monorepo, these pauses add up to seconds of dead time.
-- **String-heavy parsing.** JavaScript tooling does an enormous amount of string manipulation—regex matching, source map generation, code transforms. Native languages handle raw byte buffers dramatically faster.
+- **Single-threaded execution**: Node.js runs on a single thread by default. Your multicore processor sits mostly idle during a Webpack build. While worker threads exist, implementing parallelism in a single-threaded runtime is complex and inefficient.
+- **Interpreted overhead**: Even with V8's JIT compiler, JavaScript bears the runtime cost of dynamic typing, prototype chains, and check operations. A native binary compiled ahead of time starts faster and uses fewer CPU cycles.
+- **Garbage collection pauses**: Large builds allocate millions of short-lived AST nodes. The garbage collector must pause execution to clean them up, which adds up to seconds of idle time in a large monorepo.
+- **String parsing**: JavaScript tools perform heavy string operations, such as regular expression matching, source map generation, and code transformations. Native compiled languages handle raw byte buffers much faster.
 
-How bad is it in practice? A mid-sized Webpack 5 project (say, 2,000 modules) typically takes **30–90 seconds** for a production build. Enterprise monorepos with 10,000+ modules? You're looking at **3–8 minutes**. Cold starts in development can take 10–20 seconds before you see anything in the browser. Developers were spending _hours per week_ just waiting for tools to finish.
+In practice, a medium-sized Webpack 5 project with around 2,000 modules takes 30 to 90 seconds for a production build. Larger monorepos with over 10,000 modules can take three to eight minutes. Cold starts during local development can keep you waiting 10 to 20 seconds before the page renders. Developers end up spending hours every week waiting for builds.
 
-That's the gap native tooling is closing.
+This is the delay that native tools are addressing.
 
-## The Native Tooling Revolution
+## The native tooling revolution
 
-The migration to native-speed tooling didn't happen overnight. Here are the major players and what each one tackles:
+The transition to native-speed tooling has been building over several years. Here are the main projects and the areas they target:
 
-- **esbuild** (Go) — The one that started it all. A bundler and minifier written in Go by Evan Wallace. It's 10–100x faster than Webpack for most tasks and proved that native JS tooling wasn't just possible—it was transformative. Vite uses it for dev-time dependency pre-bundling.
-- **SWC** (Rust) — A Rust-based compiler that replaces Babel for transpilation. Next.js adopted it as the default compiler, and it's roughly 20x faster than Babel. It handles JSX transforms, TypeScript stripping, and minification.
-- **Biome** (Rust) — The successor to the Rome project. A unified formatter _and_ linter in a single Rust binary. Replaces both ESLint and Prettier with one tool that's 20–35x faster.
-- **oxc** (Rust) — The Oxidation Compiler project. Building a full Rust-based toolchain from scratch: parser, linter (oxlint), resolver, transformer, and eventually a minifier. Designed for maximum correctness and speed.
-- **Turbopack** (Rust) — Vercel's Rust-powered successor to Webpack, built by Tobias Koppers (the original Webpack creator). Designed for incremental computation, so rebuilds only reprocess what changed. Ships inside Next.js.
-- **Rolldown** (Rust) — The Rust rewrite of Rollup, designed to unify Vite's build pipeline. More on this below.
+- **esbuild (Go)**: A bundler and minifier written in Go by Evan Wallace. It runs 10 to 100 times faster than Webpack for most tasks, proving that native JS tooling is viable and highly effective. Vite uses it for pre-bundling dependencies in development.
+- **SWC (Rust)**: A Rust-based compiler that serves as a direct replacement for Babel. Next.js adopted it as its default compiler. It is roughly 20 times faster than Babel and handles JSX transformations, TypeScript compilation, and minification.
+- **Biome (Rust)**: A unified formatter and linter written in Rust. It replaces both ESLint and Prettier, running 20 to 35 times faster than the tools it replaces.
+- **oxc (Rust)**: The Oxidation Compiler project. It is building a complete Rust-based toolchain from scratch, including a parser, linter (oxlint), resolver, transformer, and minifier, focused on correctness and speed.
+- **Turbopack (Rust)**: Vercel's Rust-powered successor to Webpack, created by Tobias Koppers. It uses incremental computation to only compile modified files and ships inside Next.js.
+- **Rolldown (Rust)**: A Rust bundler designed to replace both esbuild and Rollup inside Vite to unify the build pipeline.
 
-The pattern is clear: every critical JS tool is being rewritten in a compiled language. The JavaScript-tools-for-JavaScript era is ending.
+The trend is clear: key pieces of the JS development stack are being rewritten in compiled languages. The era of writing JS tooling in JS is coming to an end.
 
-## TypeScript's Go Port
+## TypeScript's Go port
 
-One of the most exciting developments is Microsoft's project to port the TypeScript compiler to Go. This isn't a prototype or experiment—it's an official effort led by Anders Hejlsberg himself, the original creator of TypeScript (and C#, and Turbo Pascal).
+One of the most notable developments is Microsoft's project to rewrite the TypeScript compiler in Go. This is an official effort led by Anders Hejlsberg, the creator of TypeScript.
 
-### The Benchmarks
+### The benchmarks
 
-The numbers are staggering. On the VS Code codebase—one of the largest TypeScript projects in the world:
+The initial performance figures are significant. On the VS Code codebase, which is one of the largest TypeScript projects in existence:
 
-- **Type-checking time: 77.8 seconds → 7.5 seconds** (10.4x faster)
-- **Editor startup / project load: near-instant** compared to multi-second waits
-- **Memory usage: significantly reduced** thanks to Go's more predictable allocation patterns
+- Type-checking time dropped from 77.8 seconds to 7.5 seconds, running over 10 times faster.
+- Editor startup and project loading are near-instant, eliminating multi-second delays.
+- Memory usage is reduced because Go offers more predictable allocation patterns.
 
-For smaller projects the improvement is just as dramatic in relative terms. A typical 500-file project that takes 4 seconds to type-check drops to under 400 milliseconds.
+On smaller projects, the improvements are also noticeable. A project with 500 files that takes four seconds to type-check can compile in under 400 milliseconds.
 
-### What the Go Port Covers (and Doesn't)
+### What the Go port covers and what it doesn't
 
-The port covers the core pipeline: **scanning, parsing, binding, type-checking, and emit**. That's the expensive stuff—the parts that make `tsc --noEmit` slow.
+The Go port covers the primary compilation phases: scanning, parsing, binding, type-checking, and emitting files. These are the main operations that slow down the compiler.
 
-What's _not_ ported yet:
+The following features are still in development:
 
-- **Language Server Protocol (LSP)** — The full VS Code IntelliSense experience. This is actively in development and is the highest priority after the core compiler.
-- **Project references and composite builds** — Incremental build orchestration for monorepos.
-- **All compiler options** — Some niche flags are still being validated.
-- **Plugin API** — The transformer plugin system is not yet available in the Go version.
+- **Language Server Protocol (LSP)**: The engine that powers VS Code's autocomplete and IntelliSense. This is the team's primary focus after the compiler itself.
+- **Project references**: Support for incremental compilation and composite builds in monorepos.
+- **Niche compiler options**: Niche configuration flags that are still being implemented.
+- **Plugin API**: The custom transformer plugin system is not yet available in the Go version.
 
-The Go-based `tsc` is expected to reach feature parity for most workflows by late 2026, with the LSP following shortly after. Microsoft has signaled this will eventually become _the_ TypeScript compiler, not a sidecar.
+The Go-based compiler is expected to match the features of the JS version for most workflows by late 2026, with the language server following shortly after. Microsoft has indicated this will eventually become the primary TypeScript compiler.
 
-### Why Go Instead of Rust?
+### Why Go instead of Rust?
 
-While Rust dominates the JS tooling space, the TypeScript team chose Go for specific, well-reasoned tradeoffs:
+While Rust is commonly used for new JS tools, the TypeScript team selected Go due to specific technical tradeoffs:
 
-- **Garbage collection fits the workload.** A type checker creates millions of interconnected AST nodes with complex, non-linear reference patterns. Rust's ownership model would require extensive use of `Rc<RefCell<T>>` or arena allocators, adding friction to a direct port. Go's GC handles this naturally.
-- **Struct memory layout.** Go gives fine-grained control over struct layouts and value types, which is critical for cache-friendly AST traversal.
-- **Porting velocity.** The existing TypeScript codebase is massive (~1M lines). Go's simpler syntax and semantics made a faithful port faster to execute than a Rust rewrite would have been.
+- **Garbage collection**: A type checker generates millions of interconnected nodes with complex reference patterns. Managing this in Rust would require extensive use of reference counting (`Rc` or `Arc`) or custom memory arenas. Go's garbage collector handles these cyclical references naturally.
+- **Struct memory layout**: Go provides control over struct layouts and value types, allowing for cache-friendly AST traversals.
+- **Development velocity**: The TypeScript compiler is a large codebase with about a million lines of code. Go's syntax and semantics allowed for a more straightforward port than a full Rust rewrite.
 
-This isn't a statement that Go is "better" than Rust. It's that Go was the better fit _for porting this specific codebase_.
+This decision does not imply that Go is generally superior to Rust, but rather that it was the more practical option for porting this specific codebase.
 
-## Rolldown: Vite's Supercharged Future
+## Rolldown: Vite's supercharged future
 
-Evan You (creator of Vue and Vite) and his team are building **Rolldown**, a Rust-based bundler designed to replace both esbuild _and_ Rollup inside Vite—unifying the entire pipeline.
+Evan You and the Vite core team are building Rolldown, a Rust-based bundler designed to replace both esbuild and Rollup inside Vite.
 
-### The Problem Rolldown Solves
+### The problem Rolldown solves
 
-Currently, Vite uses a two-tool architecture:
+Currently, Vite uses two different bundlers:
 
-1. **esbuild** for dev-time dependency pre-bundling (fast, but limited plugin support)
-2. **Rollup** for production builds (flexible plugins, but written in JS and slow)
+1. **esbuild** for pre-bundling dependencies in development because it is fast, though its plugin support is limited.
+2. **Rollup** for production builds because it has a mature plugin system, despite being written in JS and running slowly.
 
-This split means code can occasionally behave differently between dev and prod. Different tree-shaking algorithms, different module resolution, different chunk splitting. Rolldown eliminates this by being one tool for both.
+Because of this split, code can occasionally run differently in development compared to production. They use different module resolution rules, chunk splitting algorithms, and tree-shaking logic. Rolldown aims to resolve this by providing a single bundler for both environments.
 
-### Architecture: How Rolldown Differs from Rollup
+### Architecture: how Rolldown differs from Rollup
 
-Rolldown isn't just "Rollup but faster." It rethinks several internals:
+Rolldown is a complete rewrite that changes several core concepts:
 
-- **Parallel parsing.** Rollup parses modules sequentially. Rolldown parses all discovered modules in parallel across threads.
-- **Native module resolution.** Uses oxc's Rust-based resolver instead of Node's `require.resolve`, which is significantly faster for deep `node_modules` trees.
-- **Rust plugin hooks with JS compatibility.** Rolldown supports Rollup's plugin interface for backward compatibility, but also exposes native Rust hooks for plugins that need maximum speed.
-- **Incremental architecture.** Designed from the ground up for incremental rebuilds, not bolted on after the fact.
+- **Parallel parsing**: Rollup parses modules sequentially, whereas Rolldown parses files in parallel across multiple CPU threads.
+- **Native module resolution**: It uses oxc's Rust-based resolver instead of Node's resolution logic, which speeds up lookups in deep dependency trees.
+- **Rust plugin hooks**: Rolldown supports Rollup's JavaScript plugin interface for backward compatibility, but it also allows developers to write plugins in Rust for maximum speed.
+- **Incremental builds**: The bundler is designed from the start to support incremental builds and caching.
 
-### What Vite Looks Like With Rolldown
+### What Vite looks like with Rolldown
 
-Vite 6 introduced Rolldown as an experimental backend via the `Environment API`. In Vite 7 (expected late 2026), Rolldown becomes the default bundler for both dev and production:
+Vite 6 introduced Rolldown as an experimental option. In Vite 7, Rolldown is planned to become the default bundler for both development and production:
 
-- **Dev server:** Rolldown handles dependency pre-bundling _and_ on-demand module transformation—no more esbuild dependency.
-- **Production builds:** Rolldown replaces Rollup entirely, with full plugin compatibility for the existing Vite plugin ecosystem.
-- **Single behavior model:** What you see in dev is exactly what you get in prod. One resolver, one transformer, one tree-shaker.
+- The dev server will use Rolldown for dependency pre-bundling and module transformations, removing the esbuild dependency.
+- Production builds will use Rolldown instead of Rollup, maintaining compatibility with the existing Vite plugin ecosystem.
+- Both environments will share the same resolver, chunk splitter, and tree-shaking logic.
 
 ### Comparison: esbuild vs Rollup vs Rolldown
 
@@ -122,18 +122,17 @@ Vite 6 introduced Rolldown as an experimental backend via the `Environment API`.
 
 ## Replacing ESLint and Prettier: oxlint and Biome
 
-The linting and formatting layer is also getting the native treatment. Two tools are leading the charge:
+The linting and formatting layers are also moving to native binaries.
 
 ### oxlint
 
-Part of the oxc project, **oxlint** is a Rust-based linter that's 50–100x faster than ESLint. It supports hundreds of rules out of the box with zero configuration needed:
+Oxlint is a Rust-based linter from the oxc project that runs 50 to 100 times faster than ESLint. It checks files without requiring a configuration file:
 
 ```bash
-# Install and run — no config file required
 npx oxlint@latest
 ```
 
-oxlint comes with sensible defaults covering correctness, suspicious patterns, and pedantic style rules. You can customize via an `oxlintrc.json`:
+It ships with defaults covering typical code correctness and stylistic issues. You can customize the rules using an `oxlintrc.json` file:
 
 ```json
 {
@@ -146,11 +145,11 @@ oxlint comes with sensible defaults covering correctness, suspicious patterns, a
 }
 ```
 
-The practical move right now: **run oxlint alongside ESLint**. Use oxlint for the fast feedback loop during development, keep ESLint for the rules oxlint doesn't cover yet (custom plugins, framework-specific rules).
+Currently, the most practical approach is to run oxlint alongside ESLint. Use oxlint for fast feedback during local development, and keep ESLint for rules that require custom plugins or specific framework integrations.
 
 ### Biome
 
-**Biome** takes a different philosophy—it's a single binary that replaces _both_ ESLint and Prettier:
+Biome is a single binary that replaces both ESLint and Prettier:
 
 ```bash
 # Initialize Biome in your project
@@ -160,7 +159,7 @@ npx @biomejs/biome init
 npx @biomejs/biome check --write .
 ```
 
-A minimal `biome.json` gives you full control:
+You can configure it with a `biome.json` file:
 
 ```json
 {
@@ -180,45 +179,34 @@ A minimal `biome.json` gives you full control:
 }
 ```
 
-Biome formats and lints your entire codebase in a single pass. On a 5,000-file project, that's typically **under 500 milliseconds** versus 30+ seconds for ESLint + Prettier combined.
+Biome processes formatting and linting in a single pass. In a project with 5,000 files, it typically finishes in under 500 milliseconds, compared to over 30 seconds for ESLint and Prettier combined.
 
-## What This Means for Your Workflow Today
+## What this means for your workflow today
 
-Not every tool is production-ready for every use case. Here's a practical guide on what to adopt now:
+Not every tool is ready to replace your existing setup. Here is a guide on what you can adopt now:
 
-**Adopt today with confidence:**
+- **Stable to adopt today**: Swap Babel for SWC in your build pipeline. Next.js already does this, and the migration is clean in other frameworks. You can also run Biome or oxlint alongside your existing configuration. esbuild is a reliable choice for standalone bundling tasks.
+- **Suitable for new projects**: If you are starting a new project, consider using Vite 7 with Rolldown enabled. For existing projects, you can wait for the stable release. The TypeScript Go compiler can be used in CI to speed up type-checking tasks.
+- **Keep monitoring**: Turbopack is currently integrated with Next.js, so there is no immediate reason to adopt it for other frameworks yet.
 
-- **SWC** — If you're on Next.js, you're already using it. If not, swap Babel for SWC in your build pipeline. The migration is straightforward.
-- **Biome or oxlint** — Run alongside (or instead of) ESLint/Prettier. The speed improvement alone justifies it, and both tools are stable.
-- **esbuild** — Battle-tested. If you're not using Vite, esbuild is a solid standalone bundler for many projects.
+## The tradeoffs of native tooling
 
-**Adopt for new projects:**
+Moving your build infrastructure from JavaScript to Rust and Go has some notable consequences:
 
-- **Vite with Rolldown** — If starting a new project in late 2026, use Vite 7 with Rolldown as the default. For existing Vite projects, the migration will be seamless.
-- **TypeScript Go compiler** — Watch this space. Once the LSP is ready, expect VS Code to ship it as the default. Until then, the native `tsc` is already usable for CI type-checking.
+- **Higher contribution barrier**: Web developers can easily inspect and contribute to a Webpack plugin written in JavaScript. Writing or modifying a Rolldown plugin requires knowledge of Rust, which limits the number of potential contributors.
+- **Rebuilding the plugin ecosystem**: While Babel has thousands of plugins, SWC has fewer. Rolldown maintains Rollup compatibility, but native Rust plugins will take time to grow.
+- **Debugging complexity**: Debugging a JS-based bundler yields standard JS stack traces. When a compiled Rust tool encounters an error or crashes, resolving the issue is more difficult for web developers.
+- **Platform-specific binaries**: Native tools must compile and distribute binaries for different operating systems and CPU architectures. This adds complexity to CI runs and can lead to installations failing on less common configurations.
+- **Community dependencies**: When a tool is written in a language that most of its users do not speak, the project depends heavily on its core maintainers. If those maintainers step away, forking or maintaining the project is more difficult.
 
-**Wait and watch:**
+These are tradeoffs to weigh before replacing a working build setup.
 
-- **Turbopack** — Currently tightly coupled to Next.js. If you're not in the Next.js ecosystem, there's no reason to adopt it directly yet.
+## The bottom line
 
-## The Tradeoffs of Native Tooling
+The JavaScript build pipeline is going through its most significant change in years. TypeScript's Go port will speed up type-checking, Rolldown will consolidate Vite's build steps into a fast Rust binary, and Biome is making formatting and linting near-instant.
 
-It's not all upside. Moving critical infrastructure from JavaScript to Rust and Go introduces real costs:
+The tools that build your JavaScript are no longer being written in JavaScript, and that helps developers focus on writing applications instead of waiting for compilation steps to finish.
 
-- **Contribution barrier.** Your average frontend developer can read and contribute to a Webpack plugin written in JavaScript. Contributing to Rolldown requires knowing Rust. The contributor pool shrinks dramatically.
-- **Plugin ecosystems reset.** Babel has thousands of plugins. SWC has… far fewer. Rolldown supports Rollup plugins for compatibility, but native Rust plugins are a different world. The ecosystem needs time to rebuild.
-- **Debugging complexity.** When your JS-based bundler breaks, you read a JavaScript stack trace. When a Rust tool segfaults or produces unexpected output, debugging is harder for most web developers.
-- **Platform-specific binaries.** Native tools need to ship prebuilt binaries for every platform (macOS ARM, macOS Intel, Linux x64, Linux ARM, Windows). This creates CI complexity and occasional "binary not found" issues on exotic setups.
-- **Lock-in risk.** When a tool is written in a language most of its users can't read, the community depends more heavily on the core team. If that team loses funding or interest, forking is much harder than with a JavaScript project.
+For most developers, these changes will be seamless. Your build commands will simply run faster, and code diagnostics in your editor will update quicker, while your daily coding workflow remains the same.
 
-These are manageable tradeoffs, and the performance gains are worth it for most teams. But they're worth understanding before you rip out your entire toolchain.
-
-## The Bottom Line
-
-The JavaScript tooling landscape is undergoing its most significant transformation since the Webpack era. TypeScript's Go port will make type-checking feel instant. Rolldown will unify Vite's build pipeline into a single, blazing-fast Rust binary. Biome and oxlint are making linting and formatting effectively free in terms of developer wait time.
-
-The direction is irreversible: **the tools that build your JavaScript will no longer be written in JavaScript.** And that's a good thing. Developers shouldn't spend their time waiting for tools. They should spend it building products.
-
-The best part? Most of these transitions will be invisible. You'll run `vite build` and it'll just be 50x faster. You'll open VS Code and type-checking will just be instant. The tools change underneath; your workflow stays the same—just faster.
-
-Start experimenting with these tools now. The ones that are ready today (SWC, Biome, esbuild) deliver immediate, measurable improvements. The ones landing later this year (Rolldown, TypeScript Go) will complete the picture. The era of waiting for JavaScript tooling is over.
+You can start adopting SWC, Biome, and esbuild today for immediate improvements. As Rolldown and the Go-based TypeScript compiler mature, the transition will be complete.

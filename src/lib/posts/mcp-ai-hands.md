@@ -12,19 +12,19 @@ updated: "2026-06-05"
 
 # The Model Context Protocol (MCP): Giving AI "Hands"
 
-If you have been using AI for coding, you know the frustration: the AI is incredibly smart, but it's trapped in a box. It can't see your database, it can't check your server logs, and it certainly doesn't know about your company's specific internal documentation.
+If you have been using AI for coding, you know the frustration: the AI is smart, but it is trapped in a box. It cannot see your database, it cannot check your server logs, and it does not know about your company's internal documentation.
 
-The Model Context Protocol (MCP) is the emerging standard solving this exact problem. In this post, we'll go deep — the architecture, the best servers available today, how to build your own from scratch, and the security pitfalls you need to avoid.
+The Model Context Protocol (MCP) is the emerging standard solving this problem. This post covers the architecture, the best servers available today, how to build your own from scratch, and the security pitfalls to avoid.
 
 ## What is MCP?
 
-Think of MCP as an API specifically designed for AI. It allows you to expose **tools** (executable functions), **resources** (readable data), and **prompts** (reusable templates) to an LLM. Instead of manually copying and pasting logs into ChatGPT or Claude, you connect your AI client (like Cursor, Claude Desktop, or an agentic framework) to an MCP Server.
+Think of MCP as an API designed for AI. It allows you to expose tools (executable functions), resources (readable data), and prompts (reusable templates) to an LLM. Instead of copying and pasting logs into a chat window, you connect your AI client, like Cursor, Claude Desktop, or an agentic framework, to an MCP server.
 
-This gives the AI "hands" to manipulate your environment and "eyes" to read your specific context.
+This gives the AI actions to manipulate your environment and context to read your data.
 
-## The Architecture: Client → Server → Tool
+## The architecture: client, server, and tools
 
-MCP follows a clean client-server model. Here's how the pieces fit together:
+MCP follows a client-server model:
 
 ```
 ┌─────────────────┐       JSON-RPC        ┌─────────────────┐
@@ -40,77 +40,77 @@ MCP follows a clean client-server model. Here's how the pieces fit together:
                                   └───────┘  └──────────┘ └────────┘
 ```
 
-1. **The Client** is any AI-powered application — Claude Desktop, Cursor, Windsurf, or your own agent. It discovers what capabilities a server offers, then calls them when the LLM decides it needs to.
-2. **The Server** is a lightweight process you run. It registers tools, resources, and prompts, then waits for requests over a transport layer (stdio for local processes, SSE for remote).
-3. **The Primitives** (Tools, Resources, Prompts) are the capabilities the server exposes. The LLM sees their names and descriptions, then decides when to invoke them.
+1. **The client**: Any AI-powered application, like Claude Desktop, Cursor, Windsurf, or a custom agent. It discovers what capabilities a server offers, then calls them when the LLM decides it needs to.
+2. **The server**: A lightweight process you run. It registers tools, resources, and prompts, then waits for requests over a transport layer, using stdio for local processes and SSE for remote ones.
+3. **The primitives**: The tools, resources, and prompts the server exposes. The LLM sees their names and descriptions, then decides when to invoke them.
 
-The key insight: the _model_ decides when to call a tool. You describe what the tool does, and the LLM figures out the right moment to use it based on the user's intent.
+The model itself decides when to call a tool. You describe what the tool does, and the LLM determines the right moment to use it based on the user's intent.
 
-## S-Tier MCP Servers to Use Today
+## MCP servers to use today
 
-The ecosystem is growing rapidly. Here are some incredibly powerful MCP servers that change how you build software — with real examples of what interactions actually look like.
+The ecosystem is growing rapidly. Here are some useful MCP servers that change how you build software, along with examples of how they work:
 
 ### Chrome DevTools
 
-Allows the AI to open a headless browser, click buttons, inspect the console for errors, and verify CSS or layout fixes automatically. It's like having an automated QA tester built into your editor.
+Allows the AI to open a headless browser, click buttons, inspect the console for errors, and verify CSS or layout fixes. It works like an automated QA tester built into your editor.
 
 **Example interaction:**
 
 > **You:** "My signup form button is invisible on mobile. Can you check what's happening?"
 >
-> **AI calls** `browser_navigate` → opens `localhost:3000/signup` with a mobile viewport
-> **AI calls** `browser_console_errors` → finds `Uncaught TypeError` in `form.js`
-> **AI calls** `browser_screenshot` → sees the button is rendered behind the footer
+> **AI calls** `browser_navigate` to open `localhost:3000/signup` with a mobile viewport.
+> **AI calls** `browser_console_errors` and finds an `Uncaught TypeError` in `form.js`.
+> **AI calls** `browser_screenshot` and sees the button is rendered behind the footer.
 >
-> **AI responds:** "Two issues — there's a JS error preventing the loading state, and your `.submit-btn` has `position: absolute` without a `z-index`, so it renders behind the footer on viewports under 640px. Here's the fix..."
+> **AI responds:** "There are two issues: a JS error preventing the loading state, and your `.submit-btn` has `position: absolute` without a `z-index`, so it renders behind the footer on viewports under 640px. Here is the fix..."
 
 ### Sentry
 
-Instead of hunting for bugs in a dashboard, you can ask your AI to find and fix errors directly.
+Instead of searching for bugs in a dashboard, you can ask the AI to retrieve and fix active errors.
 
 **Example interaction:**
 
 > **You:** "What are the latest unresolved errors in production?"
 >
-> **AI calls** `sentry_search_issues` with query `is:unresolved` and project `web-app`
+> **AI calls** `sentry_search_issues` with query `is:unresolved` and project `web-app`.
 >
-> **AI responds:** "There are 3 unresolved issues. The most frequent is a `TypeError: Cannot read property 'email' of undefined` in `UserProfile.tsx` at line 42, occurring 847 times in the last 24h. The user object isn't being null-checked after the API call. Here's a fix..."
+> **AI responds:** "There are three unresolved issues. The most frequent is a `TypeError: Cannot read property 'email' of undefined` in `UserProfile.tsx` at line 42, occurring 847 times in the last 24 hours. The user object is not checked after the API call. Here is the fix..."
 
-### Postgres / Databases
+### Postgres and databases
 
-Give the AI read-access to your database schema. It can now write perfect SQL queries without you having to repeatedly paste the schema into the prompt.
+Give the AI read-access to your database schema. It can then write SQL queries without you having to copy the schema into the prompt.
 
 **Example interaction:**
 
 > **You:** "Which customers signed up in the last week but haven't made a purchase?"
 >
-> **AI calls** `query` → `SELECT * FROM customers WHERE created_at > NOW() - INTERVAL '7 days' AND id NOT IN (SELECT customer_id FROM orders)`
+> **AI calls** `query` with: `SELECT * FROM customers WHERE created_at > NOW() - INTERVAL '7 days' AND id NOT IN (SELECT customer_id FROM orders)`
 >
-> **AI responds:** "Found 23 customers. Here's the breakdown by signup source..." (then formats a table)
+> **AI responds:** "Found 23 customers. Here is the breakdown by signup source..." (then formats a table)
 
 ### Stripe
 
-Manage customers, create test products, and inspect invoices directly through natural language.
+Manage customers, create test products, and inspect invoices through natural language.
 
 **Example interaction:**
 
 > **You:** "Create a test product called 'Pro Plan' at $29/month with a 14-day trial."
 >
-> **AI calls** `stripe_create_product` with name `Pro Plan`
-> **AI calls** `stripe_create_price` with `unit_amount: 2900`, `recurring.interval: month`, `trial_period_days: 14`
+> **AI calls** `stripe_create_product` with name `Pro Plan`.
+> **AI calls** `stripe_create_price` with `unit_amount: 2900`, `recurring.interval: month`, `trial_period_days: 14`.
 >
-> **AI responds:** "Done. Product `prod_xxx` is live in test mode with a $29/month price and 14-day free trial. Here's the checkout link to test it..."
+> **AI responds:** "Product `prod_xxx` is live in test mode with a $29/month price and 14-day free trial. Here is the checkout link to test it..."
 
-## MCP Resources vs Tools
+## MCP resources vs tools
 
-This is a distinction that trips people up. MCP exposes three primitives, and two of them — **Resources** and **Tools** — sound similar but serve very different purposes.
+MCP exposes three primitives, and two of them, resources and tools, serve different purposes.
 
-**Tools** are _actions_. They do something — query a database, send an email, create a file. The model _invokes_ them, and they have side effects. Think of them like POST endpoints.
+**Tools** are actions. They perform operations, such as querying a database, sending an email, or creating a file. The model invokes them, and they can have side effects. They behave similarly to POST endpoints.
 
-**Resources** are _data_. They provide context for the model to read — a file's contents, a database schema, a config file. They are read-only and identified by a URI. Think of them like GET endpoints.
+**Resources** are data. They provide context for the model to read, like a file's contents, a database schema, or a config file. They are read-only and identified by a URI, behaving similarly to GET endpoints.
 
 ```typescript
-// Resource — provides data for context
+// Resource: provides data for context
 server.resource("schema", "db://schema", async () => ({
   contents: [
     {
@@ -121,18 +121,18 @@ server.resource("schema", "db://schema", async () => ({
   ],
 }));
 
-// Tool — performs an action
+// Tool: performs an action
 server.tool("run_query", { sql: z.string() }, async ({ sql }) => {
   const rows = await db.query(sql); // has side effects
   return { content: [{ type: "text", text: JSON.stringify(rows) }] };
 });
 ```
 
-**Why does this matter?** Resources can be loaded proactively by the client to stuff into the LLM's context window _before_ the user even asks a question. Tools are only called when the model decides to act. A well-designed MCP server uses resources for "here's what you need to know" and tools for "here's what you can do."
+Resources can be loaded by the client to add to the LLM's context window before the user asks a question. Tools are only called when the model decides to act. An MCP server uses resources for information and tools for actions.
 
-## MCP Prompts: The Third Primitive
+## MCP prompts: the third primitive
 
-Prompts are the most overlooked primitive. They are reusable, parameterized templates that a server can expose to guide the LLM's behavior. Think of them as server-defined "slash commands."
+Prompts are reusable, parameterized templates that a server exposes to guide the LLM's behavior. You can think of them as server-defined slash commands.
 
 ```typescript
 server.prompt("code_review", { pr_diff: z.string() }, ({ pr_diff }) => ({
@@ -148,11 +148,11 @@ server.prompt("code_review", { pr_diff: z.string() }, ({ pr_diff }) => ({
 }));
 ```
 
-When a user selects this prompt in their client, the LLM receives a well-structured request instead of a vague "review my code." This is powerful for teams — you can standardize how your AI handles common tasks like code reviews, incident triage, or data analysis, and ship those patterns as part of your MCP server.
+When a user selects this prompt in their client, the LLM receives a structured request. This allows teams to standardize how their AI handles tasks like code reviews, incident reports, or data analysis, shipping those patterns as part of the MCP server.
 
-## Building Your Own MCP Server
+## Building your own MCP server
 
-Let's build a real, working MCP server — a weather lookup tool. This covers the full setup including transport configuration.
+Here is how to build a basic weather lookup MCP server:
 
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -192,18 +192,18 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
 
-### Stdio vs SSE Transport
+### Stdio vs SSE transport
 
-- **Stdio** — The client spawns your server as a child process. Communication happens over `stdin`/`stdout`. This is the default for local tools and what Claude Desktop and Cursor use. Zero network config, zero auth headaches.
-- **SSE (Server-Sent Events)** — The server runs as a standalone HTTP service. Clients connect over the network. Use this when you want to host a shared MCP server for a team, or deploy it remotely.
+- **Stdio**: The client spawns your server as a child process. Communication runs over `stdin` and `stdout`. This is the default for local tools used by Claude Desktop and Cursor, requiring no network or authentication setup.
+- **SSE (Server-Sent Events)**: The server runs as a standalone HTTP service, and clients connect over the network. This is useful when hosting a shared MCP server for a team or deploying it remotely.
 
-For most personal or local-dev use cases, stdio is the way to go. SSE is for when you're running MCP servers as infrastructure.
+For local development and personal use, stdio is the standard option. SSE is suitable for hosted infrastructure.
 
-## Getting Started: Configuring Your Client
+## Getting started: configuring your client
 
-Most MCP clients use a JSON config file to know which servers to spin up. Here's how to wire up the weather server we just built.
+Most MCP clients use a JSON configuration file to manage active servers.
 
-**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+For **Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {
@@ -223,7 +223,7 @@ Most MCP clients use a JSON config file to know which servers to spin up. Here's
 }
 ```
 
-**Cursor** (`.cursor/mcp.json` in your project root):
+For **Cursor** (`.cursor/mcp.json` in your project root):
 
 ```json
 {
@@ -236,29 +236,29 @@ Most MCP clients use a JSON config file to know which servers to spin up. Here's
 }
 ```
 
-After saving the config, restart the client. You should see your tools appear in the available tools list. The AI will start using them automatically when they're relevant to your prompts.
+After saving the configuration, restart the client. The new tools will appear in the client interface, and the AI will call them when they are relevant to your prompts.
 
-## Security Considerations
+## Security considerations
 
-MCP is powerful — and that means it's dangerous if you're careless. A few things to think about before you wire up a server to your production database:
+MCP is powerful, which means it can be dangerous if you are careless. Consider the following safety measures:
 
-- **Principle of least privilege.** Give the AI read-only access unless you _genuinely_ need write operations. A `SELECT`-only Postgres user is your friend.
-- **Validate and sanitize inputs.** The model generates the arguments to your tools. Treat them like untrusted user input — because they are. Use Zod schemas aggressively.
-- **Never expose secrets through tool responses.** If your tool returns API keys, tokens, or credentials in its output, those go straight into the LLM's context (and potentially into logs). Redact sensitive data before returning it.
-- **Be cautious with `eval` or shell execution tools.** Tools that let the AI run arbitrary code or shell commands are incredibly useful — and incredibly risky. Sandbox them, limit permissions, and never run them against production systems without guardrails.
-- **Audit tool calls.** Log every tool invocation with its arguments and results. You want a trail when something goes wrong — and with agentic workflows, things _will_ eventually go wrong.
+- **Principle of least privilege**: Give the AI read-only access unless you need write operations. A read-only database user is recommended.
+- **Validate inputs**: The model generates the arguments for your tools. Treat them like untrusted user input, and use validation schemas like Zod.
+- **Do not expose secrets**: Avoid returning API keys, tokens, or credentials in tool outputs, as these enter the LLM's context window.
+- **Use caution with shell tools**: Tools that execute shell commands or code carry risks. Sandbox these processes and limit their permissions.
+- **Audit tool calls**: Log every tool invocation, including arguments and results, to help debug issues.
 
-A good rule of thumb: if you wouldn't give a junior developer unrestricted access to it, don't give it to your MCP server either.
+As a general rule, avoid giving an MCP server access permissions that you would not give to an unverified third-party script.
 
-## Where MCP Is Heading
+## Where MCP is heading
 
-MCP is still early, but the trajectory is clear. We're moving from AI as a text generator to AI as an active participant in our development environments — and eventually, in production systems.
+We are moving from AI as a text generator to AI as an active participant in our development environments, and eventually in production systems.
 
-A few trends to watch:
+Key trends include:
 
-- **Composable agent architectures** — Multiple MCP servers chained together, where an AI agent can use a Sentry server to find a bug, a GitHub server to create a branch, a code-editing tool to write the fix, and a CI server to deploy it. All in one conversation.
-- **Marketplace and discovery** — Expect a registry of verified MCP servers, much like npm or the VS Code extension marketplace. Anthropic and the community are already building toward this.
-- **Authentication standards** — OAuth-based flows for remote MCP servers are being standardized, enabling secure, multi-tenant server deployments.
-- **Streaming and real-time** — Today, tools return a single response. Future iterations will likely support streaming results, enabling tools that watch logs, monitor metrics, or track deployments in real time.
+- **Composable agent architectures**: Multiple MCP servers working together, allowing an AI agent to query error logs, find a bug, create a git branch, write the code fix, and monitor the CI build.
+- **Discovery registries**: Standardized directories for finding verified MCP servers.
+- **Authentication standards**: OAuth-based protocols to secure connections to remote MCP servers.
+- **Streaming tools**: Support for streaming outputs to monitor active logs or network connections in real time.
 
-The protocol is the foundation. By standardizing how tools talk to LLMs, we're building the plumbing for a future where AI doesn't just _suggest_ code — it ships it.
+By standardizing how tools talk to LLMs, the protocol provides the foundation for agentic software workflows.

@@ -10,39 +10,39 @@ coverHeight: 9
 updated: "2026-01-10"
 ---
 
-# MCP: Give Your AI Eyes and Hands, Not Just a Keyboard
+# MCP: give your AI eyes and hands, not just a keyboard
 
-Storytime: I was debugging a production issue at an unreasonable hour. The AI I was using was helpful — genuinely helpful — right up until the moment I needed it to check something in the database, verify an environment variable, or pull a stack trace from our error tracker. Each time, I had to stop, context-switch to another tab, copy something, paste it back, repeat.
+Storytime: I was debugging a production issue at an unreasonable hour. The AI I was using was genuinely helpful, right up until the moment I needed it to check something in the database, verify an environment variable, or pull a stack trace from our error tracker. Each time, I had to stop, context-switch to another tab, copy something, paste it back, and repeat.
 
-The AI was smart. But it was blind.
+The AI was smart, but it was blind.
 
-The Model Context Protocol (MCP) fixes this. Instead of you manually shuttling context between your tools and your AI, MCP lets the AI reach out and grab what it needs directly — databases, browser sessions, error trackers, internal APIs, whatever you choose to expose. It's working in production today, and once you experience it, it's hard to go back.
+The Model Context Protocol (MCP) fixes this. Instead of you manually shuttling context between your tools and your AI, MCP lets the AI reach out and grab what it needs directly, including databases, browser sessions, error trackers, and internal APIs. It is working in production today, and once you experience it, it is hard to go back.
 
-## What's Actually Happening Here
+## What's actually happening here
 
-MCP is a client-server protocol — but not in the web sense. Three pieces:
+MCP is a client-server protocol, but not in the traditional web sense. It consists of three pieces:
 
-**MCP Hosts** are AI applications that support the protocol. Claude Desktop, Cursor, and others. The host manages connections to MCP servers and decides when to invoke them.
+**MCP Hosts** are AI applications that support the protocol, such as Claude Desktop or Cursor. The host manages connections to MCP servers and decides when to invoke them.
 
-**MCP Servers** expose tools (functions the AI can call) and resources (data the AI can read). One server for your database, another for error tracking, another for your browser — each focused on a specific domain.
+**MCP Servers** expose tools (functions the AI can call) and resources (data the AI can read). You might have one server for your database, another for error tracking, and another for your browser, with each focused on a specific domain.
 
-**The Protocol** itself is JSON-RPC under the hood, but you don't need to know that. You just need to know: when you ask your AI a question, it can now go _get_ the answer instead of waiting for you to paste it in.
+**The Protocol** itself runs over JSON-RPC under the hood. You just need to know that when you ask your AI a question, it can now fetch the answer directly instead of waiting for you to paste it in.
 
-Here's what that looks like in practice:
+Here is what that looks like in practice:
 
 > You ask: "What's causing the error spike today?"
 >
-> The AI queries your Sentry MCP server → fetches recent issues → reads the relevant code → answers your question in plain language.
+> The AI queries your Sentry MCP server, fetches recent issues, reads the relevant code, and answers your question in plain language.
 
-You see the answer. You never opened Sentry.
+You see the answer without ever opening Sentry.
 
-## Servers You Can Use Right Now
+## Servers you can use right now
 
-The ecosystem already has solid integrations for common dev workflows. Let me walk you through the ones I'd reach for first.
+The ecosystem already has solid integrations for common developer workflows. Let's look at the ones I recommend reaching for first.
 
 ### Chrome DevTools MCP
 
-This one gives your AI control of a real browser. Instead of describing how to reproduce a bug, you can ask the AI to reproduce it.
+This integration gives your AI control of a real browser. Instead of describing how to reproduce a bug, you can ask the AI to reproduce it.
 
 ```typescript
 // Natural language prompt:
@@ -56,7 +56,7 @@ and report any console errors"
 // 4. Reports back what it found
 ```
 
-I personally find this most useful for CSS debugging. "Inspect that button, check the computed styles, figure out why it's 4px off on mobile" — instead of doing it yourself across DevTools and a chat window.
+I find this most useful for CSS debugging. You can ask the AI to inspect a button, check the computed styles, and figure out why it is misaligned on mobile, avoiding the back-and-forth between DevTools and a chat window.
 
 ### Sentry MCP
 
@@ -72,13 +72,13 @@ Error tracking becomes conversational.
 // - Returns formatted stack traces
 ```
 
-The real payoff: the AI can fetch an error from Sentry _and_ open the relevant source file _and_ suggest a fix — all in one shot. That's the workflow that feels like magic the first time.
+The real benefit is that the AI can fetch an error from Sentry, open the relevant source file, and suggest a fix, all in one shot. That workflow feels like magic the first time you run it.
 
-**Setup tip**: Use a read-only Sentry API token. There's no reason your AI needs write access here.
+Tip: Use a read-only Sentry API token. There is no reason your AI needs write access here.
 
 ### Postgres MCP
 
-The AI understands your schema without you pasting it in every session.
+The AI understands your schema without requiring you to copy and paste it into every session.
 
 ```typescript
 // You ask:
@@ -91,11 +91,11 @@ The AI understands your schema without you pasting it in every session.
 // 4. Formats the results
 ```
 
-**Important**: Configure this with read-only credentials. Seriously. A `SELECT`-only database user is five minutes to set up and means you'll never have a bad day where the AI runs a `DELETE` with a missing `WHERE` clause.
+Important: Configure this with read-only credentials. A SELECT-only database user takes five minutes to set up and ensures the AI can never run a DELETE with a missing WHERE clause.
 
 ### Stripe MCP
 
-Customer and payment queries in plain language — especially useful if your support team needs Stripe access without learning the dashboard.
+Customer and payment queries in plain language are especially useful if your support team needs Stripe access without learning the full dashboard.
 
 ```typescript
 // Support workflow:
@@ -105,13 +105,13 @@ Customer and payment queries in plain language — especially useful if your sup
 "Create a test customer with a monthly Pro plan subscription";
 ```
 
-Use restricted API keys. Test mode and live mode should be separate MCP configurations.
+Use restricted API keys, and keep test mode and live mode configurations separate.
 
-## Building Your Own MCP Server
+## Building your own MCP server
 
-When the existing servers don't cover your use case — an internal API, a proprietary tool, a custom database — building one is more approachable than it sounds. Let me show you the shape of it.
+When the existing servers do not cover your use case, such as an internal API, a proprietary tool, or a custom database, building one is straightforward. Let's look at the basic structure.
 
-### The Basic Structure
+### The basic structure
 
 ```typescript
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -157,11 +157,11 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
 
-That's the whole pattern. Define what tools exist (`ListTools`), handle when they're called (`CallTool`), return structured results.
+That is the entire pattern. You define what tools exist using ListTools, handle when they are called in CallTool, and return structured results.
 
-### Add Validation — Always
+### Add validation: always
 
-Before you ship anything, add Zod validation on your inputs. The AI sends data in good faith, but good faith isn't a type system.
+Before you ship anything, add Zod validation on your inputs. The AI sends data in good faith, but good faith is not a type system.
 
 ```typescript
 import { z } from "zod";
@@ -176,11 +176,11 @@ const validated = SearchSchema.parse(args);
 const users = await database.users.search(validated.query, validated.limit);
 ```
 
-Clear error messages when validation fails make debugging significantly less painful.
+Clear error messages when validation fails make debugging significantly easier.
 
-### Add Resources for Dynamic Docs
+### Add resources for dynamic docs
 
-Resources are how you give the AI access to reference data — API documentation, configuration, anything that changes over time.
+Resources are how you give the AI access to reference data, such as API documentation or configurations that change over time.
 
 ```typescript
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
@@ -193,9 +193,9 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 });
 ```
 
-This is one of my favorite MCP patterns — documentation that's always current because it's fetched dynamically, not copy-pasted once and forgotten.
+This is one of my favorite MCP patterns: documentation that is always current because it is fetched dynamically, rather than copied and pasted once and forgotten.
 
-### Connecting It to Claude Desktop
+### Connecting it to Claude Desktop
 
 Edit the config file:
 
@@ -216,13 +216,13 @@ Edit the config file:
 }
 ```
 
-Restart Claude Desktop. Your tools are now available.
+Restart Claude Desktop, and your tools will be available.
 
-## Security: A Few Rules That Matter
+## Security: a few rules that matter
 
-**Read-only by default.** Every database connection your MCP server makes should use a read-only user unless you've explicitly decided otherwise. This applies to Postgres, your internal APIs, everything.
+**Read-only by default**: Every database connection your MCP server makes should use a read-only user unless you have explicitly decided otherwise. This applies to Postgres, your internal APIs, and all other services.
 
-**Validate inputs.** I said it above but I'll say it again — always validate, even though the inputs come from AI. Especially for anything destructive:
+**Validate inputs**: Always validate, even though the inputs come from an AI. This is especially true for anything destructive:
 
 ```typescript
 const DeleteSchema = z.object({
@@ -231,9 +231,9 @@ const DeleteSchema = z.object({
 });
 ```
 
-**Separate dev from prod.** Use different MCP configurations for different environments. Point your day-to-day work at your development database. Only connect to production when you specifically need it, and never with write access unless there's no alternative.
+**Separate dev from prod**: Use different MCP configurations for different environments. Point your day-to-day work at your development database. Only connect to production when you specifically need it, and never with write access unless there is no alternative.
 
-**Log everything.** Build an audit trail from the start:
+**Log everything**: Build an audit trail from the start:
 
 ```typescript
 await auditLog.record({
@@ -243,20 +243,12 @@ await auditLog.record({
 });
 ```
 
-When something unexpected happens — and it will — you'll want to know exactly what the AI ran.
+When something unexpected happens, and it will, you will want to know exactly what the AI ran.
 
-## Go Connect Something
+## Go connect something
 
-The fastest way to understand MCP is to set up one server and use it for a week. I'd start with whatever thing you context-switch to most often. For me that was error logs. For you it might be your database, or Stripe, or an internal API.
+The fastest way to understand MCP is to set up one server and use it for a week. I suggest starting with the task that causes you to context-switch most often. For me, that was checking error logs. For you, it might be querying your database, Stripe, or an internal API.
 
-Pick that one thing. Get it working. The productivity shift is immediately obvious — and once you've felt the difference between "paste this in" and "just ask," you'll start seeing connection points everywhere.
+Pick that one thing, get it working, and the productivity shift will be immediately obvious. Once you experience the difference between copying data and simply asking for it, you will start seeing connection points everywhere.
 
-The infrastructure is there. The question is which wall you knock down first. 🎉
-
----
-
-**Resources:**
-
-- [MCP Documentation](https://modelcontextprotocol.io) — official spec and SDK docs
-- [MCP Server Registry](https://github.com/modelcontextprotocol/servers) — community-maintained server list
-- [Anthropic's MCP Quickstart](https://docs.anthropic.com/en/docs/agents-and-tools/mcp) — getting started with Claude Desktop
+The infrastructure is ready. The only question is which integration you build first.

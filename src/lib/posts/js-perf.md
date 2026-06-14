@@ -10,17 +10,17 @@ coverHeight: 9
 updated: "2026-01-03"
 ---
 
-# JavaScript Performance Tricks That Actually Move the Needle
+# JavaScript performance tricks that actually move the needle
 
-Storytime: I once inherited a codebase where a "simple" list render was taking over 800ms. The culprit? A loop that was touching the DOM 200 times instead of once. One refactor, four lines changed, and it dropped to 12ms. I've been a little obsessed with JS performance ever since.
+Storytime: I once inherited a codebase where a simple list render took over 800ms. The culprit was a loop touching the DOM 200 times instead of once. A quick refactor of only four lines dropped that time to 12ms. I have been a little obsessed with JS performance ever since.
 
-The good news: you don't need to understand V8 internals to write fast JavaScript. A handful of patterns cover 90% of the gains you'll ever need. Let's dig in.
+The good news is that you don't need to understand V8 internals to write fast JavaScript. A handful of patterns cover most of the performance gains you'll ever need. Let's look at the ones that matter.
 
-## Stop Touching the DOM So Much
+## Stop touching the DOM so much
 
-Every time you modify the DOM, the browser recalculates styles, reruns layout, and repaints. Do it in a loop and you're triggering that whole pipeline on every iteration.
+Every time you modify the DOM, the browser recalculates styles, reruns layout, and repaints. Doing this in a loop triggers that entire pipeline on every iteration.
 
-The fix: batch your changes off-screen first, then commit once.
+To fix this, batch your changes off-screen first, then commit them once.
 
 ```javascript
 // ❌ Triggers a reflow for every single item
@@ -41,7 +41,7 @@ users.forEach((user) => {
 container.appendChild(fragment); // single reflow here
 ```
 
-Same idea applies to style changes. Instead of setting individual properties — which each trigger their own recalculation — swap a CSS class instead:
+The same idea applies to style changes. Instead of setting individual properties, which each trigger their own recalculation, swap a CSS class instead:
 
 ```javascript
 // ❌ Multiple style changes = multiple reflows
@@ -55,9 +55,9 @@ element.classList.add("highlighted-box");
 
 Your CSS already lives in a stylesheet. Let the browser do its job.
 
-## Write Loops That Know When to Stop
+## Write loops that know when to stop
 
-Loops are where I see the most avoidable waste. The classic example: iterating an entire array looking for one item, even after you've found it.
+Loops are where I see the most avoidable waste. The classic example is iterating an entire array looking for one item, even after you've already found it.
 
 ```javascript
 // ❌ Checks all 10,000 users even after finding the one you want
@@ -70,7 +70,7 @@ users.forEach((user) => {
 const target = users.find((user) => user.id === 42);
 ```
 
-`find()`, `some()`, and `findIndex()` all short-circuit — they stop iterating the moment the condition is met. Reach for them before writing a manual loop.
+`find()`, `some()`, and `findIndex()` all short-circuit, meaning they stop iterating the moment the condition is met. Reach for them before writing a manual loop.
 
 For hot loops over large datasets, cache the array length:
 
@@ -81,29 +81,29 @@ for (let i = 0; i < len; i++) {
 }
 ```
 
-Micro-optimization? Maybe. But in tight loops processing thousands of items, it adds up.
+This may seem like a minor detail, but in tight loops processing thousands of items, it adds up.
 
-## Parallel Async Operations with `Promise.all`
+## Parallel async operations with Promise.all
 
-This one is genuinely underused. If you have multiple independent async operations, `await`-ing them sequentially is leaving performance on the table.
+This optimization is often overlooked. If you have multiple independent async operations, awaiting them sequentially leaves performance on the table.
 
 ```javascript
-// ❌ Sequential — 6 seconds total
+// ❌ Sequential: 6 seconds total
 async function loadPage() {
   const users = await fetchUsers(); // 2s
   const posts = await fetchPosts(); // 2s
   const comments = await fetchComments(); // 2s
 }
 
-// ✅ Parallel — 2 seconds total
+// ✅ Parallel: 2 seconds total
 async function loadPage() {
   const [users, posts, comments] = await Promise.all([fetchUsers(), fetchPosts(), fetchComments()]);
 }
 ```
 
-The rule is simple: if the requests don't depend on each other's results, run them together. I personally check for this pattern in every code review — it's one of the easiest wins available.
+The rule is simple: if the requests do not depend on each other's results, run them together. I check for this pattern in every code review, as it is one of the easiest wins available.
 
-## Lazy Load What You Don't Need Yet
+## Lazy load what you don't need yet
 
 Don't pay the cost of loading something until the user actually needs it. The Intersection Observer API makes this trivial for images:
 
@@ -123,7 +123,7 @@ document.querySelectorAll("img[data-src]").forEach((img) => {
 });
 ```
 
-Mark your images with `data-src` instead of `src`, and they only load as they scroll into view. For image-heavy pages, this alone can dramatically improve initial load time.
+Mark your images with `data-src` instead of `src`, and they will only load as they scroll into view. For image-heavy pages, this alone can dramatically improve initial load time.
 
 The same principle applies to JavaScript modules. If a feature is only used sometimes, import it dynamically instead of bundling it upfront:
 
@@ -134,9 +134,9 @@ button.addEventListener("click", async () => {
 });
 ```
 
-## Measure First, Optimize Second
+## Measure first, optimize second
 
-Here's the thing I wish someone had told me earlier: don't guess at bottlenecks. Measure them.
+Here is the advice I wish someone had given me earlier: do not guess at bottlenecks, but measure them.
 
 ```javascript
 const start = performance.now();
@@ -152,17 +152,17 @@ renderList();
 console.timeEnd("render"); // "render: 23.4ms"
 ```
 
-Open DevTools, run a Performance trace, and let the flame graph show you where time is actually going. Nine times out of ten it's not where you expected.
+Open DevTools, run a Performance trace, and let the flame graph show you where time is actually going. Most of the time it is not where you expected.
 
-## The Short List
+## The short list
 
-When something feels slow, work through this in order:
+When something feels slow, work through these steps:
 
 - Batch DOM changes with document fragments
 - Swap CSS classes instead of inline styles
-- Use `find()` / `some()` instead of `forEach` when you need early exit
+- Use `find()` or `some()` instead of `forEach` when you need an early exit
 - Run independent async calls with `Promise.all`
 - Lazy load images and heavy modules
-- Measure before and after — every time
+- Measure before and after, every time
 
-Performance work is satisfying precisely because the feedback is immediate. Slow → fast, measured before and after. Go find your 800ms and make it 12. 🎉
+Performance work is satisfying precisely because the feedback is immediate. Slow code becomes fast, measured before and after. Go find your slow renders and optimize them.

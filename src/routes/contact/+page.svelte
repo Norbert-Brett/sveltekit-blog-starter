@@ -194,7 +194,7 @@
         <span class="ct-meta text-[10px] font-sans font-medium text-foreground/30 tracking-[0.15em] uppercase">Budapest, HU · {currentTime} CET</span>
       </div>
 
-      <!-- Giant title — cinematic oversized typography -->
+      <!-- Giant title: cinematic oversized typography -->
       <h1 class="text-[13vw] sm:text-[11vw] md:text-[9vw] lg:text-[7.5rem] font-serif font-normal tracking-tight leading-[0.88] mb-0" style="perspective: 800px;">
         <span class="block overflow-hidden py-1">
           <span class="ct-word block will-change-transform" style="transform-origin: bottom left;">Get in</span>
@@ -367,7 +367,7 @@
                 </div>
                 <div>
                   <span class="text-sm font-sans font-semibold text-foreground block leading-tight">Response within 24h</span>
-                  <span class="text-[10px] font-sans text-foreground/35 tracking-wider">Mon – Fri · CET timezone</span>
+                  <span class="text-[10px] font-sans text-foreground/35 tracking-wider">Mon to Fri · CET timezone</span>
                 </div>
               </div>
               <div class="flex items-center gap-4 p-4 rounded-xl border border-foreground/[0.05] bg-foreground/[0.02]">

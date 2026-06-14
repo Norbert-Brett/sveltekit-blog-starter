@@ -21,7 +21,7 @@
   const values = [
     { icon: 'target', title: 'Purpose-Driven', text: 'Every line of code serves a business goal. I build with intent, not impulse.' },
     { icon: 'shield-check', title: 'Battle-Tested', text: '11+ years of managing high-pressure teams taught me resilience and systems thinking.' },
-    { icon: 'sparkles', title: 'Craft-Obsessed', text: 'I obsess over the details — from pixel-perfect UI to optimised database queries.' }
+    { icon: 'sparkles', title: 'Craft-Obsessed', text: 'I obsess over the details, from pixel-perfect UI to optimised database queries.' }
   ];
 
   const skillCategories = [
@@ -49,6 +49,19 @@
         { name: 'Node.js', level: 82 },
         { name: 'PostgreSQL', level: 88 },
         { name: 'Java', level: 80 }
+      ]
+    },
+    {
+      name: 'AI Engineering',
+      code: 'AI_SYS',
+      icon: 'brain',
+      skills: [
+        { name: 'Enterprise AI Integration', level: 95 },
+        { name: 'LLM Fine-Tuning & Setup', level: 88 },
+        { name: 'Agentic AI Workflows', level: 92 },
+        { name: 'RAG Setup & Optimisation', level: 90 },
+        { name: 'Multi-Agent Orchestration', level: 88 },
+        { name: 'AI Security & Guardrails', level: 85 }
       ]
     },
     {
@@ -164,10 +177,10 @@
 
 <MetaTags
   title="About"
-  description="Norbert Brettschneider (br3tt) is a full-stack developer and AI specialist specializing in user-centered digital experiences."
+  description="Norbert Brett (br3tt) is a full-stack engineer and AI developer who builds clean, functional, and user-centered digital products."
   openGraph={{
-    title: 'About | Norbert Brettschneider',
-    description: 'Learn about Norbert Brettschneider (br3tt), a Full-Stack Developer and AI Specialist with a foundation in operational leadership.'
+    title: 'About | Norbert Brett',
+    description: 'Learn about Norbert Brett (br3tt), a full-stack engineer and AI developer with a background in operational leadership.'
   }}
 />
 
@@ -313,14 +326,14 @@
           <h2 class="text-4xl md:text-6xl lg:text-7xl font-serif tracking-tight leading-[0.9]">System <span class="text-accent">Specs</span></h2>
         </div>
         <p class="text-foreground/50 text-xs font-mono tracking-widest max-w-xs md:text-right uppercase">
-          [ MODULES LOADED: 4 / STACK ENGINE ACTIVE ]
+          [ MODULES LOADED: 5 / STACK ENGINE ACTIVE ]
         </p>
       </div>
       
       <div class="skills-grid grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         {#each skillCategories as cat, i (i)}
           <!-- Large modular plaque cards with interactive spotlight coordinates -->
-          <div class="skill-category-card spotlight-card group relative p-8 md:p-10 rounded-3xl border border-border/40 bg-foreground/[0.02] hover:border-accent/25 transition-all duration-500 overflow-hidden shadow-2xl">
+          <div class="skill-category-card spotlight-card group relative p-8 md:p-10 rounded-3xl border border-border/40 bg-foreground/[0.02] hover:border-accent/25 transition-all duration-500 overflow-hidden shadow-2xl {i === 4 ? 'lg:col-span-2' : ''}">
             <!-- Customized gold accent cursor spotlights -->
             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl" style="background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212,176,85,0.07), transparent 65%);"></div>
             
@@ -332,6 +345,8 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="m9 21 0-12"/></svg>
                   {:else if cat.icon === 'server'}
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+                  {:else if cat.icon === 'brain'}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .52 5.886 4 4 0 0 0 6.587 4.774 4 4 0 0 0 6.587-4.774 4 4 0 0 0 .52-5.886 4 4 0 0 0-2.526-5.77A3 3 0 1 0 12 5z"/></svg>
                   {:else if cat.icon === 'cloud'}
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a5.5 5.5 0 0 0 0-11h-1.5a7 7 0 1 0-13.5 1.5c-2.5.5-2.5 4.5 0 5h15Z"/></svg>
                   {:else if cat.icon === 'users'}
@@ -349,7 +364,7 @@
             </div>
             
             <!-- Matrix micro-cards chip grid -->
-            <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 {i === 4 ? 'lg:grid-cols-3' : ''} gap-3.5">
               {#each cat.skills as skill}
                 <div class="group/skill relative p-4 rounded-2xl border border-border/40 bg-foreground/[0.01] hover:bg-foreground/[0.04] hover:border-accent/35 transition-all duration-300 flex flex-col justify-between min-h-[82px] shadow-sm">
                   <!-- Bouncing active coordinate beacon -->

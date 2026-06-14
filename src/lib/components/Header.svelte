@@ -149,7 +149,7 @@
               {/if}
             </button>
 
-            <!-- Menu Button — mobile only -->
+            <!-- Menu Button: mobile only -->
             {#if isMobile}
               <div in:scale={{ duration: 300, start: 0.6 }} class="pointer-events-auto">
                 <button

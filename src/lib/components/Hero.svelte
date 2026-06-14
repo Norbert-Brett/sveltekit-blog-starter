@@ -431,7 +431,7 @@
 
       if (isAtTop) {
         // ═══════════════════════════════════════════════
-        // CINEMATIC BOOT SEQUENCE — 3-PHASE REVEAL
+        // CINEMATIC BOOT SEQUENCE: 3-PHASE REVEAL
         // ═══════════════════════════════════════════════
         const introTL = gsap.timeline({ delay: 0.15 });
 
@@ -466,7 +466,7 @@
           ease: 'power3.out'
         }, 0.8);
 
-        // Scanline sweep — a single dramatic gold beam wipes down
+        // Scanline sweep: a single dramatic gold beam wipes down
         introTL.set('.hud-scan-line', { top: '0%', opacity: 0, scaleX: 1 }, 0);
         introTL.to('.hud-scan-line', { opacity: 0.9, duration: 0.1, ease: 'power2.in' }, 0.5);
         introTL.to('.hud-scan-line', { top: '100%', duration: 1.1, ease: 'power1.inOut' }, 0.5);
@@ -514,7 +514,7 @@
           1.0
         );
 
-        // Scroll indicator — last element, the final gentle cue
+        // Scroll indicator: last element, the final gentle cue
         introTL.fromTo('.scroll-indicator',
           { opacity: 0, y: 10 },
           { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
@@ -785,7 +785,7 @@
     <!-- Cinematic Dark Vignette Overlay for Ultimate Contrast -->
     <div class="absolute inset-0 bg-black/10 dark:bg-black/30 pointer-events-none"></div>
     
-    <!-- Radial Aperture Vignette — starts fully opaque black, fades to reveal -->
+    <!-- Radial Aperture Vignette: starts fully opaque black, fades to reveal -->
     <div class="hero-aperture-vignette absolute inset-0 pointer-events-none z-1"></div>
     
     <!-- Mobile/Global Fade Overlay -->
@@ -1055,7 +1055,7 @@
     --hero-vignette-color: 246, 243, 235;
   }
 
-  /* Cinematic Aperture Vignette — heavy radial gradient from edges to center */
+  /* Cinematic Aperture Vignette: heavy radial gradient from edges to center */
   .hero-aperture-vignette {
     background: radial-gradient(
       ellipse 60% 60% at 50% 50%,

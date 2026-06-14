@@ -129,7 +129,7 @@
         }
       );
 
-      // 3. Grid columns — staggered fade up
+      // 3. Grid columns: staggered fade up
       gsap.fromTo('.footer-col', 
         { y: 30, opacity: 0 },
         {
@@ -261,14 +261,14 @@
     <div class="flex whitespace-nowrap" style="--duration: 35s; --gap: 3rem;">
       <div class="animate-marquee flex shrink-0 min-w-full justify-around text-[10px] font-sans font-bold tracking-[0.25em] text-accent uppercase" style="gap: var(--gap);">
         <span>* NORBERT BRETT *</span>
-        <span>CRAFTING DIGITAL MASTERPIECES</span>
+        <span>DESIGN & CODE FOR THE WEB</span>
         <span>* AVAILABLE FOR WORK *</span>
         <span>DEVELOPING IN BUDAPEST, HU</span>
         <span>* PORTFOLIO 2026 *</span>
       </div>
       <div class="aria-hidden animate-marquee flex shrink-0 min-w-full justify-around text-[10px] font-sans font-bold tracking-[0.25em] text-accent uppercase" style="gap: var(--gap);">
         <span>* NORBERT BRETT *</span>
-        <span>CRAFTING DIGITAL MASTERPIECES</span>
+        <span>DESIGN & CODE FOR THE WEB</span>
         <span>* AVAILABLE FOR WORK *</span>
         <span>DEVELOPING IN BUDAPEST, HU</span>
         <span>* PORTFOLIO 2026 *</span>
@@ -307,7 +307,7 @@
           <div>
             <h3 class="font-bold text-2xl tracking-tight mb-3 text-foreground">{siteTitle}</h3>
             <p class="text-foreground/60 text-sm max-w-xs leading-relaxed">
-              Full Stack Developer crafting digital experiences with precision and passion.
+              Full Stack Engineer building clean, functional, and user-centered web applications.
             </p>
           </div>
 
