@@ -133,7 +133,7 @@
   });
 </script>
 
-<section bind:this={sectionRef} class="relative py-28 md:py-36 bg-transparent overflow-clip flex flex-col items-center">
+<section bind:this={sectionRef} class="relative py-28 md:py-36 bg-background z-30 overflow-clip flex flex-col items-center">
   <!-- Grid backdrop lines -->
   <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
     <div class="w-full h-full" 
