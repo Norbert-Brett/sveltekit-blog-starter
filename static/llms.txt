@@ -1,0 +1,18 @@
+# Norbert Br3tt - Personal Website & Blog
+
+Welcome to the AI-readable version of Norbert Br3tt's personal website. 
+
+## About
+Norbert Br3tt is a creative developer, designer, and AI enthusiast. This website serves as a portfolio of his projects, a collection of his design aesthetics, and a blog where he shares his latest insights on web development, AI integration, and design systems.
+
+## Key Sections
+- **Projects**: A showcase of recent works, focusing on cutting-edge UI/UX and web technologies.
+- **Blog / Insights**: Articles on topics such as Vibe Coding, AI in Web Development, and SvelteKit best practices.
+- **Testimonials**: Feedback from colleagues and clients highlighting his expertise and collaborative nature.
+
+## Navigation
+- Home: `/`
+- Blog: `/articles`
+- About: `/about`
+
+This file is provided to help AI agents understand the structure and purpose of the website. For more details, explore the various paths and pages on the site.

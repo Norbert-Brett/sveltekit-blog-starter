@@ -740,6 +740,10 @@
     if (ctx) ctx.revert();
   });
 </script>
+<svelte:head>
+  <link rel="preload" as="image" href="https://res.cloudinary.com/nbrett/image/upload/f_auto,q_auto:eco,w_1024/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg" fetchpriority="high" />
+</svelte:head>
+
 
 <section
   bind:this={heroSection}
@@ -768,6 +772,8 @@
   </div>
   {/if}
 
+
+
   <!-- 2. Background Video (morphing scaling wrapper, z-index 20) -->
   <div class="hero-video-wrapper absolute inset-0 w-full h-full z-20 overflow-hidden bg-background origin-center border border-transparent gpu-accelerated {glitchActive ? 'glitch-active' : ''}">
     <video 
@@ -776,10 +782,10 @@
       muted 
       playsinline
       preload={isMobile ? 'none' : 'metadata'}
-      poster="https://res.cloudinary.com/nbrett/image/upload/f_auto,q_auto/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg"
+      poster="https://res.cloudinary.com/nbrett/image/upload/f_auto,q_auto:eco,w_1024/v1758661776/3170B43D-E178-4C7F-81A1-B4D0B128D021_zjinq2.jpg"
       class="hero-bg-video w-full h-full object-cover grayscale opacity-40 dark:opacity-80 scale-105 gpu-accelerated"
     >
-      <source src="https://res.cloudinary.com/nbrett/video/upload/f_auto:video,q_auto/v1768848615/video_un63ox.mov" type="video/mp4" />
+      <source src="https://res.cloudinary.com/nbrett/video/upload/f_auto:video,q_auto:eco,w_1024/v1768848615/video_un63ox.mov" type="video/mp4" />
     </video>
     
     <!-- Cinematic Dark Vignette Overlay for Ultimate Contrast -->

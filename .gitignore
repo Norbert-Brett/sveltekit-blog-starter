@@ -29,3 +29,11 @@ build/
 *.log
 /.svelte-kit
 /package
+
+# Lighthouse reports
+/lighthouse-report.html 
+/lighthouse-desktop.json 
+/lighthouse-mobile.json 
+
+# Playwright reports
+/playwright-report

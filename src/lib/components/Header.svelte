@@ -95,7 +95,7 @@
         : 'px-5 sm:px-6 py-4 rounded-3xl bg-foreground/[0.03] backdrop-blur-xl border border-foreground/[0.08] shadow-[0_4px_24px_0_rgba(0,0,0,0.15)]'}">
         
         <!-- Morphing Logo Accordion -->
-        <a href="/" class="group flex items-center gap-1 interactive shrink-0 select-none font-bold" aria-label="Norbert Br3tt - Home">
+        <a href="/" class="group flex items-center gap-1 interactive shrink-0 select-none font-bold" aria-label="Norbert Br3tt. Home">
           <div class="logo-text text-xl font-black tracking-tight leading-none text-foreground flex items-center">
             <span class="text-foreground">N</span>
             <span class="logo-collapsible text-foreground" class:collapsed={isScrolled}>orbert</span>

@@ -186,7 +186,7 @@
             <span class="text-accent font-black text-lg font-mono">{testimonials[activeIndex].author.name.charAt(0)}</span>
           </div>
           <div>
-            <h4 class="telemetry-fade-target text-base font-sans font-bold text-foreground tracking-wide">{testimonials[activeIndex].author.name}</h4>
+            <h3 class="telemetry-fade-target text-base font-sans font-bold text-foreground tracking-wide">{testimonials[activeIndex].author.name}</h3>
             <p class="telemetry-fade-target text-xs font-mono text-foreground/45 uppercase mt-0.5">{testimonials[activeIndex].author.description}</p>
           </div>
         </div>
@@ -228,6 +228,7 @@
                   class="cursor-pointer group/node pointer-events-auto"
                   onclick={() => selectTestimonial(idx, true)}
                   role="button"
+                  aria-label="Testimonial from {t.author.name}"
                   tabindex="0"
                 >
                   <circle cx={cx} cy={cy} r="18" fill="transparent" />

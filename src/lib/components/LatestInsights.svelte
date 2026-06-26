@@ -156,7 +156,7 @@
               <img
                 src={featured.coverImage}
                 alt={featured.title}
-                loading="eager"
+                loading="lazy"
                 class="w-full h-full object-cover transition-[transform,filter] duration-[2s] ease-out group-hover/feat:scale-[1.04] blur-[0.5px] group-hover/feat:blur-0 grayscale-[0.3] group-hover/feat:grayscale-0"
               />
             {/if}
